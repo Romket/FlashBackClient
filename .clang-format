@@ -248,7 +248,6 @@ SpacesInLineCommentPrefix:
   Maximum: -1
 SpacesInParens: Never
 SpacesInParensOptions:
-  ExceptDoubleParentheses: false
   InConditionalStatements: false
   InCStyleCasts: false
   InEmptyParentheses: false
