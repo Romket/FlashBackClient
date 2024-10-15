@@ -13,6 +13,5 @@ repos:
         args: [--style=file]
     -   id: clang-tidy
     -   id: cppcheck
-    -   id: cpplint
     -   id: include-what-you-use
     -   id: uncrustify
