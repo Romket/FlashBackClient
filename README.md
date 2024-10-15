@@ -1,5 +1,7 @@
-# FlashBack
-A fast, lightweight, and highly customizeable command line backup software designed to connect multiple linux/unix systems to a central server.
+# FlashBack Server
+This is the server software for FlashBack
+
+FlashBack is a fast, lightweight, and highly customizeable command line backup software designed to connect multiple systems to a central server.
 
 **NOTE: FLASHBACK IS STILL IN DEVELOPMENT!**
 
