@@ -14,4 +14,3 @@ repos:
     -   id: clang-tidy
     -   id: cppcheck
     -   id: include-what-you-use
-    -   id: uncrustify
