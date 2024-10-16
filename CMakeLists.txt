@@ -15,3 +15,4 @@ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")
+endif()
