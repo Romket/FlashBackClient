@@ -7,7 +7,9 @@ project(FlashBackClient
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(FlashBackClient
+set(CMAKE_INSTALL_PREFIX "/usr/local/bin/flashbackclient")
+
+add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -16,3 +18,8 @@ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")
 endif()
+
+install(TARGETS flashbackclient
+    DESTINATION ${CMAKE_INSTALL_PREFIX}
+    RENAME flashbackclient
+)
