@@ -1,5 +1,5 @@
 # FlashBack Client
-This is the client software for FastBack
+This is the client software for FlashBack
 
 FlashBack is a fast, lightweight, and highly customizeable command line backup software designed to connect multiple systems to a central server.
 
