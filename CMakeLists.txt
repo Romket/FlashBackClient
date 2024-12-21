@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.12)
 project(FlashBackClient
         VERSION 0.0.0.1
         LANGUAGES C CXX
-        DESCRIPTION "Fast, cross-device, cloud backup and sync program")
+        DESCRIPTION "Fast cross-device cloud backup and sync program")
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_INSTALL_PREFIX "/usr/local/bin/flashbackclient")
+set(CMAKE_INSTALL_PREFIX "/usr/local/bin/flashback")
 
 add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
@@ -21,5 +21,5 @@ endif()
 
 install(TARGETS flashbackclient
     DESTINATION ${CMAKE_INSTALL_PREFIX}
-    RENAME flashbackclient
+    RENAME client
 )
