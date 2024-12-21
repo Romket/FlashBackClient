@@ -12,6 +12,8 @@ repos:
     -   id: clang-format
         args: ["--style=file"]
     -   id: clang-tidy
+        args: ["build/compile_commands.json"]
     -   id: cppcheck
         args: ["--enable=all", "--language=c++", "--inline-suppr"]
     -   id: include-what-you-use
+        args: ["build/compile_commands.json"]
