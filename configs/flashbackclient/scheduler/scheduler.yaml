@@ -1,0 +1,60 @@
+# scheduler.yaml documentation
+#
+# This file provides the default settings for the scheduler to use
+
+# Enum defining possible actions
+actions:
+  down: "download changed files"
+  up: "upload changed files"
+  sync: "download and upload changed files"
+  none: "take no action"
+
+# Action to be taken on system startup
+startup: ${actions.down}
+
+# Action to be taken on system shutdown
+shutdown: ${actions.up}
+
+# Action to be taken when a file change is detected
+# Optional: threshold determines the number of files that must be changed before the event is triggered. If not defined, default is 1
+file_change:
+  - action: ${actions.none}
+#  threshold: 2
+
+# Action to specific times and dates, scheduled using cron expressions
+times:
+#  - cron_exp: "00 00 * * *"
+#    action: ${actions.sync}
+#  - cron_exp: "00 12 * * *"
+#    action: ${actions.sync}
+#  - cron_exp: "00 17 * * FRI"
+#    action: ${actions.up}
+#  - cron_exp: "00 09 * * MON"
+#    action: ${actions.down}
+
+# Action to be taken every number of minutes after previous matching action
+# Optional: also define a minimum time required before any future scheduled action
+# Note: actions.sync matches both actions.down and actions.up
+after:
+  - action: ${actions.sync}
+    timing: 120
+    before: 120
+
+# More complex hybrid cases that must be matched, consisting of any combination of other cases
+hybrid:
+  - action: ${actions.sync}
+    cases:
+      file_change:
+      after:
+        - timing: 120
+        - before: 120
+#  - action: ${actions.down}
+#    cases:
+#      startup:
+#      times:
+#        - cron_exp: "* * * * MON-FRI"
+#  - action: ${actions.up}
+#    cases:
+#      shutdown
+#      times:
+#        - cron_exp: "* * * * MON-FRI"

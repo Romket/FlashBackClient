@@ -1,0 +1,22 @@
+# Example target file defining a target named example
+
+name: example
+
+path: ~/Dev/FlashBackClient
+
+actions:
+  down: "download changed files"
+  up: "upload changed files"
+  sync: "download and upload changed files"
+  none: "take no action"
+
+settings:
+  encrypt: true
+  scheduler:
+    hybrid:
+      - action: ${actions.sync}
+        cases:
+          file_change:
+          after:
+            - timing: 30
+            - before: 30
