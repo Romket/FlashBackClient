@@ -13,5 +13,5 @@ repos:
         args: ["--style=file"]
     -   id: clang-tidy
     -   id: cppcheck
-        args: ["--enable=all", "--language=c++"]
+        args: ["--enable=all", "--language=c++", "--inline-suppr"]
     -   id: include-what-you-use
