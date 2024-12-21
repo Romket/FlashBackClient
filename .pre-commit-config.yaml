@@ -16,4 +16,4 @@ repos:
     -   id: cppcheck
         args: ["--enable=all", "--language=c++", "--inline-suppr"]
     -   id: include-what-you-use
-        args: ["build/compile_commands.json"]
+        args: ["-p", "./build/compile_commands.json"]
