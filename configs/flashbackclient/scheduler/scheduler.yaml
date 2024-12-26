@@ -2,59 +2,72 @@
 #
 # This file provides the default settings for the scheduler to use
 
-# Enum defining possible actions
+# Possible actions to take
 actions:
-  down: "download changed files"
-  up: "upload changed files"
-  sync: "download and upload changed files"
-  none: "take no action"
+  download_changed: "Download changed files"
+  upload_changed: "Upload changed files"
+  sync_files: "Download and upload changed files"
+  no_action: "Take no action"
 
-# Action to be taken on system startup
-startup: ${actions.down}
+# Possible triggers to trigger an action
+triggers:
+  on_startup: "System startup"
+  on_shutdown: "System shutdown"
+  on_file_change: "After a detected file change"
+  on_schedule: "Specific cron expressions"
+  after_interval: "Time after any previous"
 
-# Action to be taken on system shutdown
-shutdown: ${actions.up}
-
-# Action to be taken when a file change is detected
-# Optional: threshold determines the number of files that must be changed before the event is triggered. If not defined, default is 1
-file_change:
-  - action: ${actions.none}
-#  threshold: 2
-
-# Action to specific times and dates, scheduled using cron expressions
-times:
-#  - cron_exp: "00 00 * * *"
-#    action: ${actions.sync}
-#  - cron_exp: "00 12 * * *"
-#    action: ${actions.sync}
-#  - cron_exp: "00 17 * * FRI"
-#    action: ${actions.up}
-#  - cron_exp: "00 09 * * MON"
-#    action: ${actions.down}
-
-# Action to be taken every number of minutes after previous matching action
-# Optional: also define a minimum time required before any future scheduled action
-# Note: actions.sync matches both actions.down and actions.up
-after:
-  - action: ${actions.sync}
-    timing: 120
-    before: 120
-
-# More complex hybrid cases that must be matched, consisting of any combination of other cases
-hybrid:
-  - action: ${actions.sync}
+# Rules for triggering actions
+rules:
+  - action: ${actions.download_changed}
     cases:
-      file_change:
-      after:
-        - timing: 120
-        - before: 120
-#  - action: ${actions.down}
-#    cases:
-#      startup:
-#      times:
-#        - cron_exp: "* * * * MON-FRI"
-#  - action: ${actions.up}
-#    cases:
-#      shutdown
-#      times:
-#        - cron_exp: "* * * * MON-FRI"
+      - id: ${triggers.on_startup}
+  
+  - action: ${actions.upload_changed}
+    cases:
+      - id: ${triggers.on_shutdown}
+  
+# - action: ${actions.sync_files}
+#   cases:
+#     - id: ${triggers.on_schedule}
+#       times:
+#         - cron_exp: "00 00 * * *"
+
+# - action: ${actions.sync_files}
+#   cases:
+#     - id: ${triggers.on_schedule}
+#       times:
+#         - cron_exp: "00 12 * * *"
+
+# - action: ${actions.upload_changed}
+#   cases:
+#     - id: ${triggers.on_schedule}
+#       times:
+#         - cron_exp: "00 17 * * FRI"
+
+# - action: ${actions.download_changed}
+#   cases:
+#     - id: ${triggers.on_schedule}
+#       times:
+#         - cron_exp: "00 09 * * MON"
+
+  - action: ${actions.sync_files}
+    cases:
+      - id: ${triggers.on_file_change}
+      - id: ${triggers.after_interval}
+        after_last: 120
+        before_next_scheduled: 60
+
+# - action: ${actions.download_changed}
+#   cases:
+#     - id: ${triggers.on_startup}
+#     - id: ${triggers.on_schedule}
+#       times:
+#         - cron_exp: "* * * * MON-FRI"
+
+# - action: ${actions.upload_changed}
+#   cases:
+#     - id: ${triggers.on_shutdown}
+#     - id: ${triggers.on_schedule}
+#       times:
+#         - cron_exp: "* * * * MON-FRI"
