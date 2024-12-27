@@ -5,25 +5,22 @@
 
 namespace FlashBackClient
 {
-    struct setting
-    {
-        // cppcheck-suppress unusedStructMember
-        std::string name;
-        any value;
-    };
-
     class ConfigManager
     {
     public:
         inline ConfigManager() : loadconfigs() {}
 
-        std::unordered_map<setting> GetSettings();
-        setting GetSetting(const std::string& settingName)
+        inline std::unordered_map<std::string, any> GetGlobalSettings() { return _globalSettings; }
+        
+        template<typename T>
+        T GetGlobalSetting(const std::string& settingName);
+
+        void SetGlobalSetting(const std::string& settingName, any value);
 
     private:
         void loadconfigs();
 
         // cppcheck-suppress unusedStructMember
-        std::unordered_map<setting> settings;
+        std::unordered_map<std::string, any> _globalSettings;
     };
 } //namespace FlashBackClient

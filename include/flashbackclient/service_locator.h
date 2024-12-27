@@ -1,6 +1,7 @@
 #pragma once
 
-#include "configs.h"
+#include <flashbackclient/configs.h>
+
 #include <memory>
 
 namespace FlashBackClient
@@ -21,5 +22,5 @@ namespace FlashBackClient
 
     private:
         std::unique_pointer<ConfigManager> _configManager;
-    }
-};
+    };
+} //namespace FlashBackClient

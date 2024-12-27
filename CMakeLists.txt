@@ -9,11 +9,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INSTALL_PREFIX "/usr/local/bin/flashback")
 
+add_subdirectory(lib/yaml-cpp)
+
 add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
+target_link_libraries(flashbackclient yaml-cpp)
 
 if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")

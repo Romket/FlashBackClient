@@ -1,5 +1,10 @@
 #pragma once
 
+#include <flashbackclient/trigger.h>
+
+#include <unordered_map>
+#include <vector>
+
 namespace FlashBackClient
 {
     class Target
@@ -9,6 +14,7 @@ namespace FlashBackClient
         void Download();
 
     private:
-
+        std::unordered_map<std::string, any> _targetSettings;
+        std::vector<Rule> _targetRules;
     };
-} //FlashBackClient
+} //namespace FlashBackClient
