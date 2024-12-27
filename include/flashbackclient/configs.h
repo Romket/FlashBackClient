@@ -8,7 +8,7 @@ namespace FlashBackClient
     class ConfigManager
     {
     public:
-        inline ConfigManager() : loadconfigs() {}
+        inline ConfigManager() : loadConfigs() {}
 
         inline std::unordered_map<std::string, any> GetGlobalSettings() { return _globalSettings; }
         
@@ -18,7 +18,7 @@ namespace FlashBackClient
         void SetGlobalSetting(const std::string& settingName, any value);
 
     private:
-        void loadconfigs();
+        void loadConfigs();
 
         // cppcheck-suppress unusedStructMember
         std::unordered_map<std::string, any> _globalSettings;
