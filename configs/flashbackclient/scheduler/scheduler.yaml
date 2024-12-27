@@ -19,53 +19,56 @@ triggers:
 
 # Rules for triggering actions
 rules:
-  - action: ${actions.download_changed}
+  - name: "Download on startup"
+    action: ${actions.download_changed}
     cases:
       - id: ${triggers.on_startup}
   
-  - action: ${actions.upload_changed}
+  - name: "Upload on shutdown"
+    action: ${actions.upload_changed}
     cases:
       - id: ${triggers.on_shutdown}
-  
-# - action: ${actions.sync_files}
+
+# - name: "Sync files noon and midnight"
+#   action: ${actions.sync_files}
 #   cases:
 #     - id: ${triggers.on_schedule}
 #       times:
 #         - cron_exp: "00 00 * * *"
-
-# - action: ${actions.sync_files}
-#   cases:
-#     - id: ${triggers.on_schedule}
-#       times:
 #         - cron_exp: "00 12 * * *"
 
-# - action: ${actions.upload_changed}
+# - name: "Upload end of work week"
+#   action: ${actions.upload_changed}
 #   cases:
 #     - id: ${triggers.on_schedule}
 #       times:
 #         - cron_exp: "00 17 * * FRI"
 
-# - action: ${actions.download_changed}
+# - name: "Download start of work week"
+#   action: ${actions.download_changed}
 #   cases:
 #     - id: ${triggers.on_schedule}
 #       times:
 #         - cron_exp: "00 09 * * MON"
 
-  - action: ${actions.sync_files}
+  - name: "Sync changed files after 2 hours"
+    action: ${actions.sync_files}
     cases:
       - id: ${triggers.on_file_change}
       - id: ${triggers.after_interval}
         after_last: 120
         before_next_scheduled: 60
 
-# - action: ${actions.download_changed}
+# - name: "Download on startup on weekdays"
+#   action: ${actions.download_changed}
 #   cases:
 #     - id: ${triggers.on_startup}
 #     - id: ${triggers.on_schedule}
 #       times:
 #         - cron_exp: "* * * * MON-FRI"
 
-# - action: ${actions.upload_changed}
+# - name: "Upload on shutdown on weekdays"
+#   action: ${actions.upload_changed}
 #   cases:
 #     - id: ${triggers.on_shutdown}
 #     - id: ${triggers.on_schedule}
