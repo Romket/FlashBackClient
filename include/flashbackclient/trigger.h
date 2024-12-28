@@ -1,5 +1,7 @@
 #pragma once
 
+#include <yaml-cpp/yaml.h>
+
 #include <any>
 #include <string>
 #include <unordered_map>
@@ -41,9 +43,9 @@ namespace FlashBackClient
 namespace YAML
 {
     template<>
-    struct convert<Actions>
+    struct convert<FlashBackClient::Actions>
     {
-        static bool decode(const Node &node, Actions &action)
+        static bool decode(const Node &node, FlashBackClient::Actions &action)
         {
             if (!node.IsScalar())
                 return false;
@@ -72,9 +74,9 @@ namespace YAML
     };
 
     template<>
-    struct convert<Triggers>
+    struct convert<FlashBackClient::Triggers>
     {
-        static bool decode(const Node &node, Triggers &trigger)
+        static bool decode(const Node &node, FlashBackClient::Triggers &trigger)
         {
             if (!node.IsScalar())
                 return false;
