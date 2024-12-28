@@ -5,15 +5,18 @@
 
 #include <vector>
 
+#DEFINE CONFIG_DIR "~/.config/flashbackclient/scheduler"
+#DEFINE CONFIG_FILE "scheduler.yaml"
+
 namespace FlashBackClient
 {
     class Scheduler
     {
+    public:
+        Scheduler() : _globalRules(Helper::LoadRules(CONFIG_DIR "/" CONFIG_FILE)) {}
+
     private:
         void checkTargets();
-        void loadDefaultRules();
-
-        bool loadCases(Rule& rule, const YAML::Node& casesNode);
 
         std::vector<Target> _targets;
         std::vector<Rule> _globalRules;

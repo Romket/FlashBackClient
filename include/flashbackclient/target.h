@@ -10,11 +10,17 @@ namespace FlashBackClient
     class Target
     {
     public:
+        Target(std::string& configPath);
+
         void Upload();
         void Download();
 
     private:
+        void checkRules();
+
+        std::string _targetName;
+
         std::unordered_map<std::string, any> _targetSettings;
-        std::vector<Rule> _targetRules;
+        std::unordered_map<std::string, Rule> _targetRules;
     };
 } //namespace FlashBackClient
