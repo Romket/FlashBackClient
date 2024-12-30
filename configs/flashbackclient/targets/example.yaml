@@ -1,8 +1,10 @@
 # Example target file defining a target named example
 
-name: example
+name: "example"
 
-path: ~/Dev/FlashBackClient
+path: "~/Dev/FlashBackClient"
+
+target_type: "directory"
 
 encrypt: true
 

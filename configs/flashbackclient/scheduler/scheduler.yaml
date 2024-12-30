@@ -1,6 +1,5 @@
-# scheduler.yaml documentation
-#
-# This file provides the default settings for the scheduler to use
+# ~/.config/flashbackclient/scheduler/scheduler.yaml
+# Default rules for the scheduler
 
 # Possible actions to take
 actions:
@@ -19,58 +18,23 @@ triggers:
 
 # Rules for triggering actions
 rules:
-  - name: "Download on startup"
+  - id: 0
+    name: "Download on startup"
     action: ${actions.download_changed}
     cases:
       - id: ${triggers.on_startup}
-  
-  - name: "Upload on shutdown"
+
+  - id: 1
+    name: "Upload on shutdown"
     action: ${actions.upload_changed}
     cases:
       - id: ${triggers.on_shutdown}
 
-# - name: "Sync files noon and midnight"
-#   action: ${actions.sync_files}
-#   cases:
-#     - id: ${triggers.on_schedule}
-#       times:
-#         - cron_exp: "00 00 * * *"
-#         - cron_exp: "00 12 * * *"
-
-# - name: "Upload end of work week"
-#   action: ${actions.upload_changed}
-#   cases:
-#     - id: ${triggers.on_schedule}
-#       times:
-#         - cron_exp: "00 17 * * FRI"
-
-# - name: "Download start of work week"
-#   action: ${actions.download_changed}
-#   cases:
-#     - id: ${triggers.on_schedule}
-#       times:
-#         - cron_exp: "00 09 * * MON"
-
-  - name: "Sync changed files after 2 hours"
+  - id: 2
+    name: "Sync changed files after 2 hours"
     action: ${actions.sync_files}
     cases:
       - id: ${triggers.on_file_change}
       - id: ${triggers.after_interval}
         after_last: 120
         before_next_scheduled: 60
-
-# - name: "Download on startup on weekdays"
-#   action: ${actions.download_changed}
-#   cases:
-#     - id: ${triggers.on_startup}
-#     - id: ${triggers.on_schedule}
-#       times:
-#         - cron_exp: "* * * * MON-FRI"
-
-# - name: "Upload on shutdown on weekdays"
-#   action: ${actions.upload_changed}
-#   cases:
-#     - id: ${triggers.on_shutdown}
-#     - id: ${triggers.on_schedule}
-#       times:
-#         - cron_exp: "* * * * MON-FRI"
