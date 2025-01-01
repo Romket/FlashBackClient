@@ -1,22 +1,25 @@
 #pragma once
+#include <flashbackclient/defs.h>
 
 #include <flashbackclient/target.h>
 #include <flashbackclient/trigger.h>
 
+#include <filesystem>
 #include <vector>
-
-#DEFINE CONFIG_DIR "~/.config/flashbackclient/scheduler"
-#DEFINE CONFIG_FILE "scheduler.yaml"
 
 namespace FlashBackClient
 {
     class Scheduler
     {
     public:
-        Scheduler() : _globalRules(Helper::LoadRules(CONFIG_DIR "/" CONFIG_FILE)) {}
+        Scheduler() : _globalRules(Helper::LoadRules(SCHEDULER_CONFIG_FILE_PATH)) { loadTargets(); }
+
+        ~Scheduler() = default;
 
     private:
-        void checkTargets();
+        void checkStartup();
+
+        void loadTargets(const std::filesystem::path& path, int depth = 0);
 
         std::vector<Target> _targets;
         std::vector<Rule> _globalRules;

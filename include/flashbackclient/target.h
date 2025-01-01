@@ -2,6 +2,7 @@
 
 #include <flashbackclient/trigger.h>
 
+#include <filesystem>
 #include <unordered_map>
 #include <vector>
 
@@ -10,13 +11,18 @@ namespace FlashBackClient
     class Target
     {
     public:
-        Target(std::string& configPath);
+        Target(const std::filesystem::path& path);
 
-        void Upload();
-        void Download();
+        ~Target() = default;
+
+        template <typename... Args>
+        void CheckRules(Args... args)
 
     private:
-        void checkRules();
+        bool checkConditions(const Rule& rule, Args... args);
+
+        bool upload();
+        bool download();
 
         std::string _targetName;
 

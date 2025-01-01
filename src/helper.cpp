@@ -4,11 +4,11 @@
 
 namespace FlashBackClient
 {
-    std::unordered_map<std::string, Rule> Helper::LoadRules(std::string& configPath)
+    std::unordered_map<std::string, Rule> Helper::LoadRules(const std::filesystem::path& configPath)
     {
         std::unordered_map<std::string, Rule> rules;
 
-        YAML::Node config = YAML::LoadFile(configPath);
+        YAML::Node config = YAML::LoadFile(configPath.string());
         if (!config)
         {
             std::cout << "Failed to load config file" << std::endl;
@@ -54,7 +54,7 @@ namespace FlashBackClient
     {
         std::unordered_map<std::string, any> settings;
 
-        YAML::Node config = YAML::LoadFile(configPath);
+        YAML::Node config = YAML::LoadFile(configPath.string());
         if (!config)
         {
             std::cout << "Failed to load config file" << std::endl;
