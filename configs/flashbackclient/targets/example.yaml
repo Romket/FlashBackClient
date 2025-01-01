@@ -29,5 +29,6 @@ rules:
     cases:
       - id: ${triggers.on_file_change}
       - id: ${triggers.after_interval}
+        file_change_trigger: true
         after_last: 30
         before_next_scheduled: 30
