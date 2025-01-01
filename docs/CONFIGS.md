@@ -72,10 +72,14 @@ times:
   - cron_exp: "00 17 * * FRI"
   - cron_exp: "00 09 * * MON"
 ```
+`after_interval` has an additional setting `file_change_trigger` that can be used to define if the wait time should be reset after a file change or not. This setting is set to `false` by default.
 
-`after_interval` has an `after_last` and `before_next_scheduled` setting that can be used to define the time to wait before and after the last trigger. These settings are in minutes, and will be set to the default value of `0` if not specified.
+`after_interval` also has an `after_last` and `before_next_scheduled` setting that can be used to define the time to wait before and after the last trigger. These settings are in minutes, and will be set to the default value of `0` if not specified.
+
+*Note - not specifying an `after_last` or setting it to `0` will mean the case will be ignored.*
 
 ```yaml
+file_change_trigger: false
 after_last: 120
 before_next_scheduled: 60
 ```
