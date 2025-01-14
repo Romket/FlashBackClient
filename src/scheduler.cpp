@@ -1,4 +1,4 @@
-#include <flashbackclient/scheduler.h>
+#include "scheduler.h"
 
 #include <flashbackclient/defs.h>
 
@@ -6,17 +6,22 @@
 
 namespace FlashBackClient
 {
-    void Scheduler::checkStartup()
+    void afterCheck()
     {
         for (const auto& target : _targets)
         {
-            target.CheckRules(Triggers::on_startup);
+            target->CheckRules({Triggers::on_startup});
         }
+    }
+
+    void Scheduler::checkStartup()
+    {
+        std::vector<int> metDefaults = CheckRules({Triggers::on_startup});
     }
 
     void Scheduler::loadTargets(const std::filesystem::path& path, int depth)
     {
-        if (depth > 10)
+        if (depth > RECURSION_LIMIT)
             throw std::invalid_argument("Too many directories");
 
         for (const auto& entry : std::filesystem::directory_iterator(path))
@@ -26,7 +31,7 @@ namespace FlashBackClient
             else if (!entry.is_regular_file() || entry.path().extension() != ".yaml")
                 continue;
             else if (entry.path().is_regular_file())
-                _targets.push_back(Target(entry.path()));
+                _targets.push_back(std::make_unique<Target>(Target(entry.path())));
         }
     }
 } //namespace FlashBackClient

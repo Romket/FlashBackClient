@@ -1,5 +1,8 @@
 #pragma once
 
+#include <flashbackclient/managers/rulemanager.h>
+#include <flashbackclient/managers/settingmanager.h>
+
 #include <flashbackclient/trigger.h>
 
 #include <filesystem>
@@ -8,18 +11,13 @@
 
 namespace FlashBackClient
 {
-    class Target
+    class Target : private RuleManager, private SettingManager
     {
     public:
-        Target(const std::filesystem::path& path);
-
-        ~Target() = default;
-
-        template <typename... Args>
-        void CheckRules(Args... args)
+        Target(const std::filesystem::path& path) : RuleManager(path), SettingManager(path) {}
 
     private:
-        bool checkConditions(const Rule& rule, Args... args);
+        void afterCheck() override;
 
         bool upload();
         bool download();

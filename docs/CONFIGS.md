@@ -10,15 +10,15 @@
 *Located at `~/.config/flashbackclient/flashbackclient.yaml`*
 
 This file provides the default settings for the following settings:
-- Encryption (default `false` if no value specified)\
-*Note - encryption also encrypts directory structure, meaning encryption disables sequential backup.*
+- Encryption (`"none"`, `"file"`, or `"direcory"`default `"none"` if no value specified)\
+*Note - directory-level encoding encrypts directory structure, disabling sequential backup*
 
 An example file might look something like this:
 ```yaml
 # ~/.config/flashbackclient/flashbackclient.yaml
 # Default settings for FlashBack Client
 
-encrypt: true
+encrypt: "file"
 ```
 
 ## Default Scheduler Configs
@@ -225,7 +225,7 @@ The file may also contain a `rules` setting that contains the rules to use for t
 
 The file may also contain an `override_rules` setting that contains the rules to override the default rules for the target.
 
-To override a default rule, use the `name` or `id` of the rule in the `override_rules` setting.
+To override a default rule, use the `id` of the rule in the `override_rules` setting.
 
 An example file might look something like this:
 ```yaml
@@ -247,6 +247,4 @@ rules:
 
 override_rules:
   - id: 2
-# OR
-# - name: "Sync changed files after 2 hours"
 ```

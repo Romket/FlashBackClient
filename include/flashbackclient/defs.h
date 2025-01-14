@@ -12,3 +12,5 @@
 
 #DEFINE LOG_DIR "~/.local/share/flashbackclient"
 #DEFINE LOG_FILE_FMT "%Y-%m-%d_%H-%M-%S"
+
+#DEFINE RECURSION_LIMIT 10

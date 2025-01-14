@@ -1,18 +1,27 @@
-#include <flashbackclient/helper.h>
-
-#include <iostream>
+#include <flashbackclient/managers/rulemanager.h>
 
 namespace FlashBackClient
 {
-    std::unordered_map<std::string, Rule> Helper::LoadRules(const std::filesystem::path& configPath)
+    void RuleManager::CheckRules(const std::vector<Triggers>& givenTriggers)
     {
-        std::unordered_map<std::string, Rule> rules;
+        for (const auto& rule : _rules)
+        {
+            if (rule.first.Conditions.empty())
+                continue;
 
+            rule.second = checkConditions(rule.first, givenTriggers);
+        }
+        
+        afterCheck();
+    }
+
+    void RuleManager::loadRules(const std::filesystem::path& path)
+    {
         YAML::Node config = YAML::LoadFile(configPath.string());
         if (!config)
         {
             std::cout << "Failed to load config file" << std::endl;
-            return rules;
+            return;
         }
         
         if (!config["rules"])
@@ -23,15 +32,23 @@ namespace FlashBackClient
 
         for (const auto& rule : config["rules"])
         {
+            if (!rule["id"])
+            {
+                std::cout << "Rule has no id" << std::endl;
+                continue;
+            }
+
+            Rule newRule;
+            newRule.id = rule["id"].as<int>();
+
             if (!rule["name"])
             {
                 std::cout << "Rule has no name" << std::endl;
                 continue;
             }
 
-            name = rule["name"].as<std::string>();
+            newRule.name = rule["name"].as<std::string>();
 
-            Rule newRule;
             if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action);)
             {
                 std::cout << "Invalid or no action in rule" << name << std::endl;
@@ -44,36 +61,11 @@ namespace FlashBackClient
                 continue;
             }
 
-            rules.push_back(std::pair<std::string, Rule>(name, newRule));
+            _rules.push_back(std::pair<Rule, bool>(newRule, false));
         }
-
-        return rules;
     }
 
-    std::unordered_map<std::string, any> Helper::LoadSettings(std::string& configPath)
-    {
-        std::unordered_map<std::string, any> settings;
-
-        YAML::Node config = YAML::LoadFile(configPath.string());
-        if (!config)
-        {
-            std::cout << "Failed to load config file" << std::endl;
-            return settings;
-        }
-
-        if (config["name"])
-            settings["name"] = config["name"].as<std::string>();
-
-        if (config["path"])
-            settings["path"] = config["path"].as<std::string>();
-
-        if (config["encrypt"])
-            settings["encrypt"] = config["encrypt"].as<bool>();
-
-        return settings;
-    }
-
-    bool Helper::loadCases(Rule& rule, const YAML::Node& casesNode)
+    bool RuleManager::loadCases(Rule& rule, const YAML::Node& casesNode)
     {
         if (!casesNode)
             return false;
@@ -140,5 +132,31 @@ namespace FlashBackClient
         }
 
         return true;
+    }
+
+    bool checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers)
+    {
+        for (const auto& condition : rule.Conditions)
+        {
+            if checkTrigger(condition.TriggerName, givenTriggers)
+                continue;
+            
+            // TODO: check conditions not given by scheduler or event listener
+
+            return false;
+        }
+
+        return true;
+    }
+
+    bool checkTrigger(Trigger trigger, const std::vector<Trigger> givenTriggers)
+    {
+        for (const auto& trigger : givenTriggers)
+        {
+            if (condition.TriggerName == trigger)
+                return true;
+        }
+
+        return false;
     }
 } //namespace FlashBackClient

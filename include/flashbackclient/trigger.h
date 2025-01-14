@@ -35,6 +35,8 @@ namespace FlashBackClient
 
     struct Rule
     {
+        int id;
+        std::string name;
         Actions Action;
         std::vector<Condition> Conditions;
     };

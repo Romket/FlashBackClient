@@ -6,7 +6,7 @@ path: "~/Dev/FlashBackClient"
 
 target_type: "directory"
 
-encrypt: true
+encrypt: "directory"
 
 # Possible actions to take
 actions:
