@@ -1,0 +1,4 @@
+# ~/.config/flashbackclient/flashbackclient.yaml
+# Default settings
+
+encrypt: "none"

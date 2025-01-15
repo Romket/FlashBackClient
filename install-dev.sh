@@ -62,32 +62,28 @@ cmake_build() {
     log "Build completed successfully!"
 }
 
-# Install scheduler script to /usr/local/bin and set to run on startup
-install_scheduler() {
-    echo "Installing scheduler..."
-    sudo cp scheduler /usr/local/bin/flashbackclient/scheduler
-    sudo chmod +x /usr/local/bin/flashbackclient/scheduler
-
+# Create systemd service
+install() {
     echo "Creating systemd service..."
-    sudo cat > "/etc/systemd/system/flashback.scheduler.service" << EOF
+    sudo cat > "/etc/systemd/system/flashback.client.service" << EOF
 [Unit]
-Description=Scheduler for FlashBack
+Description=Client for FlashBack backup and sync software
 
 [Service]
-ExecStart=/usr/local/bin/flashbackclient/scheduler
+ExecStart=/usr/local/bin/flashback/client
 Restart=always
 
 [Install]
 WantedBy=multi-user.target
-Ailias=flashback.scheduler.service
+Ailias=flashback.client.service
 EOF
 
-    systemctl enable flashback.scheduler.service
-    systemctl start flashback.scheduler.service
+    systemctl enable flashback.client.service
+    systemctl start flashback.client.service
 
     check_error
 
-    echo "Scheduler installed"
+    echo "Installed"
 }
 
 # Generate config files
@@ -95,17 +91,14 @@ generate_configs() {
     echo "Generating configs..."
 
     mkdir ~/.flashback
-    mkdir ~/.flashback/scheduler
 
-    # TODO: create default config files
-    #// cp flashback.conf ~/.flashback/flashback.conf
-    #// cp scheduler.conf ~/.flashback/scheduler/scheduler.conf
+    cp configs/flashbackclient ~/.flashbackclient
 }
 
 main() {
     cmake_build
 
-    install_scheduler
+    install
 
     generate_configs
 }
