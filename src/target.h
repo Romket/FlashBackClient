@@ -17,11 +17,6 @@ namespace FlashBackClient
         Target(const std::filesystem::path& path) : RuleManager(path), SettingManager(path) {}
         virtual ~Target() = default;
 
-        Target(const Target&) = delete;             // Disable copy
-        Target(Target&&) = default;                 // Allow move
-        Target& operator=(const Target&) = delete;  // Disable assignment
-        Target& operator=(Target&&) = default;      // Allow move assignment
-
     private:
         void afterCheck() override;
 
