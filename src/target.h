@@ -11,10 +11,16 @@
 
 namespace FlashBackClient
 {
-    class Target : private RuleManager, private SettingManager
+    class Target : public RuleManager, public SettingManager
     {
     public:
         Target(const std::filesystem::path& path) : RuleManager(path), SettingManager(path) {}
+        virtual ~Target() = default;
+
+        Target(const Target&) = delete;             // Disable copy
+        Target(Target&&) = default;                 // Allow move
+        Target& operator=(const Target&) = delete;  // Disable assignment
+        Target& operator=(Target&&) = default;      // Allow move assignment
 
     private:
         void afterCheck() override;
@@ -24,7 +30,7 @@ namespace FlashBackClient
 
         std::string _targetName;
 
-        std::unordered_map<std::string, any> _targetSettings;
+        std::unordered_map<std::string, std::any> _targetSettings;
         std::unordered_map<std::string, Rule> _targetRules;
     };
 } //namespace FlashBackClient

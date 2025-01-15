@@ -10,7 +10,7 @@
 
 namespace FlashBackClient
 {
-    class ConfigManager : private SettingManager
+    class ConfigManager : public SettingManager
     {
     public:
         inline ConfigManager() : SettingManager(CONFIG_FILE_PATH) {}

@@ -1,16 +1,16 @@
 #pragma once
 
-#DEFINE CONFIG_DIR "~/.config/flashbackclient"
-#DEFINE CONFIG_FILE "flashbackclient.yaml"
-#DEFINE CONFIG_FILE_PATH CONFIG_DIR "/" CONFIG_FILE
+#define CONFIG_DIR "~/.config/flashbackclient"
+#define CONFIG_FILE "flashbackclient.yaml"
+#define CONFIG_FILE_PATH CONFIG_DIR "/" CONFIG_FILE
 
-#DEFINE SCHEDULER_CONFIG_DIR "~/.config/flashbackclient/scheduler"
-#DEFINE SCHEDULER_CONFIG_FILE "scheduler.yaml"
-#DEFINE SCHEDULER_CONFIG_FILE_PATH SCHEDULER_CONFIG_DIR "/" SCHEDULER_CONFIG_FILE
+#define SCHEDULER_CONFIG_DIR "~/.config/flashbackclient/scheduler"
+#define SCHEDULER_CONFIG_FILE "scheduler.yaml"
+#define SCHEDULER_CONFIG_FILE_PATH SCHEDULER_CONFIG_DIR "/" SCHEDULER_CONFIG_FILE
 
-#DEFINE TARGET_DEF_DIR "~/.config/flashbackclient/targets"
+#define TARGET_DEF_DIR "~/.config/flashbackclient/targets"
 
-#DEFINE LOG_DIR "~/.local/share/flashbackclient"
-#DEFINE LOG_FILE_FMT "%Y-%m-%d_%H-%M-%S"
+#define LOG_DIR "~/.local/share/flashbackclient"
+#define LOG_FILE_FMT "%Y-%m-%d_%H-%M-%S"
 
-#DEFINE RECURSION_LIMIT 10
+#define RECURSION_LIMIT 10

@@ -6,7 +6,7 @@
 
 namespace FlashBackClient
 {
-    void afterCheck()
+    void Scheduler::afterCheck()
     {
         for (const auto& target : _targets)
         {
@@ -16,7 +16,7 @@ namespace FlashBackClient
 
     void Scheduler::checkStartup()
     {
-        std::vector<int> metDefaults = CheckRules({Triggers::on_startup});
+        CheckRules({Triggers::on_startup});
     }
 
     void Scheduler::loadTargets(const std::filesystem::path& path, int depth)
@@ -26,11 +26,11 @@ namespace FlashBackClient
 
         for (const auto& entry : std::filesystem::directory_iterator(path))
         {
-            if (entry.path().is_directory())
+            if (std::filesystem::is_directory(entry.path()))
                 loadTargets(entry.path(), depth + 1);
-            else if (!entry.is_regular_file() || entry.path().extension() != ".yaml")
+            else if (!std::filesystem::is_regular_file(entry.path()) || entry.path().extension() != ".yaml")
                 continue;
-            else if (entry.path().is_regular_file())
+            else
                 _targets.push_back(std::make_unique<Target>(Target(entry.path())));
         }
     }

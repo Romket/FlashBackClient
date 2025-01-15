@@ -12,7 +12,7 @@ namespace FlashBackClient
     class RuleManager
     {
     public:
-        RuleManager(const std::filesystem::path& path) : loadRules(path) {}
+        RuleManager(const std::filesystem::path& path);
         virtual ~RuleManager() = default;
 
         void CheckRules(const std::vector<Triggers>& givenTriggers = {});
@@ -22,6 +22,8 @@ namespace FlashBackClient
     protected:
         virtual void afterCheck();
 
+        std::unordered_map<Rule, bool> _rules;
+
     private:
         void loadRules(const std::filesystem::path& path);
 
@@ -29,8 +31,6 @@ namespace FlashBackClient
         
         bool checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers = {});
 
-        bool checkTrigger(Trigger trigger, const std::vector<Trigger> givenTriggers = {});
-
-        std::unordered_map<Rule, bool> _rules;
+        bool checkTrigger(Triggers trigger, const std::vector<Triggers>& givenTriggers = {});
     };
 } //namespace FlashBackClient

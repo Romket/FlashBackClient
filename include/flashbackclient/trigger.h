@@ -30,7 +30,7 @@ namespace FlashBackClient
     struct Condition
     {
         Triggers TriggerName;
-        std::unordered_map<std::string, any> TriggerInfo;
+        std::unordered_map<std::string, std::any> TriggerInfo;
     };
 
     struct Rule
@@ -39,11 +39,30 @@ namespace FlashBackClient
         std::string name;
         Actions Action;
         std::vector<Condition> Conditions;
+
+        bool operator==(const Rule& other) const
+        {
+            return id == other.id && name == other.name;
+        }
     };
 } //namespace FlashBackClient
 
+// Hash function for Rule
+namespace std
+{
+    template <>
+    struct hash<FlashBackClient::Rule>
+    {
+        std::size_t operator()(const FlashBackClient::Rule& rule) const
+        {
+            return std::hash<int>()(rule.id) ^ (std::hash<std::string>()(rule.name) << 1);
+        }
+    };
+} //namespace std
+
 namespace YAML
 {
+    // .as<T> functions for FlashBackClient::Actions
     template<>
     struct convert<FlashBackClient::Actions>
     {
@@ -53,28 +72,23 @@ namespace YAML
                 return false;
 
             const std::string value = node.as<std::string>();
-            switch (value)
-            {
-            case "no_action":
-                action = no_action;
-                break;
-            case "download_changed":
-                action = download_changed;
-                break;
-            case "upload_changed":
-                action = upload_changed;
-                break;
-            case "sync_files":
-                action = sync_files;
-                break;
-            default:
+
+            if (value == "no_action")
+                action = FlashBackClient::Actions::no_action;
+            else if (value == "download_changed")
+                action = FlashBackClient::Actions::download_changed;
+            else if (value == "upload_changed")
+                action = FlashBackClient::Actions::upload_changed;
+            else if (value == "sync_files")
+                action = FlashBackClient::Actions::sync_files;
+            else
                 return false;
-            }
 
             return true;
         }
     };
 
+    // .as<T> functions for FlashBackClient::Triggers
     template<>
     struct convert<FlashBackClient::Triggers>
     {
@@ -84,29 +98,21 @@ namespace YAML
                 return false;
 
             const std::string value = node.as<std::string>();
-            switch (value)
-            {
-            case "none":
-                trigger = none;
-                break;
-            case "on_startup":
-                trigger = on_startup;
-                break;
-            case "on_shutdown":
-                trigger = on_shutdown;
-                break;
-            case "on_file_change":
-                trigger = on_file_change;
-                break;
-            case "on_schedule":
-                trigger = on_schedule;
-                break;
-            case "after_interval":
-                trigger = after_interval;
-                break;
-            default:
+
+            if (value == "none")
+                trigger = FlashBackClient::Triggers::none;
+            else if (value == "on_startup")
+                trigger = FlashBackClient::Triggers::on_startup;
+            else if (value == "on_shutdown")
+                trigger = FlashBackClient::Triggers::on_shutdown;
+            else if (value == "on_file_change")
+                trigger = FlashBackClient::Triggers::on_file_change;
+            else if (value == "on_schedule")
+                trigger = FlashBackClient::Triggers::on_schedule;
+            else if (value == "after_interval")
+                trigger = FlashBackClient::Triggers::after_interval;
+            else
                 return false;
-            }
 
             return true;
         }

@@ -12,7 +12,13 @@ set(CMAKE_INSTALL_PREFIX "/usr/local/bin/flashback")
 add_subdirectory(lib/yaml-cpp)
 
 add_executable(flashbackclient
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/configs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scheduler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/target.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/rulemanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/settingmanager.cpp
+)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 

@@ -1,11 +1,10 @@
-#include <flashbackclient/target.h>
-#include <flashbackclient/helper.h>
+#include "target.h"
 
 #include <iostream>
 
 namespace FlashBackClient
 {
-    void afterCheck()
+    void Target::afterCheck()
     {
         // TODO: check default and override rules
         // TODO: check rules are met and use upload, download, and sync

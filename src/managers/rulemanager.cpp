@@ -1,7 +1,14 @@
 #include <flashbackclient/managers/rulemanager.h>
 
+#include <iostream>
+
 namespace FlashBackClient
 {
+    RuleManager::RuleManager(const std::filesystem::path& path)
+    {
+        loadRules(path);
+    }
+
     void RuleManager::CheckRules(const std::vector<Triggers>& givenTriggers)
     {
         for (const auto& rule : _rules)
@@ -9,7 +16,7 @@ namespace FlashBackClient
             if (rule.first.Conditions.empty())
                 continue;
 
-            rule.second = checkConditions(rule.first, givenTriggers);
+            _rules.find(rule.first)->second = checkConditions(rule.first, givenTriggers);
         }
         
         afterCheck();
@@ -17,7 +24,7 @@ namespace FlashBackClient
 
     void RuleManager::loadRules(const std::filesystem::path& path)
     {
-        YAML::Node config = YAML::LoadFile(configPath.string());
+        YAML::Node config = YAML::LoadFile(path.string());
         if (!config)
         {
             std::cout << "Failed to load config file" << std::endl;
@@ -49,19 +56,19 @@ namespace FlashBackClient
 
             newRule.name = rule["name"].as<std::string>();
 
-            if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action);)
+            if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action))
             {
-                std::cout << "Invalid or no action in rule" << name << std::endl;
+                std::cout << "Invalid or no action in rule" << newRule.name << std::endl;
                 continue;
             }
 
-            if (!loadCases(newRule, rule["cases"]);)
+            if (!loadCases(newRule, rule["cases"]))
             {
-                std::cout << "Failed to load cases for rule" << name << std::endl;
+                std::cout << "Failed to load cases for rule" << newRule.name << std::endl;
                 continue;
             }
 
-            _rules.push_back(std::pair<Rule, bool>(newRule, false));
+            _rules.insert(std::pair<Rule, bool>(newRule, false));
         }
     }
 
@@ -102,21 +109,23 @@ namespace FlashBackClient
                         continue;
                     }
 
-                    newCase.TriggerInfo["times"].push_back(time["cron_exp"].as<std::string>());
+                    if (newCase.TriggerInfo.find("times") == newCase.TriggerInfo.end()) {
+                        newCase.TriggerInfo["times"] = std::vector<std::string>();
+                    }
+
+                    auto& times = std::any_cast<std::vector<std::string>&>(newCase.TriggerInfo["times"]);
+                    times.push_back(time["cron_exp"].as<std::string>());
                 }
             }
-            elif (trigger == Triggers::after_interval)
+            else if (trigger == Triggers::after_interval)
             {
-                if (!caseNode["after_last"])
-                    after_last = 0;
-                else
+                int after_last = 0;
+                int before_next_scheduled = 0;
+
+                if (caseNode["after_last"])
                     after_last = caseNode["after_last"].as<int>();
-
-                if (!caseNode["before_next_scheduled"])
-                    before_next_scheduled = 0;
-                else
+                if (caseNode["before_next_scheduled"])
                     before_next_scheduled = caseNode["before_next_scheduled"].as<int>();
-
 
                 newCase.TriggerInfo["after_last"] = after_last;
                 newCase.TriggerInfo["before_next_scheduled"] = before_next_scheduled;
@@ -134,11 +143,11 @@ namespace FlashBackClient
         return true;
     }
 
-    bool checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers)
+    bool RuleManager::checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers)
     {
         for (const auto& condition : rule.Conditions)
         {
-            if checkTrigger(condition.TriggerName, givenTriggers)
+            if (checkTrigger(condition.TriggerName, givenTriggers))
                 continue;
             
             // TODO: check conditions not given by scheduler or event listener
@@ -149,11 +158,11 @@ namespace FlashBackClient
         return true;
     }
 
-    bool checkTrigger(Trigger trigger, const std::vector<Trigger> givenTriggers)
+    bool RuleManager::checkTrigger(Triggers trigger, const std::vector<Triggers>& givenTriggers)
     {
-        for (const auto& trigger : givenTriggers)
+        for (const auto& givenTrigger : givenTriggers)
         {
-            if (condition.TriggerName == trigger)
+            if (givenTrigger == trigger)
                 return true;
         }
 
