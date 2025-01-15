@@ -20,7 +20,7 @@ namespace FlashBackClient
         inline std::unordered_map<Rule, bool> GetRules() { return _rules; }
 
     protected:
-        virtual void afterCheck();
+        virtual void afterCheck() {}
 
         std::unordered_map<Rule, bool> _rules;
 

@@ -17,7 +17,7 @@ namespace FlashBackClient
         inline void SetSettings(const std::unordered_map<std::string, std::any>& settings) { _settings = settings; }
 
         template<typename T>
-        inline T GetSettingValue(const std::string& name)
+        inline T GetSettingValue(const std::string& name) const
         {
             if (_settings.find(name) != _settings.end())
                 return _settings.at(name);
