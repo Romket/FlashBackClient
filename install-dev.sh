@@ -64,8 +64,8 @@ cmake_build() {
 
 # Create systemd service
 install() {
-    echo "Creating systemd service..."
-    sudo cat > "/etc/systemd/system/flashback.client.service" << EOF
+    log "Creating systemd service..."
+    cat > "/etc/systemd/system/flashback.client.service" << EOF
 [Unit]
 Description=Client for FlashBack backup and sync software
 
@@ -78,21 +78,23 @@ WantedBy=multi-user.target
 Ailias=flashback.client.service
 EOF
 
-    systemctl enable flashback.client.service
-    systemctl start flashback.client.service
+    sudo systemctl enable flashback.client.service
+    sudo systemctl start flashback.client.service
 
     check_error
 
-    echo "Installed"
+    log "Installed"
 }
 
 # Generate config files
 generate_configs() {
-    echo "Generating configs..."
+    log "Generating configs..."
 
-    mkdir ~/.flashback
+    if [ -d "~/.config/flashbackclient" ]; then
+        rm -r ~/.config/flashbackclient
+    fi
 
-    cp configs/flashbackclient ~/.flashbackclient
+    cp -r configs/flashbackclient ~/.config
 }
 
 main() {

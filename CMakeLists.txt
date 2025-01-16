@@ -7,7 +7,7 @@ project(FlashBackClient
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_INSTALL_PREFIX "/usr/local/bin/flashback")
+set(CMAKE_INSTALL_PREFIX "/usr/local/bin/")
 
 add_subdirectory(lib/yaml-cpp)
 

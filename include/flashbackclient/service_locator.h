@@ -12,6 +12,11 @@ namespace FlashBackClient
         template <typename T>
         static void Provide(T* service)
         {
+            if (!service)
+            {
+                throw std::invalid_argument("Cannot provide null service");
+            }
+
             auto& instance = getServiceInstance<T>();
             if (instance != nullptr)
             {

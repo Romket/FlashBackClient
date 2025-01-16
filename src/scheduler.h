@@ -17,13 +17,13 @@ namespace FlashBackClient
     class Scheduler : public RuleManager
     {
     public:
-        Scheduler() : RuleManager(SCHEDULER_CONFIG_FILE_PATH) { loadTargets(); checkStartup(); }
+        Scheduler() : RuleManager(SCHEDULER_CONFIG_FILE_PATH) {}
         virtual ~Scheduler() = default;
+
+        bool Initialize() override;
 
     private:
         void afterCheck() override;
-
-        void checkStartup();
 
         void loadTargets(const std::filesystem::path& path = TARGET_DEF_DIR, int depth = 0);
 

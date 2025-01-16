@@ -11,6 +11,8 @@ namespace FlashBackClient
 
     void RuleManager::CheckRules(const std::vector<Triggers>& givenTriggers)
     {
+        std::cout << "Checking rules" << std::endl;
+
         for (const auto& rule : _rules)
         {
             if (rule.first.Conditions.empty())
@@ -24,6 +26,8 @@ namespace FlashBackClient
 
     void RuleManager::loadRules(const std::filesystem::path& path)
     {
+        std::cout << "Loading rules from path " << path.string() << std::endl;
+
         YAML::Node config = YAML::LoadFile(path.string());
         if (!config)
         {
@@ -58,13 +62,13 @@ namespace FlashBackClient
 
             if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action))
             {
-                std::cout << "Invalid or no action in rule" << newRule.name << std::endl;
+                std::cout << "Invalid or no action in rule \"" << newRule.name << '\"' << std::endl;
                 continue;
             }
 
             if (!loadCases(newRule, rule["cases"]))
             {
-                std::cout << "Failed to load cases for rule" << newRule.name << std::endl;
+                std::cout << "Failed to load cases for rule \"" << newRule.name << '\"' << std::endl;
                 continue;
             }
 
@@ -154,6 +158,8 @@ namespace FlashBackClient
 
             return false;
         }
+
+        std::cout << "Condition met" << std::endl;
 
         return true;
     }

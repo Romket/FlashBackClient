@@ -3,6 +3,8 @@
 #include "configs.h"
 #include "scheduler.h"
 
+#include <iostream>
+
 int main()
 {
     // Provide ConfigManager as SettingManager
@@ -12,14 +14,14 @@ int main()
     // Provide Scheduler as RuleManager
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::RuleManager>(
         new FlashBackClient::Scheduler());
-
-    // Retrieve and use services (example)
-    auto configs = FlashBackClient::ServiceLocator::Get<FlashBackClient::SettingManager>();
-    auto rules = FlashBackClient::ServiceLocator::Get<FlashBackClient::RuleManager>();
-
-    // Shutdown services (example)
-    FlashBackClient::ServiceLocator::Shutdown<FlashBackClient::SettingManager>();
-    FlashBackClient::ServiceLocator::Shutdown<FlashBackClient::RuleManager>();
+    
+    if (!FlashBackClient::ServiceLocator::Get<FlashBackClient::RuleManager>()->Initialize())
+    {
+        std::cerr << "Failed to initialize scheduler" << std::endl;
+        return 1;
+    }
+    
+    auto defaultRules = FlashBackClient::ServiceLocator::Get<FlashBackClient::RuleManager>()->GetRules();
 
     return 0;
 }

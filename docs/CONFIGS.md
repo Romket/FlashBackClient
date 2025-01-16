@@ -26,24 +26,6 @@ encrypt: "file"
 
 This file contains the default rules for the scheduler to use when checking targets.
 
-The file must begin with the following:
-```yaml
-actions:
-  download_changed: "Download changed files"
-  upload_changed: "Upload changed files"
-  sync_files: "Download and upload changed files"
-  no_action: "Take no action"
-
-triggers:
-  on_startup: "System startup"
-  on_shutdown: "System shutdown"
-  on_file_change: "After a detected file change"
-  on_schedule: "Specific cron expressions"
-  after_interval: "Time after any previous"
-```
-
-These enums, `actions` and `triggers` define the actions to take when a condition is met and the triggers used to create those conditions.
-
 ### Actions
 There are four actions:
 - `download_changed` checks the server for any file changes and fetches changes, if any are found.
@@ -73,9 +55,9 @@ times:
   - cron_exp: "00 09 * * MON"
 ```
 
-`after_interval` has an additional setting `file_change_trigger` that can be used to define if the wait time should be reset after a file change or not. This setting is set to `false` by default.
+`after_interval` has an additional setting `file_change_trigger` that can be used to defitriggerne if the wait time should be reset after a file change or not. This setting is set to `false` by default.
 
-`after_interval` also has an `after_last` and `before_next_scheduled` setting that can be used to define the time to wait before and after the last trigger. These settings are in minutes, and will be set to the default value of `0` if not specified.
+`after_interval` also has an `after_last` and `before_next_scheduled` setting that can be used to define the minimum time before the next scheduled action and after the last action. These settings are in minutes, and will be set to the default value of `0` if not specified.
 
 *Note - not specifying an `after_last` or setting it to `0` will mean the case will be ignored.*
 
@@ -101,65 +83,65 @@ Rules with `id` 5 through 7 are examples of more complex rules, utilizing multip
 ```yaml
 - id: 0
   name: "Download on startup"
-  action: ${actions.download_changed}
+  action: "download_changed"
   cases:
-    - id: ${triggers.on_startup}
+    - id: "on_startup"
 
 - id: 1
   name: "Upload on shutdown"
-  action: ${actions.upload_changed}
+  action: "upload_changed"
   cases:
-    - id: ${triggers.on_shutdown}
+    - id: "on_shutdown"
 
 - id: 2
   name: "Sync files noon and midnight"
-  action: ${actions.sync_files}
+  action: "sync_files"
   cases:
-    - id: ${triggers.on_schedule}
+    - id: "on_schedule"
       times:
         - cron_exp: "00 00 * * *"
         - cron_exp: "00 12 * * *"
 
 - id: 3
   name: "Upload end of work week"
-  action: ${actions.upload_changed}
+  action: "upload_changed"
   cases:
-    - id: ${triggers.on_schedule}
+    - id: "on_schedule"
       times:
         - cron_exp: "00 17 * * FRI"
 
 - id: 4
   name: "Download start of work week"
-  action: ${actions.download_changed}
+  action: "download_changed"
   cases:
-    - id: ${triggers.on_schedule}
+    - id: "on_schedule"
       times:
         - cron_exp: "00 09 * * MON"
 
 - id: 5
   name: "Sync changed files after 2 hours"
-  action: ${actions.sync_files}
+  action: "sync_files"
   cases:
-    - id: ${triggers.on_file_change}
-    - id: ${triggers.after_interval}
+    - id: "on_file_change"
+    - id: "after_interval"
       after_last: 120
       before_next_scheduled: 60
 
 - id: 6
   name: "Download on startup on weekdays"
-  action: ${actions.download_changed}
+  action: "download_changed"
   cases:
-    - id: ${triggers.on_startup}
-    - id: ${triggers.on_schedule}
+    - id: "on_startup"
+    - id: "on_schedule"
       times:
         - cron_exp: "* * * * MON-FRI"
 
 - id: 7
   name: "Upload on shutdown on weekdays"
-  action: ${actions.upload_changed}
+  action: "upload_changed"
   cases:
-    - id: ${triggers.on_shutdown}
-    - id: ${triggers.on_schedule}
+    - id: "on_shutdown"
+    - id: "on_schedule"
       times:
         - cron_exp: "* * * * MON-FRI"
 ```
@@ -188,22 +170,22 @@ triggers:
 rules:
   - id: 0
     name: "Download on startup"
-    action: ${actions.download_changed}
+    action: "download_changed"
     cases:
-      - id: ${triggers.on_startup}
+      - id: "on_startup"
 
   - id: 1
     name: "Upload on shutdown"
-    action: ${actions.upload_changed}
+    action: "upload_changed"
     cases:
-      - id: ${triggers.on_shutdown}
+      - id: "on_shutdown"
 
   - id: 2
     name: "Sync changed files after 2 hours"
-    action: ${actions.sync_files}
+    action: "sync_files"
     cases:
-      - id: ${triggers.on_file_change}
-      - id: ${triggers.after_interval}
+      - id: "on_file_change"
+      - id: "after_interval"
         after_last: 120
         before_next_scheduled: 60
 ```
@@ -238,10 +220,10 @@ target_type: "file"
 
 rules:
   - name: "Sync changed files after 30 minutes"
-    action: ${actions.sync_files}
+    action: "sync_files"
     cases:
-      - id: ${triggers.on_file_change}
-      - id: ${triggers.after_interval}
+      - id: "on_file_change"
+      - id: "after_interval"
         after_last: 30
         before_next_scheduled: 30
 

@@ -8,27 +8,14 @@ target_type: "directory"
 
 encrypt: "directory"
 
-# Possible actions to take
-actions:
-  download_changed: "Download changed files"
-  upload_changed: "Upload changed files"
-  sync_files: "Download and upload changed files"
-  no_action: "Take no action"
-
-# Possible triggers to trigger an action
-triggers:
-  on_startup: "System startup"
-  on_shutdown: "System shutdown"
-  on_file_change: "After a detected file change"
-  on_schedule: "Specific cron expressions"
-  after_interval: "Time after any previous"
-
 # Rules for triggering actions
 rules:
-  - action: ${actions.sync_files}
+  - id: 0
+    name: "Sync files 30 minutes after last file change"
+    action: "sync_files"
     cases:
-      - id: ${triggers.on_file_change}
-      - id: ${triggers.after_interval}
+      - id: "on_file_change"
+      - id: "after_interval"
         file_change_trigger: true
         after_last: 30
         before_next_scheduled: 30

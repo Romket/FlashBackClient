@@ -1,41 +1,25 @@
 # ~/.config/flashbackclient/scheduler/scheduler.yaml
 # Default rules for the scheduler
 
-# Possible actions to take
-actions:
-  download_changed: "Download changed files"
-  upload_changed: "Upload changed files"
-  sync_files: "Download and upload changed files"
-  no_action: "Take no action"
-
-# Possible triggers to trigger an action
-triggers:
-  on_startup: "System startup"
-  on_shutdown: "System shutdown"
-  on_file_change: "After a detected file change"
-  on_schedule: "Specific cron expressions"
-  after_interval: "Time after any previous"
-
-# Rules for triggering actions
 rules:
   - id: 0
     name: "Download on startup"
-    action: ${actions.download_changed}
+    action: "download_changed"
     cases:
-      - id: ${triggers.on_startup}
+      - id: "on_startup"
 
   - id: 1
     name: "Upload on shutdown"
-    action: ${actions.upload_changed}
+    action: "upload_changed"
     cases:
-      - id: ${triggers.on_shutdown}
+      - id: "on_shutdown"
 
   - id: 2
     name: "Sync changed files after 2 hours"
-    action: ${actions.sync_files}
+    action: "sync_files"
     cases:
-      - id: ${triggers.on_file_change}
-      - id: ${triggers.after_interval}
+      - id: "on_file_change"
+      - id: "after_interval"
         file_change_trigger: true
         after_last: 120
         before_next_scheduled: 60

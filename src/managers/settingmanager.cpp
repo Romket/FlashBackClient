@@ -14,6 +14,8 @@ namespace FlashBackClient
 
     void SettingManager::loadSettings(const std::filesystem::path& path)
     {
+        std::cout << "Loading settings from path " << path.string() << std::endl;
+
         YAML::Node config = YAML::LoadFile(path.string());
         if (!config)
         {
@@ -32,14 +34,13 @@ namespace FlashBackClient
 
         if (config["override_rules"])
         {
-            _settings["override_rules"] = std::vector<int> {};
             for (const auto& rule : config["override_rules"])
             {
                 if (!rule["id"])
                     continue;
 
                 if (_settings.find("override_rules") == _settings.end())
-                    _settings["override_rules"] = std::vector<std::vector<int>> {};
+                    _settings["override_rules"] = std::vector<int> {};
                 
                 auto& rules = std::any_cast<std::vector<int>&>(_settings["override_rules"]);
                 rules.push_back(rule["id"].as<int>());

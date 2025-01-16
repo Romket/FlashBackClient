@@ -6,17 +6,25 @@
 
 namespace FlashBackClient
 {
+    bool Scheduler::Initialize()
+    {
+        loadTargets();
+        for (const auto& target : _targets)
+        {
+            target->Initialize();
+        }
+
+        CheckRules({Triggers::on_startup});
+
+        return true;
+    }
+
     void Scheduler::afterCheck()
     {
         for (const auto& target : _targets)
         {
             target->CheckRules({Triggers::on_startup});
         }
-    }
-
-    void Scheduler::checkStartup()
-    {
-        CheckRules({Triggers::on_startup});
     }
 
     void Scheduler::loadTargets(const std::filesystem::path& path, int depth)
