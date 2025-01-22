@@ -30,5 +30,5 @@ endif()
 
 install(TARGETS flashbackclient
     DESTINATION ${CMAKE_INSTALL_PREFIX}
-    RENAME client
+    RENAME flashbackclient
 )
