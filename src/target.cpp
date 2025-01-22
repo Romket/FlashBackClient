@@ -6,21 +6,26 @@
 
 namespace FlashBackClient
 {
+    bool Target::Initialize()
+    {
+        return RuleManager::Initialize() && SettingManager::Initialize();
+    }
+
     void Target::afterCheck()
     {
         auto metDefaults = checkOverrideRules();
 
         auto rules = metDefaults;
-        rules.insert(_rules);
+        rules.insert(_rules.begin(), _rules.end());
 
         for (auto& rule : rules)
         {
             if (!rule.second)
                 continue;
 
-            if (rule.first.action == Actions::upload_changed || rule.first.action == Actions::sync_files)
+            if (rule.first.Action == Actions::upload_changed || rule.first.Action == Actions::sync_files)
                 upload();
-            if (rule.first.action == Actions::download_changed || rule.first.action == Actions::sync_files)
+            if (rule.first.Action == Actions::download_changed || rule.first.Action == Actions::sync_files)
                 download();
         }
     }
@@ -39,7 +44,7 @@ namespace FlashBackClient
         for (const auto& schedulerRule : schedulerRules)
         {
             if (checkRule(schedulerRule.first, overrideRules))
-                metDefaults.push_back(std::pair<Rule, bool>(schedulerRule.first, true));
+                metDefaults.insert(std::pair<Rule, bool>(schedulerRule.first, true));
         }
 
         return metDefaults;
@@ -49,7 +54,7 @@ namespace FlashBackClient
     {
         for (int overrideRule : overrideRules)
         {
-            if (overrideRule == schedulerRule.id)
+            if (overrideRule == defaultRule.id)
                 return false;
         }
 

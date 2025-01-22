@@ -17,6 +17,8 @@ namespace FlashBackClient
         Target(const std::filesystem::path& path) : RuleManager(path), SettingManager(path) {}
         virtual ~Target() = default;
 
+        bool Initialize() override;
+
     private:
         void afterCheck() override;
         std::unordered_map<Rule, bool> checkOverrideRules();
