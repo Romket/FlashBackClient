@@ -2,7 +2,7 @@
 ## High Priority
 - [ ] Get server connection working
 - [ ] Nontrivial rule checks
-- [ ] Override rule check
+- [x] Override rule check
 - [x] Load configs
 - [x] Load rules
 - [x] Basic rule checking

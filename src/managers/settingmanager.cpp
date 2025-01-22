@@ -34,6 +34,8 @@ namespace FlashBackClient
 
         if (config["override_rules"])
         {
+            auto& rules = std::any_cast<std::vector<int>&>(_settings["override_rules"]);
+            
             for (const auto& rule : config["override_rules"])
             {
                 if (!rule["id"])
@@ -42,7 +44,6 @@ namespace FlashBackClient
                 if (_settings.find("override_rules") == _settings.end())
                     _settings["override_rules"] = std::vector<int> {};
                 
-                auto& rules = std::any_cast<std::vector<int>&>(_settings["override_rules"]);
                 rules.push_back(rule["id"].as<int>());
             }
         }

@@ -19,6 +19,8 @@ namespace FlashBackClient
 
     private:
         void afterCheck() override;
+        std::unordered_map<Rule, bool> checkOverrideRules();
+        bool checkRule(Rule defaultRule, const std::vector<int>& overrideRules);
 
         bool upload();
         bool download();
