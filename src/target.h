@@ -24,8 +24,5 @@ namespace FlashBackClient
         bool download();
 
         std::string _targetName;
-
-        std::unordered_map<std::string, std::any> _targetSettings;
-        std::unordered_map<std::string, Rule> _targetRules;
     };
 } //namespace FlashBackClient

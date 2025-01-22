@@ -13,6 +13,8 @@ namespace FlashBackClient
         SettingManager(const std::filesystem::path& path);
         virtual ~SettingManager() = default;
 
+        virtual bool Initialize() { return true; }
+
         inline std::unordered_map<std::string, std::any> GetSettings() { return _settings; }
         inline void SetSettings(const std::unordered_map<std::string, std::any>& settings) { _settings = settings; }
 
@@ -31,10 +33,9 @@ namespace FlashBackClient
         }
 
     protected:
+        std::unordered_map<std::string, std::any> _settings;
 
     private:
         void loadSettings(const std::filesystem::path& path);
-
-        std::unordered_map<std::string, std::any> _settings;
     };
 } //namespace FlashBackClient

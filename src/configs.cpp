@@ -1,8 +1,11 @@
 #include "configs.h"
 
-#include <stdexcept>
+#include <filesystem>
 
 namespace FlashBackClient
 {
-
+    void ConfigManager::GenerateConfigs()
+    {
+        // TODO
+    }
 } //namespace FlashBackClient

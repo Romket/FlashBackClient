@@ -14,5 +14,7 @@ namespace FlashBackClient
     {
     public:
         inline ConfigManager() : SettingManager(CONFIG_FILE_PATH) {}
+
+        static void GenerateConfigs();
     };
 } //namespace FlashBackClient
