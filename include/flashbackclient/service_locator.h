@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 
@@ -23,6 +24,18 @@ namespace FlashBackClient
                 throw std::invalid_argument("Service already provided. Please call Shutdown<T> first.");
             }
             instance = std::unique_ptr<T>(service);
+
+            try
+            {
+                if(!instance->Initialize())
+                {
+                    std::cout << "Failed to initialize" << std::endl;
+                }
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "Initialize call failed or does not exist" << std::endl;
+            }
         }
 
         // Get the provided service
