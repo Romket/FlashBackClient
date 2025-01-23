@@ -15,14 +15,14 @@ namespace FlashBackClient
         RuleManager(const std::filesystem::path& path);
         virtual ~RuleManager() = default;
 
-        virtual bool Initialize() { return true; }
+        virtual bool Initialize() = 0;
 
         void CheckRules(const std::vector<Triggers>& givenTriggers = {});
 
         inline std::unordered_map<Rule, bool> GetRules() { return _rules; }
 
     protected:
-        virtual void afterCheck() {}
+        virtual void afterCheck() = 0;
 
         std::unordered_map<Rule, bool> _rules;
 

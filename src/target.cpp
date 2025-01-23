@@ -6,11 +6,6 @@
 
 namespace FlashBackClient
 {
-    bool Target::Initialize()
-    {
-        return RuleManager::Initialize() && SettingManager::Initialize();
-    }
-
     void Target::afterCheck()
     {
         auto metDefaults = checkOverrideRules();
