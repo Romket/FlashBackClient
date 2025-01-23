@@ -39,7 +39,5 @@ int main(int argc, char** argv)
         return 1;
     }
     
-    auto defaultRules = FlashBackClient::ServiceLocator::Get<FlashBackClient::RuleManager>()->GetRules();
-
     return 0;
 }
