@@ -20,7 +20,7 @@ namespace FlashBackClient
 
             _rules.find(rule.first)->second = checkConditions(rule.first, givenTriggers);
         }
-        
+
         afterCheck();
     }
 
@@ -34,7 +34,7 @@ namespace FlashBackClient
             std::cout << "Failed to load config file" << std::endl;
             return;
         }
-        
+
         if (!config["rules"])
         {
             std::cout << "No rules found in config file" << std::endl;
@@ -80,7 +80,7 @@ namespace FlashBackClient
     {
         if (!casesNode)
             return false;
-        
+
         for (const auto& caseNode : casesNode)
         {
             if (!caseNode["id"])
@@ -153,7 +153,7 @@ namespace FlashBackClient
         {
             if (checkTrigger(condition.TriggerName, givenTriggers))
                 continue;
-            
+
             // TODO: check conditions not given by scheduler or event listener
 
             return false;
@@ -166,6 +166,8 @@ namespace FlashBackClient
 
     bool RuleManager::checkTrigger(Triggers trigger, const std::vector<Triggers>& givenTriggers)
     {
+        // TODO: use std::any_of
+        // cppcheck-suppress useStlAlgorithm
         for (const auto& givenTrigger : givenTriggers)
         {
             if (givenTrigger == trigger)
