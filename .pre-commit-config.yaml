@@ -17,6 +17,6 @@ repos:
         args: ["--enable=all", "--language=c++", "--inline-suppr",
                "--suppress=missingIncludeSystem",
                "--suppress=returnByReference", "--suppress=unusedFunction",
-               "--suppress=returnByReference"]
+               "--suppress=unusedStructMember"]
 #   -   id: include-what-you-use
 #       args: ["-p", "./build/compile_commands.json"]
