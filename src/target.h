@@ -14,7 +14,7 @@ namespace FlashBackClient
     class Target : public RuleManager, public SettingManager
     {
     public:
-        Target(const std::filesystem::path& path) : RuleManager(path), SettingManager(path) {}
+        explicit Target(const std::filesystem::path& path) : RuleManager(path), SettingManager(path) {}
         virtual ~Target() = default;
 
         bool Initialize() override { return true; }
@@ -26,7 +26,5 @@ namespace FlashBackClient
 
         bool upload();
         bool download();
-
-        std::string _targetName;
     };
 } //namespace FlashBackClient
