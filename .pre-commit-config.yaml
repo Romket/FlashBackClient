@@ -14,6 +14,6 @@ repos:
 #   -   id: clang-tidy
 #       args: ["build/compile_commands.json"]
     -   id: cppcheck
-        args: ["--enable=all", "--language=c++", "--inline-suppr"]
+        args: ["--enable=all", "--language=c++", "--inline-suppr", "--check-level=exhaustive"]
 #   -   id: include-what-you-use
 #       args: ["-p", "./build/compile_commands.json"]
