@@ -15,7 +15,7 @@ repos:
 #       args: ["build/compile_commands.json"]
     -   id: cppcheck
         args: ["--enable=all", "--language=c++", "--inline-suppr",
-               "--suppress=missingIncludeSystem",
+               "--suppress-unmatched", "--suppress=missingIncludeSystem",
                "--suppress=returnByReference", "--suppress=unusedFunction",
                "--suppress=unusedStructMember"]
 #   -   id: include-what-you-use
