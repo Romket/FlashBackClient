@@ -19,11 +19,11 @@ namespace FlashBackClient
         return true;
     }
 
-    void Scheduler::afterCheck()
+    void Scheduler::afterCheck(const std::vector<Triggers>& givenTriggers)
     {
         for (const auto& target : _targets)
         {
-            target->CheckRules({Triggers::on_startup});
+            target->CheckRules(givenTriggers);
         }
     }
 

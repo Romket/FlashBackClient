@@ -20,7 +20,7 @@ namespace FlashBackClient
         bool Initialize() override { return true; }
 
     private:
-        void afterCheck() override;
+        void afterCheck(const std::vector<Triggers>& givenTriggers = {}) override;
         std::unordered_map<Rule, bool> checkOverrideRules();
         bool checkRule(Rule defaultRule, const std::vector<int>& overrideRules);
 

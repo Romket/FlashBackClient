@@ -6,7 +6,7 @@
 
 namespace FlashBackClient
 {
-    void Target::afterCheck()
+    void Target::afterCheck(const std::vector<Triggers>& givenTriggers)
     {
         auto metDefaults = checkOverrideRules();
 

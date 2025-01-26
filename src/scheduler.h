@@ -23,7 +23,7 @@ namespace FlashBackClient
         bool Initialize() override;
 
     private:
-        void afterCheck() override;
+        void afterCheck(const std::vector<Triggers>& givenTriggers = {}) override;
 
         void loadTargets(const std::filesystem::path& path = TARGET_DEF_DIR, int depth = 0);
 
