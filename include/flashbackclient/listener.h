@@ -19,12 +19,18 @@ namespace FlashBackClient
         virtual bool AddListener(const std::filesystem::path& path) = 0;
 
     protected:
+        enum class StatusEnum
+        {
+            inactive,
+            active,
+            changed
+        };
+
         struct ListenerInfo
         {
             std::filesystem::path Path;
             std::chrono::time_point LastUpdate = std::chrono::system_clock::now();
-            bool Status = false;
-            bool Active = false;
+            StatusEnum Status = StatusEnum::inactive;
         };
 
         inline void listenerThread() { while (_running) processEvents(); }
