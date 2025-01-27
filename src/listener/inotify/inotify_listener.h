@@ -10,7 +10,7 @@ namespace FlashBackClient
     {
     public:
         // cppcheck-suppress uninitMemberVar
-        InotifyListener() : FileChangeListener() {}
+        InotifyListener() : _inotifyFd(-1) {}
         virtual ~InotifyListener() = default;
 
         bool Initialize() override;
