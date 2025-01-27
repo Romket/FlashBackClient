@@ -6,14 +6,14 @@
 
 namespace FlashBackClient
 {
-    void Target::afterCheck()
+    void Target::afterCheck(const std::vector<Triggers>& givenTriggers)
     {
         auto metDefaults = checkOverrideRules();
 
         auto rules = metDefaults;
         rules.insert(_rules.begin(), _rules.end());
 
-        for (auto& rule : rules)
+        for (const auto& rule : rules)
         {
             if (!rule.second)
                 continue;
@@ -33,7 +33,7 @@ namespace FlashBackClient
             return schedulerRules;
 
         auto overrideRules = std::any_cast<std::vector<int>&>(_settings["override_rules"]);
-    
+
         std::unordered_map<Rule, bool> metDefaults;
 
         for (const auto& schedulerRule : schedulerRules)
@@ -47,6 +47,8 @@ namespace FlashBackClient
 
     bool Target::checkRule(Rule defaultRule, const std::vector<int>& overrideRules)
     {
+        // TODO: use std::none_of
+        // cppcheck-suppress useStlAlgorithm
         for (int overrideRule : overrideRules)
         {
             if (overrideRule == defaultRule.id)

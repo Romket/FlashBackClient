@@ -23,11 +23,11 @@ namespace FlashBackClient
         bool Initialize() override;
 
     private:
-        void afterCheck() override;
+        void afterCheck(const std::vector<Triggers>& givenTriggers = {}) override;
 
         void loadTargets(const std::filesystem::path& path = TARGET_DEF_DIR, int depth = 0);
 
+        // cppcheck-suppress unusedStructMember
         std::vector<std::unique_ptr<Target>> _targets;
-        std::vector<Rule> _globalRules;
     };
 } //namespace FlashBackClient

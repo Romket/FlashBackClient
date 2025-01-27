@@ -27,9 +27,12 @@ namespace FlashBackClient
         after_interval
     };
 
+    //TODO: something better
     struct Condition
     {
+        // cppcheck-suppress unusedStructMember
         Triggers TriggerName;
+        // cppcheck-suppress unusedStructMember
         std::unordered_map<std::string, std::any> TriggerInfo;
     };
 
@@ -37,7 +40,9 @@ namespace FlashBackClient
     {
         int id;
         std::string name;
+        // cppcheck-suppress unusedStructMember
         Actions Action;
+        // cppcheck-suppress unusedStructMember
         std::vector<Condition> Conditions;
 
         bool operator==(const Rule& other) const

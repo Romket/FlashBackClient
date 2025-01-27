@@ -22,7 +22,7 @@ namespace FlashBackClient
         inline std::unordered_map<Rule, bool> GetRules() { return _rules; }
 
     protected:
-        virtual void afterCheck() = 0;
+        virtual void afterCheck(const std::vector<Triggers>& givenTriggers = {}) = 0;
 
         std::unordered_map<Rule, bool> _rules;
 
@@ -30,7 +30,7 @@ namespace FlashBackClient
         void loadRules(const std::filesystem::path& path);
 
         bool loadCases(Rule& rule, const YAML::Node& casesNode);
-        
+
         bool checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers = {});
 
         bool checkTrigger(Triggers trigger, const std::vector<Triggers>& givenTriggers = {});
