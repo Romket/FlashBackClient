@@ -9,6 +9,13 @@ namespace FlashBackClient
 {
     class FileChangeListener
     {
+    protected:
+        enum class ListenerType
+        {
+            base,
+            subdir
+        };
+
     public:
         FileChangeListener() = default;
         virtual ~FileChangeListener() = default;
@@ -16,7 +23,8 @@ namespace FlashBackClient
         virtual bool Initialize() = 0;
         virtual bool Shutdown() = 0;
 
-        virtual bool AddListener(const std::filesystem::path& path) = 0;
+        virtual bool AddListener(const std::filesystem::path& path,
+                                 ListenerType type = ListenerType::base) = 0;
 
     protected:
         enum class StatusEnum
