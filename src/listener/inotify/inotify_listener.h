@@ -10,13 +10,14 @@ namespace FlashBackClient
     {
     public:
         // cppcheck-suppress uninitMemberVar
-        InotifyListener() : _inotifyFd(-1) {}
+        InotifyListener() : _inotifyFd(-1) : FileChangeListener() {}
         virtual ~InotifyListener() = default;
 
         bool Initialize() override;
         bool Shutdown() override;
 
-        bool AddListener(const std::filesystem::path& path) override;
+        bool AddListener(const std::filesystem::path& path
+                         ListenerType type = ListenerType::base, int depth = 0) override;
 
     private:
         void processEvents() override;

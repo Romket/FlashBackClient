@@ -18,7 +18,7 @@ namespace FlashBackClient
         };
 
     public:
-        FileChangeListener() = default;
+        FileChangeListener() : _running(false), {}
         virtual ~FileChangeListener() = default;
 
         virtual bool Initialize() = 0;
