@@ -3,6 +3,7 @@
 #include <flashbackclient/listener.h>
 
 #include <string>
+#include <unordered_map>
 
 namespace FlashBackClient
 {
@@ -10,7 +11,7 @@ namespace FlashBackClient
     {
     public:
         // cppcheck-suppress uninitMemberVar
-        InotifyListener() : _inotifyFd(-1) : FileChangeListener() {}
+        InotifyListener() : _inotifyFd(-1), FileChangeListener() {}
         virtual ~InotifyListener() = default;
 
         bool Initialize() override;

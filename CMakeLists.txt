@@ -18,6 +18,7 @@ add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/rulemanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/settingmanager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/listener/inotify/inotify_listener.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)

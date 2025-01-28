@@ -18,7 +18,7 @@ namespace FlashBackClient
         };
 
     public:
-        FileChangeListener() : _running(false), {}
+        FileChangeListener() : _running(false) {}
         virtual ~FileChangeListener() = default;
 
         virtual bool Initialize() = 0;
@@ -39,7 +39,7 @@ namespace FlashBackClient
         struct ListenerInfo
         {
             std::filesystem::path Path;
-            std::chrono::time_point LastUpdate = std::chrono::system_clock::now();
+            std::chrono::time_point<std::chrono::system_clock> LastUpdate;
             StatusEnum Status = StatusEnum::inactive;
             ListenerType Type = ListenerType::base;
         };
