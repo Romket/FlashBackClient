@@ -16,8 +16,7 @@ namespace FlashBackClient
         bool Initialize() override;
         bool Shutdown() override;
 
-        bool AddListener(const std::filesystem::path& path
-                         ListenerType type = ListenerType::base, int depth = 0) override;
+        bool AddListener(const std::filesystem::path& path, int depth = 0) override;
 
     private:
         void processEvents() override;
