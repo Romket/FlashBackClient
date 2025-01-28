@@ -58,6 +58,14 @@ namespace FlashBackClient
             instance.reset();
         }
 
+        template <typename T>
+        static bool IsProvided()
+        {
+            if (getServiceInstance<T>())
+                return true;
+            return false;
+        }
+
     private:
         template <typename T>
         static std::unique_ptr<T>& getServiceInstance()
