@@ -16,3 +16,5 @@
 #define LOG_FILE_FMT "%Y-%m-%d_%H-%M-%S"
 
 #define RECURSION_LIMIT 10
+
+#define THREAD_WAIT_TIME 1000

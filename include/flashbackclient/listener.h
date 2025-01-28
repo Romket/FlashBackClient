@@ -1,7 +1,10 @@
 #pragma once
 
+#include <flashbackclient/defs.h>
+
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <filesystem>
 #include <thread>
 #include <vector>
@@ -39,16 +42,32 @@ namespace FlashBackClient
         std::vector<ListenerInfo> GetBaseListeners() { return _baseListeners; }
 
     protected:
-        inline void listenerThread() { while (_running) processEvents(); }
-
         virtual void processEvents() = 0;
 
         std::atomic<bool> _running;
+        std::condition_variable _cv;
+        std::mutex _mutex;
         std::thread _listenerThread;
 
         // cppcheck-suppress unusedStructMember
         std::vector<ListenerInfo> _baseListeners;
         // cppcheck-suppress unusedStructMember
         std::vector<ListenerInfo> _subListeners;
+
+        inline void listenerThread()
+        {
+            while (_running)
+            {
+                {
+                    std::unique_lock<std::mutex> lock(_mutex);
+                    _cv.wait_for(lock, std::chrono::milliseconds(THREAD_WAIT_TIME),
+                                 [this] { return !_running; });
+                }
+
+                if (!_running) break;
+
+                processEvents();
+            }
+        }
     };
 } //namespace FlashBackClient
