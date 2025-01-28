@@ -3,6 +3,7 @@
 #include <atomic>
 #include <chrono>
 #include <filesystem>
+#include <thread>
 #include <vector>
 
 namespace FlashBackClient
@@ -24,7 +25,8 @@ namespace FlashBackClient
         virtual bool Shutdown() = 0;
 
         virtual bool AddListener(const std::filesystem::path& path,
-                                 ListenerType type = ListenerType::base) = 0;
+                                 ListenerType type = ListenerType::base,
+                                 int depth = 0) = 0;
 
     protected:
         enum class StatusEnum
@@ -49,6 +51,7 @@ namespace FlashBackClient
         virtual void processEvents() = 0;
 
         std::atomic<bool> _running;
+        std::thread _listenerThread;
 
         // cppcheck-suppress unusedStructMember
         std::vector<ListenerInfo> _listeners;
