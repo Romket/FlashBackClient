@@ -51,11 +51,13 @@ namespace FlashBackClient
 
         ListenerInfo info;
         info.Path = path;
-        info.Type = depth == 0 ? ListenerType::base : ListenerType::subdir;
         info.Status = StatusEnum::active;
         info.LastUpdate = std::chrono::system_clock::now();
 
-        _listeners.push_back(info);
+        if (depth == 0)
+            _baseListeners.push_back(info);
+        else
+            _subListeners.push_back(info);
 
         if (!std::filesystem::is_directory(path))
         {
@@ -108,7 +110,7 @@ namespace FlashBackClient
             else
                 info.Status = StatusEnum::modified;
 
-            for (auto& listener : _listeners)
+            for (auto& listener : _baseListeners)
             {
                 if (listener.Path == path)
                 {
