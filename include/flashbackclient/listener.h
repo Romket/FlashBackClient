@@ -23,7 +23,9 @@ namespace FlashBackClient
         {
             inactive,
             active,
-            changed
+            // TODO: update target configs to include cases for self move, self delete, etc.
+            self_modified,
+            modified
         };
 
         struct ListenerInfo
