@@ -10,6 +10,8 @@
 - [x] Basic rule checking
 
 ## Medium Priority
+- [ ] Listener path ignores
+- [ ] Implement logger, remove print statements
 - [ ] Add `--generate-configs` option
 - [ ] Specify custom formatting in [.clang-format](.clang-format)
 

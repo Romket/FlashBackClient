@@ -1,16 +1,42 @@
 #include "target.h"
 
 #include <flashbackclient/service_locator.h>
+#include <listener/platform_listener.h>
 
 #include <iostream>
 
 namespace FlashBackClient
 {
+    bool Target::Initialize()
+    {
+        auto rules = checkOverrideRules();
+        rules.insert(_rules.begin(), _rules.end());
+
+        for (const auto& rule : rules)
+        {
+            std::vector<Condition> ruleConditions = rule.first.Conditions;
+
+            for (const auto& condition : ruleConditions)
+            {
+                if (condition.TriggerName == Triggers::on_file_change)
+                {
+                    if (!ServiceLocator::IsProvided<PlatformListener>())
+                        ServiceLocator::Provide<PlatformListener>(new PlatformListener);
+
+                    if (!ServiceLocator::Get<PlatformListener>()->
+                        AddListener(GetSettingValue<std::string>("path")))
+                        return false;
+                    return true;
+                }
+            }
+        }
+
+        return true;
+    }
+
     void Target::afterCheck(const std::vector<Triggers>& givenTriggers)
     {
-        auto metDefaults = checkOverrideRules();
-
-        auto rules = metDefaults;
+        auto rules = checkOverrideRules();
         rules.insert(_rules.begin(), _rules.end());
 
         for (const auto& rule : rules)

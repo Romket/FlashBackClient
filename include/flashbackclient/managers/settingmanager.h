@@ -15,6 +15,7 @@ namespace FlashBackClient
 
         virtual bool Initialize() = 0;
 
+        // cppcheck-suppress returnByReference
         inline std::unordered_map<std::string, std::any> GetSettings() { return _settings; }
         inline void SetSettings(const std::unordered_map<std::string, std::any>& settings) { _settings = settings; }
 
@@ -22,7 +23,7 @@ namespace FlashBackClient
         inline T GetSettingValue(const std::string& name) const
         {
             if (_settings.find(name) != _settings.end())
-                return _settings.at(name);
+                return std::any_cast<T>(_settings.at(name));
 
             throw std::invalid_argument("key not found in settings map");
         }
@@ -37,5 +38,7 @@ namespace FlashBackClient
 
     private:
         void loadSettings(const std::filesystem::path& path);
+
+        std::string expandHomeDirectory(const std::string& path);
     };
 } //namespace FlashBackClient

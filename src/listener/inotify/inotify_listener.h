@@ -10,7 +10,6 @@ namespace FlashBackClient
     class InotifyListener : public FileChangeListener
     {
     public:
-        // cppcheck-suppress uninitMemberVar
         InotifyListener() : _inotifyFd(-1), FileChangeListener() {}
         virtual ~InotifyListener() = default;
 
@@ -22,7 +21,6 @@ namespace FlashBackClient
     private:
         void processEvents() override;
 
-        // cppcheck-suppress unusedStructMember
         int _inotifyFd;
         // cppcheck-suppress unusedStructMember
         std::unordered_map<int, std::string> _watchDescriptors;

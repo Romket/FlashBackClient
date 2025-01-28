@@ -35,12 +35,17 @@ namespace FlashBackClient
 
     bool InotifyListener::AddListener(const std::filesystem::path& path, int depth)
     {
+        std::cout << "Adding listener in path " << path << std::endl;
+
         if (depth > RECURSION_LIMIT)
             return false;
 
         int wd = inotify_add_watch(_inotifyFd, path.c_str(), flashback_ANY_FILE_EVENT);
         if (wd < 0)
+        {
+            perror("Failed to create watch descriptor");
             return false;
+        }
 
         _watchDescriptors[wd] = path.string();
 
@@ -53,14 +58,17 @@ namespace FlashBackClient
         _listeners.push_back(info);
 
         if (!std::filesystem::is_directory(path))
+        {
+            std::cout << "Path is not directory" << std::endl;
             return true;
+        }
 
         // cppcheck-suppress useStlAlgorithm
         for (const auto& item : std::filesystem::directory_iterator(path))
         {
             if (item.is_directory())
             {
-                if (AddListener(item.path(), depth + 1))
+                if (!AddListener(item.path(), depth + 1))
                     return false;
             }
         }

@@ -17,7 +17,7 @@ namespace FlashBackClient
         explicit Target(const std::filesystem::path& path) : RuleManager(path), SettingManager(path) {}
         virtual ~Target() = default;
 
-        bool Initialize() override { return true; }
+        bool Initialize() override;
 
     private:
         void afterCheck(const std::vector<Triggers>& givenTriggers = {}) override;

@@ -21,7 +21,8 @@ add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/src/listener/inotify/inotify_listener.cpp
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
+                    ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_link_libraries(flashbackclient yaml-cpp)
 
