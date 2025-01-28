@@ -41,6 +41,7 @@ namespace FlashBackClient
             std::filesystem::path Path;
             std::chrono::time_point LastUpdate = std::chrono::system_clock::now();
             StatusEnum Status = StatusEnum::inactive;
+            ListenerType Type = ListenerType::base;
         };
 
         inline void listenerThread() { while (_running) processEvents(); }
