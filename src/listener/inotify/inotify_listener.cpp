@@ -35,7 +35,8 @@ namespace FlashBackClient
 
     bool InotifyListener::AddListener(const std::filesystem::path& path, int depth)
     {
-        std::cout << "Adding listener in path " << path << std::endl;
+        if (depth == 0)
+            std::cout << "Adding listener in path " << path << std::endl;
 
         if (depth > RECURSION_LIMIT)
             return false;
@@ -49,15 +50,14 @@ namespace FlashBackClient
 
         _watchDescriptors[wd] = path.string();
 
-        ListenerInfo info;
-        info.Path = path;
-        info.Status = StatusEnum::active;
-        info.LastUpdate = std::chrono::system_clock::now();
-
         if (depth == 0)
-            _baseListeners.push_back(info);
-        else
-            _subListeners.push_back(info);
+        {
+            ListenerInfo info;
+            info.Path = path;
+            info.Status = StatusEnum::active;
+            info.LastUpdate = std::chrono::system_clock::now();
+            _listeners.push_back(info);
+        }
 
         if (!std::filesystem::is_directory(path))
         {
@@ -110,7 +110,7 @@ namespace FlashBackClient
             else
                 info.Status = StatusEnum::modified;
 
-            for (auto& listener : _baseListeners)
+            for (auto& listener : _listeners)
             {
                 if (listener.Path == path)
                 {

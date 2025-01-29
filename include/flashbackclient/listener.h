@@ -39,7 +39,7 @@ namespace FlashBackClient
         virtual bool AddListener(const std::filesystem::path& path, int depth = 0) = 0;
 
         // cppcheck-suppress returnByReference
-        std::vector<ListenerInfo> GetBaseListeners() { return _baseListeners; }
+        std::vector<ListenerInfo> GetListeners() { return _listeners; }
 
     protected:
         virtual void processEvents() = 0;
@@ -50,9 +50,7 @@ namespace FlashBackClient
         std::thread _listenerThread;
 
         // cppcheck-suppress unusedStructMember
-        std::vector<ListenerInfo> _baseListeners;
-        // cppcheck-suppress unusedStructMember
-        std::vector<ListenerInfo> _subListeners;
+        std::vector<ListenerInfo> _listeners;
 
         inline void listenerThread()
         {
