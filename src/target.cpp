@@ -9,6 +9,9 @@ namespace FlashBackClient
 {
     bool Target::Initialize()
     {
+        if (!ServiceLocator::IsProvided<PlatformListener>())
+            ServiceLocator::Provide<PlatformListener>(new PlatformListener());
+
         auto rules = checkOverrideRules();
         rules.insert(_rules.begin(), _rules.end());
 
@@ -20,9 +23,6 @@ namespace FlashBackClient
             {
                 if (condition.TriggerName == Triggers::on_file_change)
                 {
-                    if (!ServiceLocator::IsProvided<PlatformListener>())
-                        ServiceLocator::Provide<PlatformListener>(new PlatformListener);
-
                     if (!ServiceLocator::Get<PlatformListener>()->
                         AddListener(GetSettingValue<std::string>("path")))
                         return false;
