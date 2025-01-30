@@ -38,8 +38,20 @@ namespace FlashBackClient
 
         virtual bool AddListener(const std::filesystem::path& path, int depth = 0) = 0;
 
-        // cppcheck-suppress returnByReference
-        std::vector<ListenerInfo> GetListeners() { return _listeners; }
+        const std::vector<ListenerInfo>& GetListeners() const { return _listeners; }
+
+        bool ListenerExists(const std::filesystem::path& path)
+        {
+            // TODO: std::any_of
+            // cppcheck-suppress useStlAlgorithm
+            for (const auto listener : _listeners)
+            {
+                if (listener.Path == path)
+                    return true;
+            }
+
+            return false;
+        }
 
     protected:
         virtual void processEvents() = 0;

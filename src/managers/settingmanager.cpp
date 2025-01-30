@@ -7,9 +7,11 @@
 
 namespace FlashBackClient
 {
-    SettingManager::SettingManager(const std::filesystem::path& path)
+    bool SettingManager::Initialize()
     {
-        loadSettings(path);
+        loadSettings(_settingFile);
+
+        return true;
     }
 
     void SettingManager::loadSettings(const std::filesystem::path& path)

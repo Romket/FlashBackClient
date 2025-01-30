@@ -3,14 +3,13 @@
 #include <flashbackclient/managers/rulemanager.h>
 
 #include <flashbackclient/defs.h>
-
+#include <flashbackclient/target.h>
 #include <flashbackclient/trigger.h>
 
 #include <filesystem>
 #include <memory>
 #include <vector>
 
-#include "target.h"
 
 namespace FlashBackClient
 {
@@ -23,8 +22,6 @@ namespace FlashBackClient
         bool Initialize() override;
 
     private:
-        void afterCheck(const std::vector<Triggers>& givenTriggers = {}) override;
-
         void loadTargets(const std::filesystem::path& path = TARGET_DEF_DIR, int depth = 0);
 
         // cppcheck-suppress unusedStructMember

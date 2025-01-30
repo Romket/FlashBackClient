@@ -18,7 +18,7 @@ namespace FlashBackClient
         _inotifyFd = inotify_init1(IN_NONBLOCK);
         return _inotifyFd >= 0;
 
-        std::atomic_store(&_running, true);
+        _running = true;
         _listenerThread = std::thread([this]() { this->listenerThread(); });
     }
 
@@ -60,10 +60,7 @@ namespace FlashBackClient
         }
 
         if (!std::filesystem::is_directory(path))
-        {
-            std::cout << "Path is not directory" << std::endl;
             return true;
-        }
 
         // cppcheck-suppress useStlAlgorithm
         for (const auto& item : std::filesystem::directory_iterator(path))

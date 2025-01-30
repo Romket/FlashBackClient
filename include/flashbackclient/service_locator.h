@@ -25,16 +25,9 @@ namespace FlashBackClient
             }
             instance = std::unique_ptr<T>(service);
 
-            try
+            if(!instance->Initialize())
             {
-                if(!instance->Initialize())
-                {
-                    std::cout << "Failed to initialize" << std::endl;
-                }
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "Initialize call failed or does not exist" << std::endl;
+                throw std::invalid_argument("Failed to initialize service");
             }
         }
 
