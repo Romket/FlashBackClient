@@ -2,8 +2,8 @@
 ## High Priority
 - [ ] Get server connection working
 - [ ] Nontrivial rule checks
-    - [ ] File change event listener
     - [ ] Schedule cron expressions
+    - [x] File change event listener
 - [x] Override rule check
 - [x] Load configs
 - [x] Load rules
