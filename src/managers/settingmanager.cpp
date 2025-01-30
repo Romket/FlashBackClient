@@ -1,24 +1,19 @@
 #include <flashbackclient/managers/settingmanager.h>
-
-#include <yaml-cpp/yaml.h>
-
 #include <iostream>
 #include <stdexcept>
+#include <yaml-cpp/yaml.h>
 
-namespace FlashBackClient
-{
-    SettingManager::SettingManager(const std::filesystem::path& path)
-    {
+namespace FlashBackClient {
+    SettingManager::SettingManager(const std::filesystem::path& path) {
         loadSettings(path);
     }
 
-    void SettingManager::loadSettings(const std::filesystem::path& path)
-    {
-        std::cout << "Loading settings from path " << path.string() << std::endl;
+    void SettingManager::loadSettings(const std::filesystem::path& path) {
+        std::cout << "Loading settings from path " << path.string()
+                  << std::endl;
 
         YAML::Node config = YAML::LoadFile(path.string());
-        if (!config)
-        {
+        if (!config) {
             std::cout << "Failed to load config file" << std::endl;
             return;
         }
@@ -32,20 +27,18 @@ namespace FlashBackClient
         if (config["encrypt"])
             _settings["encrypt"] = config["encrypt"].as<std::string>();
 
-        if (config["override_rules"])
-        {
-            auto& rules = std::any_cast<std::vector<int>&>(_settings["override_rules"]);
-            
-            for (const auto& rule : config["override_rules"])
-            {
-                if (!rule["id"])
-                    continue;
+        if (config["override_rules"]) {
+            auto& rules =
+                std::any_cast<std::vector<int>&>(_settings["override_rules"]);
+
+            for (const auto& rule : config["override_rules"]) {
+                if (!rule["id"]) continue;
 
                 if (_settings.find("override_rules") == _settings.end())
                     _settings["override_rules"] = std::vector<int> {};
-                
+
                 rules.push_back(rule["id"].as<int>());
             }
         }
     }
-} //namespace FlashBackClient
+} // namespace FlashBackClient

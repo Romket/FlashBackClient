@@ -2,10 +2,8 @@
 
 #include <filesystem>
 
-namespace FlashBackClient
-{
-    void ConfigManager::GenerateConfigs()
-    {
+namespace FlashBackClient {
+    void ConfigManager::GenerateConfigs() {
         // TODO
     }
-} //namespace FlashBackClient
+} // namespace FlashBackClient
