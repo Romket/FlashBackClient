@@ -11,7 +11,7 @@
 
 ## Medium Priority
 - [ ] Add `--generate-configs` option
-- [ ] Specify custom formatting in [.clang-format](.clang-format)
+- [x] Specify custom formatting in [.clang-format](.clang-format)
 
 ## Low Priority
 - [ ]
