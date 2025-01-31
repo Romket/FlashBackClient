@@ -19,7 +19,7 @@ namespace FlashBackClient
 
         void CheckRules(const std::vector<Triggers>& givenTriggers = {});
 
-        inline std::unordered_map<Rule, bool> GetRules() { return _rules; }
+        inline const std::unordered_map<Rule, bool>& GetRules() const { return _rules; }
 
     protected:
         virtual void afterCheck(const std::vector<Triggers>& givenTriggers = {}) = 0;

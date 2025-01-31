@@ -22,10 +22,10 @@ int main(int argc, char** argv)
     // Provide ConfigManager as SettingManager
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::SettingManager>(
         new FlashBackClient::ConfigManager());
-    
+
     // Provide Scheduler as RuleManager
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::RuleManager>(
         new FlashBackClient::Scheduler());
-    
+
     return 0;
 }
