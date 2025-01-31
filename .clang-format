@@ -33,6 +33,7 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 Cpp11BracedListStyle: 'true'
 DerivePointerAlignment: 'false'
 IndentWidth: '4'
+NamespaceIndentation: All
 PointerAlignment: Left
 ReflowComments: 'true'
 SortIncludes: 'true'
