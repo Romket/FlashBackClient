@@ -7,9 +7,11 @@
 
 namespace FlashBackClient
 {
-    SettingManager::SettingManager(const std::filesystem::path& path)
+    bool SettingManager::Initialize()
     {
-        loadSettings(path);
+        loadSettings(_settingFile);
+
+        return true;
     }
 
     void SettingManager::loadSettings(const std::filesystem::path& path)
@@ -27,7 +29,7 @@ namespace FlashBackClient
             _settings["name"] = config["name"].as<std::string>();
 
         if (config["path"])
-            _settings["path"] = config["path"].as<std::string>();
+            _settings["path"] = expandHomeDirectory(config["path"].as<std::string>());
 
         if (config["encrypt"])
             _settings["encrypt"] = config["encrypt"].as<std::string>();
@@ -47,5 +49,22 @@ namespace FlashBackClient
                 rules.push_back(rule["id"].as<int>());
             }
         }
+    }
+
+    std::string SettingManager::expandHomeDirectory(const std::string& path)
+    {
+        if (path.empty() || path[0] != '~')
+            return path;
+
+        const char* homeDir = std::getenv("HOME");
+        if (homeDir == nullptr)
+        {
+            std::cerr << "HOME environment variable is not set." << std::endl;
+            return path;  // Return original path if HOME is not set
+        }
+
+        std::string expandedPath = homeDir;
+        expandedPath += path.substr(1);  // Append the rest of the path after '~'
+        return expandedPath;
     }
 } //namespace FlashBackClient

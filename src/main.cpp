@@ -1,7 +1,7 @@
 #include <flashbackclient/service_locator.h>
 
-#include "configs.h"
-#include "scheduler.h"
+#include <flashbackclient/configs.h>
+#include <flashbackclient/scheduler.h>
 
 #include <iostream>
 
@@ -19,12 +19,10 @@ int main(int argc, char** argv)
         }
     }
 
-    // Provide ConfigManager as SettingManager
-    FlashBackClient::ServiceLocator::Provide<FlashBackClient::SettingManager>(
+    FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(
         new FlashBackClient::ConfigManager());
 
-    // Provide Scheduler as RuleManager
-    FlashBackClient::ServiceLocator::Provide<FlashBackClient::RuleManager>(
+    FlashBackClient::ServiceLocator::Provide<FlashBackClient::Scheduler>(
         new FlashBackClient::Scheduler());
 
     return 0;

@@ -15,7 +15,7 @@ namespace FlashBackClient
     public:
         inline ConfigManager() : SettingManager(CONFIG_FILE_PATH) {}
 
-        inline bool Initialize() override { return true; }
+        bool Initialize() override;
 
         static void GenerateConfigs();
     };

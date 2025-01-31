@@ -4,24 +4,11 @@
 
 namespace FlashBackClient
 {
-    RuleManager::RuleManager(const std::filesystem::path& path)
+    bool RuleManager::Initialize()
     {
-        loadRules(path);
-    }
+        loadRules(_ruleFile);
 
-    void RuleManager::CheckRules(const std::vector<Triggers>& givenTriggers)
-    {
-        std::cout << "Checking rules" << std::endl;
-
-        for (const auto& rule : _rules)
-        {
-            if (rule.first.Conditions.empty())
-                continue;
-
-            _rules.find(rule.first)->second = checkConditions(rule.first, givenTriggers);
-        }
-
-        afterCheck();
+        return true;
     }
 
     void RuleManager::loadRules(const std::filesystem::path& path)
@@ -145,35 +132,5 @@ namespace FlashBackClient
         }
 
         return true;
-    }
-
-    bool RuleManager::checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers)
-    {
-        for (const auto& condition : rule.Conditions)
-        {
-            if (checkTrigger(condition.TriggerName, givenTriggers))
-                continue;
-
-            // TODO: check conditions not given by scheduler or event listener
-
-            return false;
-        }
-
-        std::cout << "Condition met" << std::endl;
-
-        return true;
-    }
-
-    bool RuleManager::checkTrigger(Triggers trigger, const std::vector<Triggers>& givenTriggers)
-    {
-        // TODO: use std::any_of
-        // cppcheck-suppress useStlAlgorithm
-        for (const auto& givenTrigger : givenTriggers)
-        {
-            if (givenTrigger == trigger)
-                return true;
-        }
-
-        return false;
     }
 } //namespace FlashBackClient

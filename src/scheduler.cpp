@@ -1,4 +1,4 @@
-#include "scheduler.h"
+#include <flashbackclient/scheduler.h>
 
 #include <flashbackclient/defs.h>
 
@@ -8,23 +8,17 @@ namespace FlashBackClient
 {
     bool Scheduler::Initialize()
     {
+        if (!RuleManager::Initialize())
+            return false;
+
         loadTargets();
+
         for (const auto& target : _targets)
         {
-            target->Initialize();
+            target->CheckRules({Triggers::on_startup});
         }
-
-        CheckRules({Triggers::on_startup});
 
         return true;
-    }
-
-    void Scheduler::afterCheck(const std::vector<Triggers>& givenTriggers)
-    {
-        for (const auto& target : _targets)
-        {
-            target->CheckRules(givenTriggers);
-        }
     }
 
     void Scheduler::loadTargets(const std::filesystem::path& path, int depth)
@@ -39,7 +33,12 @@ namespace FlashBackClient
             else if (!std::filesystem::is_regular_file(entry.path()) || entry.path().extension() != ".yaml")
                 continue;
             else
-                _targets.push_back(std::make_unique<Target>(Target(entry.path())));
+            {
+                std::unique_ptr<Target> target = std::make_unique<Target>(Target(entry.path()));
+                if(!target->Initialize())
+                    continue;
+                _targets.push_back(std::move(target));
+            }
         }
     }
 } //namespace FlashBackClient
