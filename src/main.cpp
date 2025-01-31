@@ -5,6 +5,8 @@
 
 #include <flashbackclient/logger.h>
 
+#include <flashbackclient/logger.h>
+
 #include <iostream>
 
 #include <thread>
@@ -27,6 +29,9 @@ int main(int argc, char** argv)
             spdlog::get("console")->info("This is a test of formatting and scope #3");
         }
     }
+
+    auto logger = FlashBackClient::Logger::GetLogger();
+    logger->info("Application started");
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(
         new FlashBackClient::ConfigManager());
