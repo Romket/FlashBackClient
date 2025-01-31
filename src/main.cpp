@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
 
-    FlashBackClient::Logger::Init();
+    FlashBackClient::Logger::Initialize();
 
     for (int i = 1; i < argc; ++i)
     {
@@ -21,18 +21,18 @@ int main(int argc, char** argv)
         }
         else if (std::string(argv[i]) == "--verbose")
         {
-            FlashBackClient::Logger::EnableVerboseMode();  // Enable verbose logging
+            FlashBackClient::Logger::SetVerbose();
+            spdlog::get("console")->info("This is a test of formatting and scope #3");
         }
     }
-
-    auto logger = FlashBackClient::Logger::GetLogger();
-    logger->info("Application started");
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(
         new FlashBackClient::ConfigManager());
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::Scheduler>(
         new FlashBackClient::Scheduler());
+
+    spdlog::get("console")->info("This is a test of formatting and scope #4");
 
     return 0;
 }
