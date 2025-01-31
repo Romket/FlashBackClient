@@ -25,7 +25,7 @@ add_executable(flashbackclient
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_link_libraries(flashbackclient yaml-cpp)
+target_link_libraries(flashbackclient yaml-cpp spdlog)
 
 if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")

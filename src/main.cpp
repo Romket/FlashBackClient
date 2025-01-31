@@ -16,6 +16,10 @@ int main(int argc, char** argv)
                 FlashBackClient::ConfigManager::GenerateConfigs();
                 return 0;
             }
+            else if (std::string(argv[i]) == "--verbose")
+            {
+                
+            }
         }
     }
 
