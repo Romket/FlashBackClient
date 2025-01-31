@@ -1,1 +1,2 @@
+spdlog
 yaml-cpp
