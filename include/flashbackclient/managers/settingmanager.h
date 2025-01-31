@@ -15,7 +15,7 @@ namespace FlashBackClient
 
         virtual bool Initialize() = 0;
 
-        inline std::unordered_map<std::string, std::any> GetSettings() { return _settings; }
+        inline const std::unordered_map<std::string, std::any>& GetSettings() const { return _settings; }
         inline void SetSettings(const std::unordered_map<std::string, std::any>& settings) { _settings = settings; }
 
         template<typename T>
