@@ -14,6 +14,7 @@ add_subdirectory(lib/spdlog)
 
 add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/src/configs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/scheduler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/target.cpp

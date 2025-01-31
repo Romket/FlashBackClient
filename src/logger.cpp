@@ -2,5 +2,8 @@
 
 namespace FlashBackClient
 {
-    
-} //namespace FlashBackClient
+    void Logger::Initialize()
+    {
+        
+    }
+} // namespace FlashBackClient

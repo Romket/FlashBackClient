@@ -3,25 +3,30 @@
 #include <flashbackclient/configs.h>
 #include <flashbackclient/scheduler.h>
 
+#include <flashbackclient/logger.h>
+
 #include <iostream>
 
 int main(int argc, char** argv)
 {
-    if (argc > 1)
+
+    FlashBackClient::Logger::Init();
+
+    for (int i = 1; i < argc; ++i)
     {
-        for (int i = 0; i < argc; ++i)
+        if (std::string(argv[i]) == "--generate-configs")
         {
-            if (std::string(argv[i]) == "--generate-configs")
-            {
-                FlashBackClient::ConfigManager::GenerateConfigs();
-                return 0;
-            }
-            else if (std::string(argv[i]) == "--verbose")
-            {
-                
-            }
+            FlashBackClient::ConfigManager::GenerateConfigs();
+            return 0;
+        }
+        else if (std::string(argv[i]) == "--verbose")
+        {
+            FlashBackClient::Logger::EnableVerboseMode();  // Enable verbose logging
         }
     }
+
+    auto logger = FlashBackClient::Logger::GetLogger();
+    logger->info("Application started");
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(
         new FlashBackClient::ConfigManager());

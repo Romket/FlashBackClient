@@ -16,7 +16,7 @@ namespace FlashBackClient
         virtual ~RuleManager() = default;
 
         virtual bool Initialize();
-      
+
         const inline std::unordered_map<Rule, bool>& GetRules() const { return _rules; }
 
     protected:

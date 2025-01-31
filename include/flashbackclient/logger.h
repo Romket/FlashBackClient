@@ -1,8 +1,11 @@
 #pragma once
 
-#include <spdlog/
-
 namespace FlashBackClient
 {
+    class Logger
+    {
+    public:
+        static void Initialize();
 
-} //namespace FlashBackClient
+    }
+} // namespace FlashBackClient
