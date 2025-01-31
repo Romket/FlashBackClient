@@ -32,6 +32,7 @@ CompactNamespaces: 'false'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 Cpp11BracedListStyle: 'true'
 DerivePointerAlignment: 'false'
+IndentWidth: '4'
 PointerAlignment: Left
 ReflowComments: 'true'
 SortIncludes: 'true'
