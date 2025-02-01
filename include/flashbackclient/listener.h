@@ -72,7 +72,7 @@ namespace FlashBackClient
         std::atomic<bool>       _running;
         std::condition_variable _cv;
         std::mutex              _mutex;
-        std::thread             _thread;
+        std::thread             _listenerThread;
 
         // cppcheck-suppress unusedStructMember
         std::vector<ListenerInfo> _listeners;
