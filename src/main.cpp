@@ -26,7 +26,6 @@ int main(int argc, char** argv)
         else if (std::string(argv[i]) == "--verbose")
         {
             FlashBackClient::Logger::SetVerbose();
-            spdlog::get("console")->info("This is a test of formatting and scope #3");
         }
     }
 
@@ -35,8 +34,6 @@ int main(int argc, char** argv)
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::Scheduler>(
         new FlashBackClient::Scheduler());
-
-    spdlog::get("console")->info("This is a test of formatting and scope #4");
 
     FlashBackClient::ServiceLocator::Get<FlashBackClient::Scheduler>()->Run();
 
