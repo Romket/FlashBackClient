@@ -41,8 +41,6 @@ int main(int argc, char** argv)
     FlashBackClient::ServiceLocator::Get<FlashBackClient::Scheduler>()->Run();
 
     while (true) { std::this_thread::sleep_for(std::chrono::seconds(1)); }
-    
-    spdlog::get("console")->info("This is a test of formatting and scope #4");
 
     return 0;
 }
