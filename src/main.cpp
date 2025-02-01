@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+#include <thread>
+
 int main(int argc, char** argv)
 {
 
@@ -33,6 +35,10 @@ int main(int argc, char** argv)
         new FlashBackClient::Scheduler());
 
     spdlog::get("console")->info("This is a test of formatting and scope #4");
+
+    FlashBackClient::ServiceLocator::Get<FlashBackClient::Scheduler>()->Run();
+
+    while (true) { std::this_thread::sleep_for(std::chrono::seconds(1)); }
 
     return 0;
 }

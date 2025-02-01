@@ -15,14 +15,15 @@ namespace FlashBackClient
     {
         inactive,
         active,
-        // TODO: update target configs to include cases for self move, self delete, etc.
+        // TODO: update target configs to include cases for self move, self
+        // delete, etc.
         self_modified,
         modified
     };
 
     struct ListenerInfo
     {
-        std::filesystem::path Path;
+        std::filesystem::path                              Path;
         std::chrono::time_point<std::chrono::system_clock> LastUpdate;
         StatusEnum Status = StatusEnum::inactive;
     };
@@ -34,11 +35,15 @@ namespace FlashBackClient
         virtual ~FileChangeListener() = default;
 
         virtual bool Initialize() = 0;
-        virtual bool Shutdown() = 0;
+        virtual bool Shutdown()   = 0;
 
-        virtual bool AddListener(const std::filesystem::path& path, int depth = 0) = 0;
+        virtual bool AddListener(const std::filesystem::path& path,
+                                 int                          depth = 0) = 0;
 
-        const std::vector<ListenerInfo>& GetListeners() const { return _listeners; }
+        const std::vector<ListenerInfo>& GetListeners() const
+        {
+            return _listeners;
+        }
 
         bool ListenerExists(const std::filesystem::path& path)
         {
@@ -46,20 +51,28 @@ namespace FlashBackClient
             // cppcheck-suppress useStlAlgorithm
             for (const auto listener : _listeners)
             {
-                if (listener.Path == path)
-                    return true;
+                if (listener.Path == path) return true;
             }
 
             return false;
         }
 
+        void SetListenerStatus(const std::filesystem::path& path,
+                               StatusEnum                   status)
+        {
+            for (auto& listener : _listeners)
+            {
+                if (listener.Path == path) { listener.Status = status; }
+            }
+        }
+
     protected:
         virtual void processEvents() = 0;
 
-        std::atomic<bool> _running;
+        std::atomic<bool>       _running;
         std::condition_variable _cv;
-        std::mutex _mutex;
-        std::thread _listenerThread;
+        std::mutex              _mutex;
+        std::thread             _thread;
 
         // cppcheck-suppress unusedStructMember
         std::vector<ListenerInfo> _listeners;
@@ -70,7 +83,8 @@ namespace FlashBackClient
             {
                 {
                     std::unique_lock<std::mutex> lock(_mutex);
-                    _cv.wait_for(lock, std::chrono::milliseconds(THREAD_WAIT_TIME),
+                    _cv.wait_for(lock,
+                                 std::chrono::milliseconds(THREAD_WAIT_TIME),
                                  [this] { return !_running; });
                 }
 
@@ -80,4 +94,4 @@ namespace FlashBackClient
             }
         }
     };
-} //namespace FlashBackClient
+} // namespace FlashBackClient
