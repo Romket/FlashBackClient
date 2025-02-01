@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include <thread>
+
 int main(int argc, char** argv)
 {
     if (argc > 1)
@@ -24,6 +26,10 @@ int main(int argc, char** argv)
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::Scheduler>(
         new FlashBackClient::Scheduler());
+
+    FlashBackClient::ServiceLocator::Get<FlashBackClient::Scheduler>()->Run();
+
+    while (true) { std::this_thread::sleep_for(std::chrono::seconds(1)); }
 
     return 0;
 }
