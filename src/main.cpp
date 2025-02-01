@@ -9,15 +9,13 @@
 
 int main(int argc, char** argv)
 {
-    if (argc > 1)
+    
+    for (int i = 1; i < argc; ++i)
     {
-        for (int i = 0; i < argc; ++i)
+        if (std::string(argv[i]) == "--generate-configs")
         {
-            if (std::string(argv[i]) == "--generate-configs")
-            {
-                FlashBackClient::ConfigManager::GenerateConfigs();
-                return 0;
-            }
+            FlashBackClient::ConfigManager::GenerateConfigs();
+            return 0;
         }
     }
 
