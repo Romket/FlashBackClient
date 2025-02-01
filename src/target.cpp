@@ -1,7 +1,7 @@
 #include <flashbackclient/target.h>
 
-#include <flashbackclient/service_locator.h>
 #include <flashbackclient/scheduler.h>
+#include <flashbackclient/service_locator.h>
 #include <listener/platform_listener.h>
 
 #include <iostream>
@@ -29,8 +29,8 @@ namespace FlashBackClient
             {
                 if (condition.TriggerName == Triggers::on_file_change)
                 {
-                    if (!ServiceLocator::Get<PlatformListener>()->
-                        AddListener(GetSettingValue<std::string>("path")))
+                    if (!ServiceLocator::Get<PlatformListener>()->AddListener(
+                            GetSettingValue<std::string>("path")))
                         return false;
                     return true;
                 }
@@ -42,36 +42,47 @@ namespace FlashBackClient
 
     void Target::CheckRules(const std::vector<Triggers>& givenTriggers)
     {
-        std::cout << "Checking rules" << std::endl;
-
         for (const auto& rule : _rules)
         {
-            if (rule.first.Conditions.empty())
-                continue;
+            if (rule.first.Conditions.empty()) continue;
 
-            _rules.find(rule.first)->second = checkConditions(rule.first, givenTriggers);
+            _rules.find(rule.first)->second =
+                checkConditions(rule.first, givenTriggers);
         }
 
         afterCheck();
     }
 
-    bool Target::checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers)
+    bool Target::checkConditions(const Rule&                  rule,
+                                 const std::vector<Triggers>& givenTriggers)
     {
         for (const auto& condition : rule.Conditions)
         {
-            if (checkTrigger(condition.TriggerName, givenTriggers))
-                continue;
+            if (checkTrigger(condition.TriggerName, givenTriggers)) continue;
 
             // TODO: nontrivial conditions
             if (condition.TriggerName == Triggers::on_file_change)
             {
-                if (ServiceLocator::Get<PlatformListener>()->
-                    ListenerExists(GetSettingValue<std::string>("path")) &&
+                if (ServiceLocator::Get<PlatformListener>()->ListenerExists(
+                        GetSettingValue<std::string>("path")) &&
                     checkFileChanges(condition))
+                {
                     continue;
+                }
             }
 
             return false;
+        }
+
+        for (const auto& condition : rule.Conditions)
+        {
+            if (condition.TriggerName == Triggers::on_file_change)
+            {
+                const std::filesystem::path& path =
+                    GetSettingValue<std::string>("path");
+                ServiceLocator::Get<PlatformListener>()->SetListenerStatus(
+                    path, StatusEnum::active);
+            }
         }
 
         std::cout << "Condition met" << std::endl;
@@ -81,25 +92,30 @@ namespace FlashBackClient
 
     bool Target::checkFileChanges(const Condition& condition)
     {
-        const std::filesystem::path& path = GetSettingValue<std::string>("path");
+        const std::filesystem::path& path =
+            GetSettingValue<std::string>("path");
 
         // cppcheck-suppress useStlAlgorithm
-        for (const auto& listener : ServiceLocator::Get<PlatformListener>()->GetListeners())
+        for (const auto& listener :
+             ServiceLocator::Get<PlatformListener>()->GetListeners())
         {
-            if (listener.Path == path && listener.Status == StatusEnum::modified)
+            if (listener.Path == path &&
+                listener.Status == StatusEnum::modified)
+            {
                 return true;
+            }
         }
         return false;
     }
 
-    bool Target::checkTrigger(Triggers trigger, const std::vector<Triggers>& givenTriggers)
+    bool Target::checkTrigger(Triggers                     trigger,
+                              const std::vector<Triggers>& givenTriggers)
     {
         // TODO: use std::any_of
         // cppcheck-suppress useStlAlgorithm
         for (const auto& givenTrigger : givenTriggers)
         {
-            if (givenTrigger == trigger)
-                return true;
+            if (givenTrigger == trigger) return true;
         }
 
         return false;
@@ -109,12 +125,14 @@ namespace FlashBackClient
     {
         for (const auto& rule : _rules)
         {
-            if (!rule.second)
-                continue;
+            if (!rule.second) continue;
 
-            if (rule.first.Action == Actions::upload_changed || rule.first.Action == Actions::sync_files)
+            if (rule.first.Action == Actions::upload_changed ||
+                rule.first.Action == Actions::sync_files)
                 upload();
-            if (rule.first.Action == Actions::download_changed || rule.first.Action == Actions::sync_files)
+
+            if (rule.first.Action == Actions::download_changed ||
+                rule.first.Action == Actions::sync_files)
                 download();
         }
     }
@@ -126,27 +144,31 @@ namespace FlashBackClient
         if (_settings.find("override_rules") == _settings.end())
             return schedulerRules;
 
-        auto overrideRules = std::any_cast<std::vector<int>&>(_settings["override_rules"]);
+        auto overrideRules =
+            std::any_cast<std::vector<int>&>(_settings["override_rules"]);
 
         std::unordered_map<Rule, bool> metDefaults;
 
         for (const auto& schedulerRule : schedulerRules)
         {
             if (checkRule(schedulerRule.first, overrideRules))
-                metDefaults.insert(std::pair<Rule, bool>(schedulerRule.first, true));
+            {
+                metDefaults.insert(
+                    std::pair<Rule, bool>(schedulerRule.first, true));
+            }
         }
 
         return metDefaults;
     }
 
-    bool Target::checkRule(Rule defaultRule, const std::vector<int>& overrideRules)
+    bool Target::checkRule(Rule                    defaultRule,
+                           const std::vector<int>& overrideRules)
     {
         // TODO: use std::none_of
         // cppcheck-suppress useStlAlgorithm
         for (int overrideRule : overrideRules)
         {
-            if (overrideRule == defaultRule.id)
-                return false;
+            if (overrideRule == defaultRule.id) return false;
         }
 
         return true;
@@ -163,4 +185,4 @@ namespace FlashBackClient
         // TODO
         return true;
     }
-} //namespace FlashBackClient
+} // namespace FlashBackClient

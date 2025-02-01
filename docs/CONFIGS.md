@@ -10,8 +10,9 @@
 *Located at `~/.config/flashbackclient/flashbackclient.yaml`*
 
 This file provides the default settings for the following settings:
-- Encryption (`"none"`, `"file"`, or `"direcory"`default `"none"` if no value specified)\
+- Encryption (`"none"`, `"file"`, or `"direcory"`, default `"none"` if no value specified)\
 *Note - directory-level encoding encrypts directory structure, disabling sequential backup*
+- `keep_on_target_move` (default `false`): If the target is moved, setting this to `true` will continue to track it, while `false` will consider the target as deleted.
 
 An example file might look something like this:
 ```yaml
@@ -19,6 +20,8 @@ An example file might look something like this:
 # Default settings for FlashBack Client
 
 encrypt: "file"
+
+keep_on_target_move: false
 ```
 
 ## Default Scheduler Configs
@@ -59,7 +62,7 @@ times:
 
 `after_interval` also has an `after_last` and `before_next_scheduled` setting that can be used to define the minimum time before the next scheduled action and after the last action. These settings are in minutes, and will be set to the default value of `0` if not specified.
 
-*Note - not specifying an `after_last` or setting it to `0` will mean the case will be ignored.*
+*Note - not specifying either `after_last` or `before_next_scheduled` or setting both to `0` will mean the case will be ignored.*
 
 ```yaml
 file_change_trigger: false
@@ -151,21 +154,6 @@ A complete example file might look something like this:
 # ~/.config/flashbackclient/scheduler/scheduler.yaml
 # Default rules for the scheduler
 
-# Possible actions to take
-actions:
-  download_changed: "Download changed files"
-  upload_changed: "Upload changed files"
-  sync_files: "Download and upload changed files"
-  no_action: "Take no action"
-
-# Possible triggers to trigger an action
-triggers:
-  on_startup: "System startup"
-  on_shutdown: "System shutdown"
-  on_file_change: "After a detected file change"
-  on_schedule: "Specific cron expressions"
-  after_interval: "Time after any previous"
-
 # Rules for triggering actions
 rules:
   - id: 0
@@ -203,7 +191,9 @@ The file must begin with a `name`, `path`, and `target_type` setting.
 - The `path` setting is the path to the target.
 - The `target_type` setting is the type of target. This can be either `file` or `directory`.
 
-The file may also contain a `rules` setting that contains the rules to use for the target. This is structured the same as the `rules` setting in the default scheduler config, except that the `id` is not required.
+Default settings can be overridden by providing a new value for a given setting.
+
+The file may also contain a `rules` setting that contains the rules to use for the target. This is structured the same as the `rules` setting in the default scheduler config.
 
 The file may also contain an `override_rules` setting that contains the rules to override the default rules for the target.
 
