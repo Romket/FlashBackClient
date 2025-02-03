@@ -1,10 +1,7 @@
 #pragma once
 
 #include <memory>
-
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/async.h>
+#include <string>
 
 namespace FlashBackClient
 {
@@ -13,12 +10,12 @@ namespace FlashBackClient
     public:
         static void Initialize();
         static void SetVerbose();
-        static void OutputTrace();
-        static void OutputDebug();
-        static void OutputInfo();
-        static void OutputWarn();
-        static void OutputError();
-        static void OutputCritical();
 
+        static void OutputTrace(const std::string& message);
+        static void OutputDebug(const std::string& message);
+        static void OutputInfo(const std::string& message);
+        static void OutputWarn(const std::string& message);
+        static void OutputError(const std::string& message);
+        static void OutputCritical(const std::string& message);
     };
 } // namespace FlashBackClient

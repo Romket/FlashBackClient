@@ -1,5 +1,9 @@
 #include <flashbackclient/logger.h>
 
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/async.h>
+
 namespace FlashBackClient
 {
     void Logger::Initialize()
@@ -24,31 +28,33 @@ namespace FlashBackClient
         spdlog::get("console")->set_level(spdlog::level::trace);
     }
 
-    void Logger::OutputTrace()
+    void Logger::OutputTrace(const std::string& message)
     {
-        return;
-    }
-    void Logger::OutputDebug()
-    {
-        return;
-    }
-    void Logger::OutputInfo()
-    {
-        return;
-    }
-    void Logger::OutputWarn()
-    {
-        return;
-    }
-    void Logger::OutputError()
-    {
-        return;
-    }
-    void Logger::OutputCritical()
-    {
-        return;
+        spdlog::get("console")->trace(message);
     }
 
+    void Logger::OutputDebug(const std::string& message)
+    {
+        spdlog::get("console")->debug(message);
+    }
 
+    void Logger::OutputInfo(const std::string& message)
+    {
+        spdlog::get("console")->info(message);
+    }
 
+    void Logger::OutputWarn(const std::string& message)
+    {
+        spdlog::get("console")->warn(message);
+    }
+
+    void Logger::OutputError(const std::string& message)
+    {
+        spdlog::get("console")->error(message);
+    }
+
+    void Logger::OutputCritical(const std::string& message)
+    {
+        spdlog::get("console")->critical(message);
+    }
 } // namespace FlashBackClient
