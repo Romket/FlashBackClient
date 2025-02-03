@@ -2,7 +2,7 @@
 
 namespace FlashBackClient
 {
-    static void Logger::Initialize()
+    void Logger::Initialize()
     {
 
         spdlog::init_thread_pool(8192, 1);
@@ -19,7 +19,7 @@ namespace FlashBackClient
 
     }
 
-    static void Logger::SetVerbose()
+    void Logger::SetVerbose()
     {
         spdlog::get("console")->set_level(spdlog::level::trace);
     }
