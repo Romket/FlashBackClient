@@ -24,27 +24,27 @@ namespace FlashBackClient
         spdlog::get("console")->set_level(spdlog::level::trace);
     }
 
-    inline void Logger::OutputTrace()
+    void Logger::OutputTrace()
     {
         return;
     }
-    inline void Logger::OutputDebug()
+    void Logger::OutputDebug()
     {
         return;
     }
-    inline void Logger::OutputInfo()
+    void Logger::OutputInfo()
     {
         return;
     }
-    inline void Logger::OutputWarn()
+    void Logger::OutputWarn()
     {
         return;
     }
-    inline void Logger::OutputError()
+    void Logger::OutputError()
     {
         return;
     }
-    inline void Logger::OutputCritical()
+    void Logger::OutputCritical()
     {
         return;
     }
