@@ -39,6 +39,7 @@ namespace FlashBackClient
 
         std::atomic<bool>       _running;
         std::atomic<bool>       _flagged;
+
         std::thread             _schedulerThread;
         std::condition_variable _cv;
         std::mutex              _mutex;

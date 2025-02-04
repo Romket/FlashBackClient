@@ -1,18 +1,26 @@
 #include <flashbackclient/service_locator.h>
 
 #include <flashbackclient/configs.h>
+#include <flashbackclient/logger.h>
 #include <flashbackclient/scheduler.h>
 
+#include <iostream>
 #include <thread>
 
 int main(int argc, char** argv)
 {
+    FlashBackClient::Logger::Initialize();
+
     for (int i = 1; i < argc; ++i)
     {
         if (std::string(argv[i]) == "--generate-configs")
         {
             FlashBackClient::ConfigManager::GenerateConfigs();
             return 0;
+        }
+        else if (std::string(argv[i]) == "--verbose")
+        {
+            FlashBackClient::Logger::SetVerbose();
         }
     }
 
