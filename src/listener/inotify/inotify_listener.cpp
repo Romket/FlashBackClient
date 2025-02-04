@@ -2,6 +2,8 @@
 #include "inotify_listener.h"
 
 #include <flashbackclient/defs.h>
+#include <flashbackclient/scheduler.h>
+#include <flashbackclient/service_locator.h>
 
 #include <cstring>
 #include <iostream>
@@ -212,6 +214,8 @@ namespace FlashBackClient
                     std::cout << "Matched" << std::endl;
                     listener.Status     = StatusEnum::modified;
                     listener.LastUpdate = std::chrono::system_clock::now();
+
+                    ServiceLocator::Get<Scheduler>()->Flag();
                 }
             }
 

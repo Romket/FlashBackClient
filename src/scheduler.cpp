@@ -2,6 +2,7 @@
 
 #include <flashbackclient/defs.h>
 
+#include <mutex>
 #include <yaml-cpp/yaml.h>
 
 #include <iostream>
@@ -31,25 +32,35 @@ namespace FlashBackClient
         _schedulerThread = std::thread([this]() { this->schedulerThread(); });
     }
 
+    void Scheduler::Flag()
+    {
+        {
+            std::unique_lock<std::mutex> lock(_mutex);
+            _flagged = true;
+        }
+
+        _cv.notify_one();
+    }
+
     void Scheduler::schedulerThread()
     {
         std::cout << "Scheduler thread started" << std::endl;
         while (_running)
         {
-            _cycleCount++;
-
             {
                 std::unique_lock<std::mutex> lock(_mutex);
-                _cv.wait_for(lock, std::chrono::milliseconds(THREAD_WAIT_TIME),
-                             [this] { return !_running; });
+                _cv.wait(lock, [this] { return !_running || _flagged; });
             }
 
             if (!_running) break;
+            _flagged = false;
 
             {
                 std::unique_lock<std::mutex> targetsLock(_targetsMutex);
                 for (const auto& target : _targets) target->CheckRules();
             }
+
+            _cycleCount++;
         }
     }
 
