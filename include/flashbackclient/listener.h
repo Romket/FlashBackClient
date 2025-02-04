@@ -77,21 +77,6 @@ namespace FlashBackClient
         // cppcheck-suppress unusedStructMember
         std::vector<ListenerInfo> _listeners;
 
-        inline void listenerThread()
-        {
-            while (_running)
-            {
-                {
-                    std::unique_lock<std::mutex> lock(_mutex);
-                    _cv.wait_for(lock,
-                                 std::chrono::milliseconds(THREAD_WAIT_TIME),
-                                 [this] { return !_running; });
-                }
-
-                if (!_running) break;
-
-                processEvents();
-            }
-        }
+        virtual void listenerThread() = 0;
     };
 } // namespace FlashBackClient
