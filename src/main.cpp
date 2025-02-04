@@ -1,19 +1,14 @@
 #include <flashbackclient/service_locator.h>
 
 #include <flashbackclient/configs.h>
+#include <flashbackclient/logger.h>
 #include <flashbackclient/scheduler.h>
 
-#include <flashbackclient/logger.h>
-
-#include <flashbackclient/logger.h>
-
 #include <iostream>
-
 #include <thread>
 
 int main(int argc, char** argv)
 {
-
     FlashBackClient::Logger::Initialize();
 
     for (int i = 1; i < argc; ++i)

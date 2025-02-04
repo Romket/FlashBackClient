@@ -25,6 +25,8 @@ namespace FlashBackClient
 
         void Run();
 
+        void Flag();
+
     private:
         void loadTargets(const std::filesystem::path& path  = TARGET_DEF_DIR,
                          int                          depth = 0);
@@ -36,6 +38,8 @@ namespace FlashBackClient
         std::mutex                           _targetsMutex;
 
         std::atomic<bool>       _running;
+        std::atomic<bool>       _flagged;
+
         std::thread             _schedulerThread;
         std::condition_variable _cv;
         std::mutex              _mutex;

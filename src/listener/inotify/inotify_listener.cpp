@@ -1,6 +1,9 @@
+
 #include "inotify_listener.h"
 
 #include <flashbackclient/defs.h>
+#include <flashbackclient/scheduler.h>
+#include <flashbackclient/service_locator.h>
 
 #include <cstring>
 #include <iostream>
@@ -16,7 +19,46 @@ namespace FlashBackClient
     bool InotifyListener::Initialize()
     {
         _inotifyFd = inotify_init1(IN_NONBLOCK);
-        if (_inotifyFd < 0) return false;
+        if (_inotifyFd < 0)
+        {
+            std::cerr << "Failed to initialize inotify: " << strerror(errno)
+                      << std::endl;
+            return false;
+        }
+
+        _epollFd = epoll_create1(0);
+        if (_epollFd < 0)
+        {
+            std::cerr << "Failed to initialize epoll: " << strerror(errno)
+                      << std::endl;
+            return false;
+        }
+
+        if (pipe2(_selfPipeFd, IN_CLOEXEC | IN_NONBLOCK) < 0)
+        {
+            std::cerr << "Failed to create self pipe: " << strerror(errno)
+                      << std::endl;
+            return false;
+        }
+
+        epoll_event event;
+        event.events  = EPOLLIN;
+        event.data.fd = _inotifyFd;
+
+        if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _inotifyFd, &event) < 0)
+        {
+            std::cerr << "Failed to add inotify to epoll: " << strerror(errno)
+                      << std::endl;
+            return false;
+        }
+
+        event.data.fd = _selfPipeFd[0];
+        if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _selfPipeFd[0], &event) < 0)
+        {
+            std::cerr << "Failed to add self pipe to epoll: " << strerror(errno)
+                      << std::endl;
+            return false;
+        }
 
         _running        = true;
         _listenerThread = std::thread([this]() { this->listenerThread(); });
@@ -26,11 +68,23 @@ namespace FlashBackClient
 
     bool InotifyListener::Shutdown()
     {
-        if (_inotifyFd >= 0)
+        if (_selfPipeFd[1] >= 0)
         {
-            close(_inotifyFd);
-            _inotifyFd = -1;
+            ssize_t result = write(_selfPipeFd[1], "0", 1);
+            if (result == -1 && errno != EAGAIN)
+            {
+                std::cerr << "Failed to wake up listener thread: "
+                          << strerror(errno) << std::endl;
+                return false;
+            }
         }
+
+        if (_listenerThread.joinable()) _listenerThread.join();
+
+        safeClose(_selfPipeFd[0]);
+        safeClose(_selfPipeFd[1]);
+        safeClose(_epollFd);
+        safeClose(_inotifyFd);
 
         return true;
     }
@@ -76,6 +130,25 @@ namespace FlashBackClient
         return true;
     }
 
+    void InotifyListener::listenerThread()
+    {
+        while (_running)
+        {
+            int numEvents = epoll_wait(_epollFd, _events, MAX_EVENTS, -1);
+
+            for (int i = 0; i < numEvents; i++)
+            {
+                if (_events[i].data.fd == _inotifyFd) processEvents();
+                else if (_events[i].data.fd == _selfPipeFd[0])
+                {
+                    char buffer[1];
+                    read(_selfPipeFd[0], buffer, 1);
+                    break;
+                }
+            }
+        }
+    }
+
     void InotifyListener::processEvents()
     {
         char buffer[4096]
@@ -104,6 +177,7 @@ namespace FlashBackClient
             if (event->mask & IN_Q_OVERFLOW || event->mask & IN_IGNORED)
             {
                 std::cout << "Event overflow or ignored" << std::endl;
+                i += sizeof(struct inotify_event) + event->len;
                 continue;
             }
 
@@ -140,10 +214,19 @@ namespace FlashBackClient
                     std::cout << "Matched" << std::endl;
                     listener.Status     = StatusEnum::modified;
                     listener.LastUpdate = std::chrono::system_clock::now();
+
+                    ServiceLocator::Get<Scheduler>()->Flag();
                 }
             }
 
             i += sizeof(struct inotify_event) + event->len;
         }
+    }
+
+    void InotifyListener::safeClose(int& fd)
+    {
+        if (fd < 0) return;
+        close(fd);
+        fd = -1;
     }
 } // namespace FlashBackClient
