@@ -13,7 +13,7 @@
 #define TARGET_DEF_DIR HOME + "/.config/flashbackclient/targets"
 
 #define LOG_DIR HOME + "/.local/share/flashbackclient"
-#define LOG_FILE_FMT "%Y-%m-%d_%H-%M-%S"
+#define LOG_FILE_FMT "crash_%Y-%m-%d_%H-%M-%S.txt"
 
 #define RECURSION_LIMIT 10
 

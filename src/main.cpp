@@ -4,7 +4,6 @@
 #include <flashbackclient/logger.h>
 #include <flashbackclient/scheduler.h>
 
-#include <iostream>
 #include <thread>
 
 int main(int argc, char** argv)

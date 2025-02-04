@@ -1,31 +1,45 @@
+#include "flashbackclient/defs.h"
+#include "spdlog/common.h"
+#include "spdlog/spdlog.h"
 #include <flashbackclient/logger.h>
 
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/async.h>
 
 namespace FlashBackClient
 {
+    std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> Logger::_consoleSink;
+    std::shared_ptr<spdlog::sinks::basic_file_sink_mt> Logger::_fileSink;
+    std::shared_ptr<spdlog::logger> Logger::_consoleLogger;
+    std::shared_ptr<spdlog::logger> Logger::_fileLogger;
+
     void Logger::Initialize()
     {
+        constexpr size_t queueSize = 8192; // Queue size for async logging
+        constexpr size_t threadCount = 1;  // One logging thread
+        spdlog::init_thread_pool(queueSize, threadCount);
 
-        spdlog::init_thread_pool(8192, 1);
+        _fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(LOG_DIR + '/' + LOG_FILE_FMT, true);
+        
+        _fileLogger = std::make_shared<spdlog::logger>("_fileLogger", _fileSink);
+        _fileLogger->set_level(spdlog::level::trace);
 
-        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_pattern("%^[%T] [%l] %v%$");
+        constexpr size_t backtraceLength = 32;
+        _fileLogger->enable_backtrace(backtraceLength);
 
-        auto console_logger = std::make_shared<spdlog::async_logger>(
-            "console", console_sink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+        _consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
-        spdlog::register_logger(console_logger);
-
-        console_logger->set_level(spdlog::level::err);
+        _consoleLogger = std::make_shared<spdlog::logger>("_consoleLogger", _consoleSink);
+        _consoleLogger->set_level(spdlog::level::err);
+        
+        spdlog::register_logger(_fileLogger);
+        spdlog::register_logger(_consoleLogger);
 
     }
 
     void Logger::SetVerbose()
     {
-        spdlog::get("console")->set_level(spdlog::level::trace);
+        _consoleLogger->set_level(spdlog::level::trace);
     }
+
+    
 } // namespace FlashBackClient
