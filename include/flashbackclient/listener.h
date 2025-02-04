@@ -4,7 +4,6 @@
 
 #include <atomic>
 #include <chrono>
-#include <condition_variable>
 #include <filesystem>
 #include <thread>
 #include <vector>
@@ -69,10 +68,8 @@ namespace FlashBackClient
     protected:
         virtual void processEvents() = 0;
 
-        std::atomic<bool>       _running;
-        std::condition_variable _cv;
-        std::mutex              _mutex;
-        std::thread             _listenerThread;
+        std::atomic<bool> _running;
+        std::thread       _listenerThread;
 
         // cppcheck-suppress unusedStructMember
         std::vector<ListenerInfo> _listeners;
