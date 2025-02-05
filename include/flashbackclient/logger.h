@@ -21,6 +21,8 @@ namespace FlashBackClient
         static void Initialize();
         static void SetVerbose();
 
+        // Don't question the std::forward<Args>(args)...
+        // Cause I don't know either
         template <typename... Args>
         void logTrace(Args&&... args)
         {
