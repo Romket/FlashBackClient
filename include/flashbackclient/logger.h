@@ -10,22 +10,58 @@ namespace FlashBackClient
 {
     class Logger
     {
-    public:
-        static void Initialize();
-        static void SetVerbose();
-
-        static void LogTrace();
-        static void LogDebug();
-        static void LogInfo();
-        static void LogWarn();
-        static void LogError();
-        static void LogCritical();
 
     private:
         static std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> _consoleSink;
         static std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
         static std::shared_ptr<spdlog::logger> _consoleLogger;
         static std::shared_ptr<spdlog::logger> _fileLogger;
+
+    public:
+        static void Initialize();
+        static void SetVerbose();
+
+        template <typename... Args>
+        void logTrace(Args&&... args)
+        {
+            SPDLOG_LOGGER_TRACE(_consoleLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_TRACE(_fileLogger, std::forward<Args>(args)...);
+        }
+
+        template <typename... Args>
+        void logDebug(Args&&... args)
+        {
+            SPDLOG_LOGGER_DEBUG(_consoleLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_DEBUG(_fileLogger, std::forward<Args>(args)...);
+        }
+
+        template <typename... Args>
+        void logInfo(Args&&... args)
+        {
+            SPDLOG_LOGGER_INFO(_consoleLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_INFO(_fileLogger, std::forward<Args>(args)...);
+        }
+
+        template <typename... Args>
+        void logWarn(Args&&... args)
+        {
+            SPDLOG_LOGGER_WARN(_consoleLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_WARN(_fileLogger, std::forward<Args>(args)...);
+        }
+
+        template <typename... Args>
+        void logError(Args&&... args)
+        {
+            SPDLOG_LOGGER_ERROR(_consoleLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_ERROR(_fileLogger, std::forward<Args>(args)...);
+        }
+
+        template <typename... Args>
+        void logCritical(Args&&... args)
+        {
+            SPDLOG_LOGGER_CRITICAL(_consoleLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_CRITICAL(_fileLogger, std::forward<Args>(args)...);
+        }
     };
 
 

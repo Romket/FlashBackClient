@@ -1,6 +1,4 @@
-#include "flashbackclient/defs.h"
-#include "spdlog/common.h"
-#include "spdlog/spdlog.h"
+#include <flashbackclient/defs.h>
 #include <flashbackclient/logger.h>
 
 #include <spdlog/async.h>
@@ -19,7 +17,7 @@ namespace FlashBackClient
         spdlog::init_thread_pool(queueSize, threadCount);
 
         _fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(LOG_DIR + '/' + LOG_FILE_FMT, true);
-        
+
         _fileLogger = std::make_shared<spdlog::logger>("_fileLogger", _fileSink);
         _fileLogger->set_level(spdlog::level::trace);
 
@@ -30,7 +28,7 @@ namespace FlashBackClient
 
         _consoleLogger = std::make_shared<spdlog::logger>("_consoleLogger", _consoleSink);
         _consoleLogger->set_level(spdlog::level::err);
-        
+
         spdlog::register_logger(_fileLogger);
         spdlog::register_logger(_consoleLogger);
 
@@ -41,5 +39,5 @@ namespace FlashBackClient
         _consoleLogger->set_level(spdlog::level::trace);
     }
 
-    
+
 } // namespace FlashBackClient
