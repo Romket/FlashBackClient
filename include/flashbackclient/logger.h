@@ -24,42 +24,42 @@ namespace FlashBackClient
         // Don't question the std::forward<Args>(args)...
         // Cause I don't know either
         template <typename... Args>
-        void logTrace(Args&&... args)
+        static void logTrace(Args&&... args)
         {
             SPDLOG_LOGGER_TRACE(_consoleLogger, std::forward<Args>(args)...);
             SPDLOG_LOGGER_TRACE(_fileLogger, std::forward<Args>(args)...);
         }
 
         template <typename... Args>
-        void logDebug(Args&&... args)
+        static void logDebug(Args&&... args)
         {
             SPDLOG_LOGGER_DEBUG(_consoleLogger, std::forward<Args>(args)...);
             SPDLOG_LOGGER_DEBUG(_fileLogger, std::forward<Args>(args)...);
         }
 
         template <typename... Args>
-        void logInfo(Args&&... args)
+        static void logInfo(Args&&... args)
         {
             SPDLOG_LOGGER_INFO(_consoleLogger, std::forward<Args>(args)...);
             SPDLOG_LOGGER_INFO(_fileLogger, std::forward<Args>(args)...);
         }
 
         template <typename... Args>
-        void logWarn(Args&&... args)
+        static void logWarn(Args&&... args)
         {
             SPDLOG_LOGGER_WARN(_consoleLogger, std::forward<Args>(args)...);
             SPDLOG_LOGGER_WARN(_fileLogger, std::forward<Args>(args)...);
         }
 
         template <typename... Args>
-        void logError(Args&&... args)
+        static void logError(Args&&... args)
         {
             SPDLOG_LOGGER_ERROR(_consoleLogger, std::forward<Args>(args)...);
             SPDLOG_LOGGER_ERROR(_fileLogger, std::forward<Args>(args)...);
         }
 
         template <typename... Args>
-        void logCritical(Args&&... args)
+        static void logCritical(Args&&... args)
         {
             SPDLOG_LOGGER_CRITICAL(_consoleLogger, std::forward<Args>(args)...);
             SPDLOG_LOGGER_CRITICAL(_fileLogger, std::forward<Args>(args)...);
