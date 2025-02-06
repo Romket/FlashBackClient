@@ -19,4 +19,4 @@ namespace FlashBackClient
 
         static void GenerateConfigs();
     };
-} //namespace FlashBackClient
+} // namespace FlashBackClient

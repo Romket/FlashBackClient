@@ -2,11 +2,11 @@
 
 #include <flashbackclient/defs.h>
 #include <flashbackclient/listener.h>
+#include <flashbackclient/logger.h>
 #include <flashbackclient/scheduler.h>
 #include <flashbackclient/service_locator.h>
 
 #include <cstring>
-#include <iostream>
 #include <sys/inotify.h>
 #include <unistd.h>
 
@@ -21,23 +21,23 @@ namespace FlashBackClient
         _inotifyFd = inotify_init1(IN_NONBLOCK);
         if (_inotifyFd < 0)
         {
-            std::cerr << "Failed to initialize inotify: " << strerror(errno)
-                      << std::endl;
+            Logger::LOG_ERROR("Failed to initialize inotify: {}",
+                              strerror(errno));
             return false;
         }
 
         _epollFd = epoll_create1(0);
         if (_epollFd < 0)
         {
-            std::cerr << "Failed to initialize epoll: " << strerror(errno)
-                      << std::endl;
+            Logger::LOG_ERROR("Failed to initialize epoll: {}",
+                              strerror(errno));
             return false;
         }
 
         if (pipe2(_selfPipeFd, IN_CLOEXEC | IN_NONBLOCK) < 0)
         {
-            std::cerr << "Failed to create self pipe: " << strerror(errno)
-                      << std::endl;
+            Logger::LOG_ERROR("Failed to create self pipe: {}",
+                              strerror(errno));
             return false;
         }
 
@@ -47,16 +47,16 @@ namespace FlashBackClient
 
         if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _inotifyFd, &event) < 0)
         {
-            std::cerr << "Failed to add inotify to epoll: " << strerror(errno)
-                      << std::endl;
+            Logger::LOG_ERROR("Failed to add inotify to epoll: {}",
+                              strerror(errno));
             return false;
         }
 
         event.data.fd = _selfPipeFd[0];
         if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _selfPipeFd[0], &event) < 0)
         {
-            std::cerr << "Failed to add self pipe to epoll: " << strerror(errno)
-                      << std::endl;
+            Logger::LOG_ERROR("Failed to add self pipe to epoll: {}",
+                              strerror(errno));
             return false;
         }
 
@@ -73,8 +73,8 @@ namespace FlashBackClient
             ssize_t result = write(_selfPipeFd[1], "0", 1);
             if (result == -1 && errno != EAGAIN)
             {
-                std::cerr << "Failed to wake up listener thread: "
-                          << strerror(errno) << std::endl;
+                Logger::LOG_ERROR("Failed to wake up listener thread: {}",
+                                  strerror(errno));
                 return false;
             }
         }
@@ -92,7 +92,7 @@ namespace FlashBackClient
     bool InotifyListener::AddListener(ListenerInfo& info, int depth)
     {
         if (depth == 0)
-            std::cout << "Adding listener in path " << info.Path << std::endl;
+            Logger::LOG_INFO("Adding listener in path: {}", info.Path.string());
 
         if (depth > RECURSION_LIMIT) return false;
 
@@ -100,7 +100,8 @@ namespace FlashBackClient
                                    flashback_ANY_FILE_EVENT);
         if (wd < 0)
         {
-            perror("Failed to create watch descriptor");
+            Logger::LOG_INFO("Failed to create watch descripter: {}",
+                             strerror(errno));
             return false;
         }
 
@@ -159,12 +160,12 @@ namespace FlashBackClient
         if (length < 0)
         {
             if (errno != EAGAIN)
-                std::cerr << "Error reading inotify events: " << strerror(errno)
-                          << std::endl;
+                Logger::LOG_ERROR("Error reading inotify events: {}",
+                                  strerror(errno));
             return;
         }
 
-        std::cout << "Read " << length << " bytes" << std::endl;
+        Logger::LOG_INFO("Read {} bytes", length);
 
         size_t i = 0;
         while (i < length)
@@ -174,7 +175,7 @@ namespace FlashBackClient
 
             if (event->mask & IN_Q_OVERFLOW || event->mask & IN_IGNORED)
             {
-                std::cout << "Event overflow or ignored" << std::endl;
+                Logger::LOG_WARN("Event overflow or ignored");
                 i += sizeof(struct inotify_event) + event->len;
                 continue;
             }
@@ -182,8 +183,8 @@ namespace FlashBackClient
             std::string path =
                 _watchDescriptors.find(event->wd)->second + "/" + event->name;
 
-            std::cout << "Event: " << event->mask << std::endl;
-            std::cout << "Path: " << path << std::endl;
+            Logger::LOG_INFO("Event: {}", event->mask);
+            Logger::LOG_INFO("Path: {}", path);
 
             ListenerInfo info;
             info.Path       = path;
@@ -202,14 +203,14 @@ namespace FlashBackClient
                 std::filesystem::path normalizedListenerPath =
                     std::filesystem::absolute(listener.Path);
 
-                std::cout << "Checking listener: " << normalizedListenerPath
-                          << std::endl;
-                std::cout << "Against: " << normalizedPath << std::endl;
+                Logger::LOG_INFO("Checking listener: {}",
+                                 normalizedListenerPath.string());
+                Logger::LOG_INFO("Against: {}", normalizedPath.string());
 
                 if (!normalizedPath.string().find(
                         normalizedListenerPath.string()))
                 {
-                    std::cout << "Matched" << std::endl;
+                    LOG_INFO("Matched");
                     listener.Status     = StatusEnum::modified;
                     listener.LastUpdate = std::chrono::system_clock::now();
 

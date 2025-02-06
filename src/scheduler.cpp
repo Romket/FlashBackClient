@@ -1,12 +1,11 @@
 #include <flashbackclient/scheduler.h>
 
 #include <flashbackclient/defs.h>
+#include <flashbackclient/logger.h>
 
 #include <memory>
 #include <mutex>
 #include <yaml-cpp/yaml.h>
-
-#include <iostream>
 
 namespace FlashBackClient
 {
@@ -26,7 +25,7 @@ namespace FlashBackClient
 
     void Scheduler::Run()
     {
-        std::cout << "Running scheduler" << std::endl;
+        Logger::LOG_INFO("Running scheduler");
         if (_running) return;
 
         _running         = true;
@@ -45,7 +44,7 @@ namespace FlashBackClient
 
     void Scheduler::schedulerThread()
     {
-        std::cout << "Scheduler thread started" << std::endl;
+        Logger::LOG_INFO("Schedular thread started");
         while (_running)
         {
             {

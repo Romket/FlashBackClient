@@ -1,6 +1,5 @@
+#include <flashbackclient/logger.h>
 #include <flashbackclient/managers/rulemanager.h>
-
-#include <iostream>
 
 namespace FlashBackClient
 {
@@ -13,18 +12,18 @@ namespace FlashBackClient
 
     void RuleManager::loadRules(const std::filesystem::path& path)
     {
-        std::cout << "Loading rules from path " << path.string() << std::endl;
+        Logger::LOG_INFO("Loading rules from path {}", path.string());
 
         YAML::Node config = YAML::LoadFile(path.string());
         if (!config)
         {
-            std::cout << "Failed to load config file" << std::endl;
+            Logger::LOG_ERROR("Failed to load config file");
             return;
         }
 
         if (!config["rules"])
         {
-            std::cout << "No rules found in config file" << std::endl;
+            Logger::LOG_WARN("No rules found in config file");
             return;
         }
 
@@ -32,7 +31,7 @@ namespace FlashBackClient
         {
             if (!rule["id"])
             {
-                std::cout << "Rule has no id" << std::endl;
+                Logger::LOG_WARN("Rule has no id");
                 continue;
             }
 
@@ -41,7 +40,7 @@ namespace FlashBackClient
 
             if (!rule["name"])
             {
-                std::cout << "Rule has no name" << std::endl;
+                Logger::LOG_WARN("Rule has no name");
                 continue;
             }
 
@@ -49,13 +48,15 @@ namespace FlashBackClient
 
             if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action))
             {
-                std::cout << "Invalid or no action in rule \"" << newRule.name << '\"' << std::endl;
+                Logger::LOG_WARN("Invalid or no action in rule \"{}",
+                                 newRule.name);
                 continue;
             }
 
             if (!loadCases(newRule, rule["cases"]))
             {
-                std::cout << "Failed to load cases for rule \"" << newRule.name << '\"' << std::endl;
+                Logger::LOG_ERROR("Failed to load cases for rule \"{}",
+                                  newRule.name);
                 continue;
             }
 
@@ -65,21 +66,19 @@ namespace FlashBackClient
 
     bool RuleManager::loadCases(Rule& rule, const YAML::Node& casesNode)
     {
-        if (!casesNode)
-            return false;
+        if (!casesNode) return false;
 
         for (const auto& caseNode : casesNode)
         {
             if (!caseNode["id"])
             {
-                std::cout << "Case has no id" << std::endl;
+                Logger::LOG_WARN("Case has no id");
                 continue;
             }
 
             Triggers trigger = caseNode["id"].as<Triggers>();
 
-            if (trigger == Triggers::none)
-                continue;
+            if (trigger == Triggers::none) continue;
 
             Condition newCase;
             newCase.TriggerName = trigger;
@@ -88,7 +87,7 @@ namespace FlashBackClient
             {
                 if (!caseNode["times"])
                 {
-                    std::cout << "Case has no times" << std::endl;
+                    Logger::LOG_WARN("Case has no times");
                     continue;
                 }
 
@@ -96,30 +95,36 @@ namespace FlashBackClient
                 {
                     if (!time["cron_exp"])
                     {
-                        std::cout << "Time has no cron_exp" << std::endl;
+                        Logger::LOG_WARN("Time has no cron_exp");
                         continue;
                     }
 
-                    if (newCase.TriggerInfo.find("times") == newCase.TriggerInfo.end()) {
-                        newCase.TriggerInfo["times"] = std::vector<std::string>();
+                    if (newCase.TriggerInfo.find("times") ==
+                        newCase.TriggerInfo.end())
+                    {
+                        newCase.TriggerInfo["times"] =
+                            std::vector<std::string>();
                     }
 
-                    auto& times = std::any_cast<std::vector<std::string>&>(newCase.TriggerInfo["times"]);
+                    auto& times = std::any_cast<std::vector<std::string>&>(
+                        newCase.TriggerInfo["times"]);
                     times.push_back(time["cron_exp"].as<std::string>());
                 }
             }
             else if (trigger == Triggers::after_interval)
             {
-                int after_last = 0;
+                int after_last            = 0;
                 int before_next_scheduled = 0;
 
                 if (caseNode["after_last"])
                     after_last = caseNode["after_last"].as<int>();
                 if (caseNode["before_next_scheduled"])
-                    before_next_scheduled = caseNode["before_next_scheduled"].as<int>();
+                    before_next_scheduled =
+                        caseNode["before_next_scheduled"].as<int>();
 
                 newCase.TriggerInfo["after_last"] = after_last;
-                newCase.TriggerInfo["before_next_scheduled"] = before_next_scheduled;
+                newCase.TriggerInfo["before_next_scheduled"] =
+                    before_next_scheduled;
             }
 
             rule.Conditions.push_back(newCase);
@@ -127,10 +132,10 @@ namespace FlashBackClient
 
         if (rule.Conditions.empty())
         {
-            std::cout << "Rule has no cases" << std::endl;
+            Logger::LOG_WARN("Rule has no cases");
             return false;
         }
 
         return true;
     }
-} //namespace FlashBackClient
+} // namespace FlashBackClient
