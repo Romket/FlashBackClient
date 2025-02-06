@@ -29,8 +29,12 @@ namespace FlashBackClient
             {
                 if (condition.TriggerName == Triggers::on_file_change)
                 {
+                    ListenerInfo info;
+                    info.Owner = shared_from_this();
+                    info.Path  = GetSettingValue<std::string>("path");
+
                     if (!ServiceLocator::Get<PlatformListener>()->AddListener(
-                            GetSettingValue<std::string>("path")))
+                            info))
                         return false;
                     return true;
                 }
