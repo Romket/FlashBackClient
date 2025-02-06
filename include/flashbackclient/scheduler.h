@@ -34,7 +34,7 @@ namespace FlashBackClient
         void schedulerThread();
 
         // cppcheck-suppress unusedStructMember
-        std::vector<std::unique_ptr<Target>> _targets;
+        std::vector<std::shared_ptr<Target>> _targets;
         std::mutex                           _targetsMutex;
 
         std::atomic<bool> _running;

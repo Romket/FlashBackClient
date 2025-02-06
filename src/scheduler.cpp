@@ -3,6 +3,7 @@
 #include <flashbackclient/defs.h>
 #include <flashbackclient/logger.h>
 
+#include <memory>
 #include <mutex>
 #include <yaml-cpp/yaml.h>
 
@@ -77,8 +78,7 @@ namespace FlashBackClient
                 continue;
             else
             {
-                std::unique_ptr<Target> target =
-                    std::make_unique<Target>(Target(entry.path()));
+                std::shared_ptr<Target> target = Target::Create(entry.path());
 
                 if (!target->Initialize()) continue;
                 _targets.push_back(std::move(target));
