@@ -5,7 +5,7 @@
 namespace FlashBackClient
 {
     using PlatformListener = InotifyListener;
-} //namespace FlashBackClient
+} // namespace FlashBackClient
 #else
 #error "Unsupported platform"
 #endif

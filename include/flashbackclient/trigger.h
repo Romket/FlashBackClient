@@ -27,7 +27,7 @@ namespace FlashBackClient
         after_interval
     };
 
-    //TODO: something better
+    // TODO: something better
     struct Condition
     {
         // cppcheck-suppress unusedStructMember
@@ -38,7 +38,7 @@ namespace FlashBackClient
 
     struct Rule
     {
-        int id;
+        int         id;
         std::string name;
         // cppcheck-suppress unusedStructMember
         Actions Action;
@@ -50,20 +50,21 @@ namespace FlashBackClient
             return id == other.id && name == other.name;
         }
     };
-} //namespace FlashBackClient
+} // namespace FlashBackClient
 
 // Hash function for Rule
 namespace std
 {
-    template <>
+    template<>
     struct hash<FlashBackClient::Rule>
     {
         std::size_t operator()(const FlashBackClient::Rule& rule) const
         {
-            return std::hash<int>()(rule.id) ^ (std::hash<std::string>()(rule.name) << 1);
+            return std::hash<int>()(rule.id) ^
+                   (std::hash<std::string>()(rule.name) << 1);
         }
     };
-} //namespace std
+} // namespace std
 
 namespace YAML
 {
@@ -71,10 +72,9 @@ namespace YAML
     template<>
     struct convert<FlashBackClient::Actions>
     {
-        static bool decode(const Node &node, FlashBackClient::Actions &action)
+        static bool decode(const Node& node, FlashBackClient::Actions& action)
         {
-            if (!node.IsScalar())
-                return false;
+            if (!node.IsScalar()) return false;
 
             const std::string value = node.as<std::string>();
 
@@ -97,15 +97,13 @@ namespace YAML
     template<>
     struct convert<FlashBackClient::Triggers>
     {
-        static bool decode(const Node &node, FlashBackClient::Triggers &trigger)
+        static bool decode(const Node& node, FlashBackClient::Triggers& trigger)
         {
-            if (!node.IsScalar())
-                return false;
+            if (!node.IsScalar()) return false;
 
             const std::string value = node.as<std::string>();
 
-            if (value == "none")
-                trigger = FlashBackClient::Triggers::none;
+            if (value == "none") trigger = FlashBackClient::Triggers::none;
             else if (value == "on_startup")
                 trigger = FlashBackClient::Triggers::on_startup;
             else if (value == "on_shutdown")
@@ -122,4 +120,4 @@ namespace YAML
             return true;
         }
     };
-} //namespace YAML
+} // namespace YAML

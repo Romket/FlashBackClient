@@ -2,8 +2,8 @@
 #include "inotify_listener.h"
 
 #include <flashbackclient/defs.h>
-#include <flashbackclient/scheduler.h>
 #include <flashbackclient/logger.h>
+#include <flashbackclient/scheduler.h>
 #include <flashbackclient/service_locator.h>
 
 #include <cstring>
@@ -21,20 +21,23 @@ namespace FlashBackClient
         _inotifyFd = inotify_init1(IN_NONBLOCK);
         if (_inotifyFd < 0)
         {
-            Logger::LOG_ERROR("Failed to initialize inotify: {}", strerror(errno));
+            Logger::LOG_ERROR("Failed to initialize inotify: {}",
+                              strerror(errno));
             return false;
         }
 
         _epollFd = epoll_create1(0);
         if (_epollFd < 0)
         {
-            Logger::LOG_ERROR("Failed to initialize epoll: {}", strerror(errno));
+            Logger::LOG_ERROR("Failed to initialize epoll: {}",
+                              strerror(errno));
             return false;
         }
 
         if (pipe2(_selfPipeFd, IN_CLOEXEC | IN_NONBLOCK) < 0)
         {
-            Logger::LOG_ERROR("Failed to create self pipe: {}", strerror(errno));
+            Logger::LOG_ERROR("Failed to create self pipe: {}",
+                              strerror(errno));
             return false;
         }
 
@@ -44,14 +47,16 @@ namespace FlashBackClient
 
         if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _inotifyFd, &event) < 0)
         {
-            Logger::LOG_ERROR("Failed to add inotify to epoll: {}", strerror(errno));
+            Logger::LOG_ERROR("Failed to add inotify to epoll: {}",
+                              strerror(errno));
             return false;
         }
 
         event.data.fd = _selfPipeFd[0];
         if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _selfPipeFd[0], &event) < 0)
         {
-            Logger::LOG_ERROR("Failed to add self pipe to epoll: {}", strerror(errno));
+            Logger::LOG_ERROR("Failed to add self pipe to epoll: {}",
+                              strerror(errno));
             return false;
         }
 
@@ -68,7 +73,8 @@ namespace FlashBackClient
             ssize_t result = write(_selfPipeFd[1], "0", 1);
             if (result == -1 && errno != EAGAIN)
             {
-                Logger::LOG_ERROR("Failed to wake up listener thread: {}", strerror(errno));
+                Logger::LOG_ERROR("Failed to wake up listener thread: {}",
+                                  strerror(errno));
                 return false;
             }
         }
@@ -95,7 +101,8 @@ namespace FlashBackClient
                                    flashback_ANY_FILE_EVENT);
         if (wd < 0)
         {
-            Logger::LOG_INFO("Failed to create watch descripter: {}", strerror(errno));
+            Logger::LOG_INFO("Failed to create watch descripter: {}",
+                             strerror(errno));
             return false;
         }
 
@@ -155,7 +162,8 @@ namespace FlashBackClient
         if (length < 0)
         {
             if (errno != EAGAIN)
-                Logger::LOG_ERROR("Error reading inotify events: {}", strerror(errno));
+                Logger::LOG_ERROR("Error reading inotify events: {}",
+                                  strerror(errno));
             return;
         }
 
@@ -197,7 +205,8 @@ namespace FlashBackClient
                 std::filesystem::path normalizedListenerPath =
                     std::filesystem::absolute(listener.Path);
 
-                Logger::LOG_INFO("Checking listener: {}", normalizedListenerPath.string());
+                Logger::LOG_INFO("Checking listener: {}",
+                                 normalizedListenerPath.string());
                 Logger::LOG_INFO("Against: {}", normalizedPath.string());
 
                 if (!normalizedPath.string().find(

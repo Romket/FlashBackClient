@@ -13,7 +13,9 @@ namespace FlashBackClient
     {
     public:
         explicit Target(const std::filesystem::path& path) :
-            RuleManager(path), SettingManager(path) {}
+            RuleManager(path), SettingManager(path)
+        {
+        }
 
         virtual ~Target() = default;
 
@@ -26,13 +28,15 @@ namespace FlashBackClient
         std::unordered_map<Rule, bool> checkOverrideRules();
         bool checkRule(Rule defaultRule, const std::vector<int>& overrideRules);
 
-        bool checkConditions(const Rule& rule, const std::vector<Triggers>& givenTriggers = {});
+        bool checkConditions(const Rule&                  rule,
+                             const std::vector<Triggers>& givenTriggers = {});
 
-        bool checkTrigger(Triggers trigger, const std::vector<Triggers>& givenTriggers = {});
+        bool checkTrigger(Triggers                     trigger,
+                          const std::vector<Triggers>& givenTriggers = {});
 
         bool checkFileChanges(const Condition& condition);
 
         bool upload();
         bool download();
     };
-} //namespace FlashBackClient
+} // namespace FlashBackClient
