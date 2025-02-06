@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <cstring>
+#include <filesystem>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
@@ -24,47 +26,66 @@ namespace FlashBackClient
         // Don't question the std::forward<Args>(args)...
         // Cause I don't know either
         template <typename... Args>
-        static void logTrace(Args&&... args)
+        static void logTrace(const char* file, int line, const char* func, fmt::format_string<Args...> fmtStr, Args&&... args)
         {
-            SPDLOG_LOGGER_TRACE(_consoleLogger, std::forward<Args>(args)...);
-            SPDLOG_LOGGER_TRACE(_fileLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_TRACE(_consoleLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
+            SPDLOG_LOGGER_TRACE(_fileLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
         }
 
         template <typename... Args>
-        static void logDebug(Args&&... args)
+        static void logDebug(const char* file, int line, const char* func, fmt::format_string<Args...> fmtStr, Args&&... args)
         {
-            SPDLOG_LOGGER_DEBUG(_consoleLogger, std::forward<Args>(args)...);
-            SPDLOG_LOGGER_DEBUG(_fileLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_DEBUG(_consoleLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
+            SPDLOG_LOGGER_DEBUG(_fileLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
         }
 
         template <typename... Args>
-        static void logInfo(Args&&... args)
+        static void logInfo(const char* file, int line, const char* func, fmt::format_string<Args...> fmtStr, Args&&... args)
         {
-            SPDLOG_LOGGER_INFO(_consoleLogger, std::forward<Args>(args)...);
-            SPDLOG_LOGGER_INFO(_fileLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_INFO(_consoleLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
+            SPDLOG_LOGGER_INFO(_fileLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
         }
 
         template <typename... Args>
-        static void logWarn(Args&&... args)
+        static void logWarn(const char* file, int line, const char* func, fmt::format_string<Args...> fmtStr, Args&&... args)
         {
-            SPDLOG_LOGGER_WARN(_consoleLogger, std::forward<Args>(args)...);
-            SPDLOG_LOGGER_WARN(_fileLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_WARN(_consoleLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
+            SPDLOG_LOGGER_WARN(_fileLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
         }
 
         template <typename... Args>
-        static void logError(Args&&... args)
+        static void logError(const char* file, int line, const char* func, fmt::format_string<Args...> fmtStr, Args&&... args)
         {
-            SPDLOG_LOGGER_ERROR(_consoleLogger, std::forward<Args>(args)...);
-            SPDLOG_LOGGER_ERROR(_fileLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_ERROR(_consoleLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
+            SPDLOG_LOGGER_ERROR(_fileLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
         }
 
         template <typename... Args>
-        static void logCritical(Args&&... args)
+        static void logCritical(const char* file, int line, const char* func, fmt::format_string<Args...> fmtStr, Args&&... args)
         {
-            SPDLOG_LOGGER_CRITICAL(_consoleLogger, std::forward<Args>(args)...);
-            SPDLOG_LOGGER_CRITICAL(_fileLogger, std::forward<Args>(args)...);
+            SPDLOG_LOGGER_CRITICAL(_consoleLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
+            SPDLOG_LOGGER_CRITICAL(_fileLogger, "{}:{} [{}] - {}", file, line, func, fmt::format(fmtStr, std::forward<Args>(args)...));
         }
+
     };
 
 
 } // namespace FlashBackClient
+
+#define LOG_TRACE(fmt, ...) \
+    Logger::logTrace(std::filesystem::path(__FILE__).filename().string().c_str(), __LINE__, __func__, fmt, ##__VA_ARGS__)
+
+#define LOG_DEBUG(fmt, ...) \
+    Logger::logDebug(std::filesystem::path(__FILE__).filename().string().c_str(), __LINE__, __func__, fmt, ##__VA_ARGS__)
+
+#define LOG_INFO(fmt, ...) \
+    Logger::logInfo(std::filesystem::path(__FILE__).filename().string().c_str(), __LINE__, __func__, fmt, ##__VA_ARGS__)
+
+#define LOG_WARN(fmt, ...) \
+    Logger::logWarn(std::filesystem::path(__FILE__).filename().string().c_str(), __LINE__, __func__, fmt, ##__VA_ARGS__)
+
+#define LOG_ERROR(fmt, ...) \
+    Logger::logError(std::filesystem::path(__FILE__).filename().string().c_str(), __LINE__, __func__, fmt, ##__VA_ARGS__)
+
+#define LOG_CRITICAL(fmt, ...) \
+    Logger::logCritical(std::filesystem::path(__FILE__).filename().string().c_str(), __LINE__, __func__, fmt, ##__VA_ARGS__)

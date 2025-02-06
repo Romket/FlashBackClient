@@ -1,10 +1,9 @@
 #include <flashbackclient/target.h>
 
+#include <flashbackclient/logger.h>
 #include <flashbackclient/scheduler.h>
 #include <flashbackclient/service_locator.h>
 #include <listener/platform_listener.h>
-
-#include <iostream>
 
 namespace FlashBackClient
 {
@@ -85,8 +84,7 @@ namespace FlashBackClient
             }
         }
 
-        std::cout << "Condition met" << std::endl;
-
+        Logger::LOG_INFO("Condition met");
         return true;
     }
 

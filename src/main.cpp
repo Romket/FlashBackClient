@@ -23,8 +23,6 @@ int main(int argc, char** argv)
         }
     }
 
-    FlashBackClient::Logger::logError("Test this, bitch");
-
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(
         new FlashBackClient::ConfigManager());
 
