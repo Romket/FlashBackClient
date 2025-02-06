@@ -1,10 +1,12 @@
 #pragma once
 
 #include <flashbackclient/defs.h>
+#include <flashbackclient/target.h>
 
 #include <atomic>
 #include <chrono>
 #include <filesystem>
+#include <memory>
 #include <thread>
 #include <vector>
 
@@ -22,8 +24,9 @@ namespace FlashBackClient
 
     struct ListenerInfo
     {
-        std::filesystem::path                              Path;
         std::chrono::time_point<std::chrono::system_clock> LastUpdate;
+        std::shared_ptr<Target>                            Owner = nullptr;
+        std::filesystem::path                              Path;
         StatusEnum Status = StatusEnum::inactive;
     };
 
@@ -36,8 +39,7 @@ namespace FlashBackClient
         virtual bool Initialize() = 0;
         virtual bool Shutdown()   = 0;
 
-        virtual bool AddListener(const std::filesystem::path& path,
-                                 int                          depth = 0) = 0;
+        virtual bool AddListener(ListenerInfo& info, int depth = 0) = 0;
 
         const std::vector<ListenerInfo>& GetListeners() const
         {

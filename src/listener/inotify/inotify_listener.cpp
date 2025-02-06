@@ -1,7 +1,7 @@
-
 #include "inotify_listener.h"
 
 #include <flashbackclient/defs.h>
+#include <flashbackclient/listener.h>
 #include <flashbackclient/scheduler.h>
 #include <flashbackclient/service_locator.h>
 
@@ -10,8 +10,8 @@
 #include <sys/inotify.h>
 #include <unistd.h>
 
-#define flashback_ANY_FILE_EVENT                                         \
-    (IN_CREATE | IN_DELETE | IN_DELETE_SELF | IN_MODIFY | IN_MOVE_SELF | \
+#define flashback_ANY_FILE_EVENT                                              \
+    (IN_CREATE | IN_DELETE | IN_DELETE_SELF | IN_CLOSE_WRITE | IN_MOVE_SELF | \
      IN_MOVED_FROM | IN_MOVED_TO)
 
 namespace FlashBackClient
@@ -89,15 +89,14 @@ namespace FlashBackClient
         return true;
     }
 
-    bool InotifyListener::AddListener(const std::filesystem::path& path,
-                                      int                          depth)
+    bool InotifyListener::AddListener(ListenerInfo& info, int depth)
     {
         if (depth == 0)
-            std::cout << "Adding listener in path " << path << std::endl;
+            std::cout << "Adding listener in path " << info.Path << std::endl;
 
         if (depth > RECURSION_LIMIT) return false;
 
-        int wd = inotify_add_watch(_inotifyFd, path.c_str(),
+        int wd = inotify_add_watch(_inotifyFd, info.Path.c_str(),
                                    flashback_ANY_FILE_EVENT);
         if (wd < 0)
         {
@@ -105,25 +104,24 @@ namespace FlashBackClient
             return false;
         }
 
-        _watchDescriptors[wd] = path.string();
+        _watchDescriptors[wd] = info.Path.string();
 
-        if (depth == 0)
-        {
-            ListenerInfo info;
-            info.Path       = path;
-            info.Status     = StatusEnum::active;
-            info.LastUpdate = std::chrono::system_clock::now();
-            _listeners.push_back(info);
-        }
+        info.Status     = StatusEnum::active;
+        info.LastUpdate = std::chrono::system_clock::now();
 
-        if (!std::filesystem::is_directory(path)) return true;
+        if (depth == 0) _listeners.push_back(info);
+
+        if (!std::filesystem::is_directory(info.Path)) return true;
 
         // cppcheck-suppress useStlAlgorithm
-        for (const auto& item : std::filesystem::directory_iterator(path))
+        for (const auto& item : std::filesystem::directory_iterator(info.Path))
         {
             if (item.is_directory())
             {
-                if (!AddListener(item.path(), depth + 1)) return false;
+                ListenerInfo subdirInfo;
+                subdirInfo.Path = item.path();
+
+                if (!AddListener(subdirInfo, depth + 1)) return false;
             }
         }
 
@@ -215,7 +213,8 @@ namespace FlashBackClient
                     listener.Status     = StatusEnum::modified;
                     listener.LastUpdate = std::chrono::system_clock::now();
 
-                    ServiceLocator::Get<Scheduler>()->Flag();
+                    // ServiceLocator::Get<Scheduler>()->Flag();
+                    listener.Owner->CheckRules({Triggers::on_file_change});
                 }
             }
 
