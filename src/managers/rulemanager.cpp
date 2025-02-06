@@ -11,6 +11,8 @@ namespace FlashBackClient
         return true;
     }
 
+    bool RuleManager::Shutdown() { return true; }
+
     void RuleManager::loadRules(const std::filesystem::path& path)
     {
         std::cout << "Loading rules from path " << path.string() << std::endl;
@@ -49,13 +51,15 @@ namespace FlashBackClient
 
             if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action))
             {
-                std::cout << "Invalid or no action in rule \"" << newRule.name << '\"' << std::endl;
+                std::cout << "Invalid or no action in rule \"" << newRule.name
+                          << '\"' << std::endl;
                 continue;
             }
 
             if (!loadCases(newRule, rule["cases"]))
             {
-                std::cout << "Failed to load cases for rule \"" << newRule.name << '\"' << std::endl;
+                std::cout << "Failed to load cases for rule \"" << newRule.name
+                          << '\"' << std::endl;
                 continue;
             }
 
@@ -65,8 +69,7 @@ namespace FlashBackClient
 
     bool RuleManager::loadCases(Rule& rule, const YAML::Node& casesNode)
     {
-        if (!casesNode)
-            return false;
+        if (!casesNode) return false;
 
         for (const auto& caseNode : casesNode)
         {
@@ -78,8 +81,7 @@ namespace FlashBackClient
 
             Triggers trigger = caseNode["id"].as<Triggers>();
 
-            if (trigger == Triggers::none)
-                continue;
+            if (trigger == Triggers::none) continue;
 
             Condition newCase;
             newCase.TriggerName = trigger;
@@ -100,26 +102,32 @@ namespace FlashBackClient
                         continue;
                     }
 
-                    if (newCase.TriggerInfo.find("times") == newCase.TriggerInfo.end()) {
-                        newCase.TriggerInfo["times"] = std::vector<std::string>();
+                    if (newCase.TriggerInfo.find("times") ==
+                        newCase.TriggerInfo.end())
+                    {
+                        newCase.TriggerInfo["times"] =
+                            std::vector<std::string>();
                     }
 
-                    auto& times = std::any_cast<std::vector<std::string>&>(newCase.TriggerInfo["times"]);
+                    auto& times = std::any_cast<std::vector<std::string>&>(
+                        newCase.TriggerInfo["times"]);
                     times.push_back(time["cron_exp"].as<std::string>());
                 }
             }
             else if (trigger == Triggers::after_interval)
             {
-                int after_last = 0;
+                int after_last            = 0;
                 int before_next_scheduled = 0;
 
                 if (caseNode["after_last"])
                     after_last = caseNode["after_last"].as<int>();
-                if (caseNode["before_next_scheduled"])
-                    before_next_scheduled = caseNode["before_next_scheduled"].as<int>();
+                else if (caseNode["before_next_scheduled"])
+                    before_next_scheduled =
+                        caseNode["before_next_scheduled"].as<int>();
 
                 newCase.TriggerInfo["after_last"] = after_last;
-                newCase.TriggerInfo["before_next_scheduled"] = before_next_scheduled;
+                newCase.TriggerInfo["before_next_scheduled"] =
+                    before_next_scheduled;
             }
 
             rule.Conditions.push_back(newCase);
@@ -133,4 +141,4 @@ namespace FlashBackClient
 
         return true;
     }
-} //namespace FlashBackClient
+} // namespace FlashBackClient

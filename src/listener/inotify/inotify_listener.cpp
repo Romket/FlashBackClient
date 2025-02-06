@@ -68,6 +68,8 @@ namespace FlashBackClient
 
     bool InotifyListener::Shutdown()
     {
+        _running = false;
+
         if (_selfPipeFd[1] >= 0)
         {
             ssize_t result = write(_selfPipeFd[1], "0", 1);

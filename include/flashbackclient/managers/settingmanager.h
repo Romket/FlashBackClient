@@ -10,14 +10,27 @@ namespace FlashBackClient
     class SettingManager
     {
     public:
-        explicit SettingManager(const std::filesystem::path& path) : _settingFile(path) {}
+        explicit SettingManager(const std::filesystem::path& path) :
+            _settingFile(path)
+        {
+        }
+
         virtual ~SettingManager() = default;
 
         virtual bool Initialize();
+        virtual bool Shutdown();
 
-        const inline std::unordered_map<std::string, std::any>& GetSettings() const { return _settings; }
+        const inline std::unordered_map<std::string, std::any>&
+        GetSettings() const
+        {
+            return _settings;
+        }
 
-        inline void SetSettings(const std::unordered_map<std::string, std::any>& settings) { _settings = settings; }
+        inline void
+        SetSettings(const std::unordered_map<std::string, std::any>& settings)
+        {
+            _settings = settings;
+        }
 
         template<typename T>
         inline T GetSettingValue(const std::string& name) const
@@ -43,4 +56,4 @@ namespace FlashBackClient
 
         std::string expandHomeDirectory(const std::string& path);
     };
-} //namespace FlashBackClient
+} // namespace FlashBackClient

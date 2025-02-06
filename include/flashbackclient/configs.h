@@ -4,10 +4,6 @@
 
 #include <flashbackclient/defs.h>
 
-#include <filesystem>
-#include <string>
-#include <unordered_map>
-
 namespace FlashBackClient
 {
     class ConfigManager : public SettingManager
@@ -16,7 +12,8 @@ namespace FlashBackClient
         inline ConfigManager() : SettingManager(CONFIG_FILE_PATH) {}
 
         bool Initialize() override;
+        bool Shutdown() override;
 
         static void GenerateConfigs();
     };
-} //namespace FlashBackClient
+} // namespace FlashBackClient

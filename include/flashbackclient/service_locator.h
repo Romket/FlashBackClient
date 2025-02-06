@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 
@@ -10,7 +9,7 @@ namespace FlashBackClient
     {
     public:
         // Provide a service
-        template <typename T>
+        template<typename T>
         static void Provide(T* service)
         {
             if (!service)
@@ -21,18 +20,19 @@ namespace FlashBackClient
             auto& instance = getServiceInstance<T>();
             if (instance != nullptr)
             {
-                throw std::invalid_argument("Service already provided. Please call Shutdown<T> first.");
+                throw std::invalid_argument(
+                    "Service already provided. Please call Shutdown<T> first.");
             }
             instance = std::unique_ptr<T>(service);
 
-            if(!instance->Initialize())
+            if (!instance->Initialize())
             {
                 throw std::invalid_argument("Failed to initialize service");
             }
         }
 
         // Get the provided service
-        template <typename T>
+        template<typename T>
         static T* Get()
         {
             auto& instance = getServiceInstance<T>();
@@ -44,23 +44,23 @@ namespace FlashBackClient
         }
 
         // Shutdown a service
-        template <typename T>
+        template<typename T>
         static void Shutdown()
         {
             auto& instance = getServiceInstance<T>();
+
+            instance->Shutdown();
             instance.reset();
         }
 
-        template <typename T>
+        template<typename T>
         static bool IsProvided()
         {
-            if (getServiceInstance<T>())
-                return true;
-            return false;
+            return (getServiceInstance<T>() != nullptr);
         }
 
     private:
-        template <typename T>
+        template<typename T>
         static std::unique_ptr<T>& getServiceInstance()
         {
             static std::unique_ptr<T> instance = nullptr;

@@ -37,6 +37,7 @@ namespace FlashBackClient
         }
 
         bool Initialize() override;
+        bool Shutdown() override;
 
         void CheckRules(const std::vector<Triggers>& givenTriggers = {});
 

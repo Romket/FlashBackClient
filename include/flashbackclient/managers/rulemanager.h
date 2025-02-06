@@ -12,12 +12,20 @@ namespace FlashBackClient
     class RuleManager
     {
     public:
-        explicit RuleManager(const std::filesystem::path& path) : _ruleFile(path) {}
+        explicit RuleManager(const std::filesystem::path& path) :
+            _ruleFile(path)
+        {
+        }
+
         virtual ~RuleManager() = default;
 
         virtual bool Initialize();
-      
-        const inline std::unordered_map<Rule, bool>& GetRules() const { return _rules; }
+        virtual bool Shutdown();
+
+        const inline std::unordered_map<Rule, bool>& GetRules() const
+        {
+            return _rules;
+        }
 
     protected:
         std::unordered_map<Rule, bool> _rules;
@@ -29,4 +37,4 @@ namespace FlashBackClient
 
         bool loadCases(Rule& rule, const YAML::Node& casesNode);
     };
-} //namespace FlashBackClient
+} // namespace FlashBackClient
