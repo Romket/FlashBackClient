@@ -10,10 +10,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INSTALL_PREFIX "/usr/local/bin/")
 
 add_subdirectory(lib/yaml-cpp)
+add_subdirectory(lib/spdlog)
 
 add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/src/configs.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/listener/inotify/inotify_listener.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/rulemanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/settingmanager.cpp
@@ -25,7 +27,7 @@ add_executable(flashbackclient
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_link_libraries(flashbackclient yaml-cpp)
+target_link_libraries(flashbackclient yaml-cpp spdlog)
 
 if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")

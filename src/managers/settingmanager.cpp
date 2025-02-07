@@ -1,8 +1,7 @@
+#include <flashbackclient/logger.h>
 #include <flashbackclient/managers/settingmanager.h>
 
 #include <yaml-cpp/yaml.h>
-
-#include <iostream>
 
 namespace FlashBackClient
 {
@@ -17,13 +16,12 @@ namespace FlashBackClient
 
     void SettingManager::loadSettings(const std::filesystem::path& path)
     {
-        std::cout << "Loading settings from path " << path.string()
-                  << std::endl;
+        Logger::LOG_INFO("Loading settings from path {}", path.string());
 
         YAML::Node config = YAML::LoadFile(path.string());
         if (!config)
         {
-            std::cout << "Failed to load config file" << std::endl;
+            Logger::LOG_ERROR("Failed to load config file");
             return;
         }
 
@@ -61,7 +59,7 @@ namespace FlashBackClient
         const char* homeDir = std::getenv("HOME");
         if (homeDir == nullptr)
         {
-            std::cerr << "HOME environment variable is not set." << std::endl;
+            Logger::LOG_ERROR("HOME environment variable is not set.");
             return path; // Return original path if HOME is not set
         }
 

@@ -38,8 +38,9 @@ namespace FlashBackClient
         std::vector<std::shared_ptr<Target>> _targets;
         std::mutex                           _targetsMutex;
 
-        std::atomic<bool>       _running;
-        std::atomic<bool>       _flagged;
+        std::atomic<bool> _running;
+        std::atomic<bool> _flagged;
+
         std::thread             _schedulerThread;
         std::condition_variable _cv;
         std::mutex              _mutex;

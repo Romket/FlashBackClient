@@ -56,7 +56,7 @@ namespace FlashBackClient
         template<typename T>
         static bool IsProvided()
         {
-            return (getServiceInstance<T>() != nullptr);
+            return getServiceInstance<T>() != nullptr;
         }
 
     private:
