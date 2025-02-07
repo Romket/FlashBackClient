@@ -43,6 +43,8 @@ namespace FlashBackClient
         return true;
     }
 
+    bool Target::Shutdown() { return true; }
+
     void Target::CheckRules(const std::vector<Triggers>& givenTriggers)
     {
         for (const auto& rule : _rules)

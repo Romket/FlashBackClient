@@ -10,6 +10,8 @@ namespace FlashBackClient
         return true;
     }
 
+    bool RuleManager::Shutdown() { return true; }
+
     void RuleManager::loadRules(const std::filesystem::path& path)
     {
         Logger::LOG_INFO("Loading rules from path {}", path.string());

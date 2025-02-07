@@ -22,6 +22,7 @@ namespace FlashBackClient
         virtual ~Scheduler() = default;
 
         bool Initialize() override;
+        bool Shutdown() override;
 
         void Run();
 

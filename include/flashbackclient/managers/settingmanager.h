@@ -14,9 +14,11 @@ namespace FlashBackClient
             _settingFile(path)
         {
         }
+
         virtual ~SettingManager() = default;
 
         virtual bool Initialize();
+        virtual bool Shutdown();
 
         const inline std::unordered_map<std::string, std::any>&
         GetSettings() const

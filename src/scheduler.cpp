@@ -23,6 +23,16 @@ namespace FlashBackClient
         return true;
     }
 
+    bool Scheduler::Shutdown()
+    {
+        _running = false;
+        _cv.notify_one();
+
+        if (_schedulerThread.joinable()) _schedulerThread.join();
+
+        return true;
+    }
+
     void Scheduler::Run()
     {
         Logger::LOG_INFO("Running scheduler");

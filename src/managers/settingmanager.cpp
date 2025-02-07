@@ -12,6 +12,8 @@ namespace FlashBackClient
         return true;
     }
 
+    bool SettingManager::Shutdown() { return true; }
+
     void SettingManager::loadSettings(const std::filesystem::path& path)
     {
         Logger::LOG_INFO("Loading settings from path {}", path.string());

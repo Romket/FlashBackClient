@@ -3,11 +3,18 @@
 #include <flashbackclient/configs.h>
 #include <flashbackclient/logger.h>
 #include <flashbackclient/scheduler.h>
+#include <flashbackclient/signal_handler.h>
 
+#include <csignal>
 #include <thread>
 
 int main(int argc, char** argv)
 {
+    // Register signal handlers
+    signal(SIGHUP, FlashBackClient::SignalHandler::HandleShutdown);
+    signal(SIGINT, FlashBackClient::SignalHandler::HandleShutdown);
+    signal(SIGTERM, FlashBackClient::SignalHandler::HandleShutdown);
+
     FlashBackClient::Logger::Initialize();
 
     for (int i = 1; i < argc; ++i)

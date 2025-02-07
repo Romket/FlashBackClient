@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 
@@ -49,14 +48,15 @@ namespace FlashBackClient
         static void Shutdown()
         {
             auto& instance = getServiceInstance<T>();
+
+            instance->Shutdown();
             instance.reset();
         }
 
         template<typename T>
         static bool IsProvided()
         {
-            if (getServiceInstance<T>()) return true;
-            return false;
+            return getServiceInstance<T>() != nullptr;
         }
 
     private:
