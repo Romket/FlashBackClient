@@ -35,7 +35,7 @@ namespace FlashBackClient
 
     void Scheduler::Run()
     {
-        Logger::LOG_INFO("Running scheduler");
+        LOG_INFO("Running scheduler");
         if (_running) return;
 
         _running         = true;
@@ -54,7 +54,7 @@ namespace FlashBackClient
 
     void Scheduler::schedulerThread()
     {
-        Logger::LOG_INFO("Schedular thread started");
+        LOG_INFO("Schedular thread started");
         while (_running)
         {
             {

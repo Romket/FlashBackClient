@@ -90,7 +90,7 @@ namespace FlashBackClient
             }
         }
 
-        Logger::LOG_INFO("Condition met");
+        LOG_INFO("Condition met");
         return true;
     }
 

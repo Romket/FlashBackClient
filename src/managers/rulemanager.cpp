@@ -14,18 +14,18 @@ namespace FlashBackClient
 
     void RuleManager::loadRules(const std::filesystem::path& path)
     {
-        Logger::LOG_INFO("Loading rules from path {}", path.string());
+        LOG_INFO("Loading rules from path {}", path.string());
 
         YAML::Node config = YAML::LoadFile(path.string());
         if (!config)
         {
-            Logger::LOG_ERROR("Failed to load config file");
+            LOG_ERROR("Failed to load config file");
             return;
         }
 
         if (!config["rules"])
         {
-            Logger::LOG_WARN("No rules found in config file");
+            LOG_WARN("No rules found in config file");
             return;
         }
 
@@ -33,7 +33,7 @@ namespace FlashBackClient
         {
             if (!rule["id"])
             {
-                Logger::LOG_WARN("Rule has no id");
+                LOG_WARN("Rule has no id");
                 continue;
             }
 
@@ -42,7 +42,7 @@ namespace FlashBackClient
 
             if (!rule["name"])
             {
-                Logger::LOG_WARN("Rule has no name");
+                LOG_WARN("Rule has no name");
                 continue;
             }
 
@@ -50,14 +50,14 @@ namespace FlashBackClient
 
             if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action))
             {
-                Logger::LOG_WARN("Invalid or no action in rule \"{}",
+                LOG_WARN("Invalid or no action in rule \"{}",
                                  newRule.name);
                 continue;
             }
 
             if (!loadCases(newRule, rule["cases"]))
             {
-                Logger::LOG_ERROR("Failed to load cases for rule \"{}",
+                LOG_ERROR("Failed to load cases for rule \"{}",
                                   newRule.name);
                 continue;
             }
@@ -74,7 +74,7 @@ namespace FlashBackClient
         {
             if (!caseNode["id"])
             {
-                Logger::LOG_WARN("Case has no id");
+                LOG_WARN("Case has no id");
                 continue;
             }
 
@@ -89,7 +89,7 @@ namespace FlashBackClient
             {
                 if (!caseNode["times"])
                 {
-                    Logger::LOG_WARN("Case has no times");
+                    LOG_WARN("Case has no times");
                     continue;
                 }
 
@@ -97,7 +97,7 @@ namespace FlashBackClient
                 {
                     if (!time["cron_exp"])
                     {
-                        Logger::LOG_WARN("Time has no cron_exp");
+                        LOG_WARN("Time has no cron_exp");
                         continue;
                     }
 
@@ -134,7 +134,7 @@ namespace FlashBackClient
 
         if (rule.Conditions.empty())
         {
-            Logger::LOG_WARN("Rule has no cases");
+            LOG_WARN("Rule has no cases");
             return false;
         }
 

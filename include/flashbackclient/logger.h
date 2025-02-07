@@ -23,6 +23,7 @@ namespace FlashBackClient
     public:
         static void Initialize();
         static void SetVerbose();
+        // static void D
 
         // Don't question the std::forward<Args>(args)...
         // Cause I don't know either

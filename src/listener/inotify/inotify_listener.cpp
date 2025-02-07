@@ -21,7 +21,7 @@ namespace FlashBackClient
         _inotifyFd = inotify_init1(IN_NONBLOCK);
         if (_inotifyFd < 0)
         {
-            Logger::LOG_ERROR("Failed to initialize inotify: {}",
+            LOG_ERROR("Failed to initialize inotify: {}",
                               strerror(errno));
             return false;
         }
@@ -29,14 +29,14 @@ namespace FlashBackClient
         _epollFd = epoll_create1(0);
         if (_epollFd < 0)
         {
-            Logger::LOG_ERROR("Failed to initialize epoll: {}",
+            LOG_ERROR("Failed to initialize epoll: {}",
                               strerror(errno));
             return false;
         }
 
         if (pipe2(_selfPipeFd, IN_CLOEXEC | IN_NONBLOCK) < 0)
         {
-            Logger::LOG_ERROR("Failed to create self pipe: {}",
+            LOG_ERROR("Failed to create self pipe: {}",
                               strerror(errno));
             return false;
         }
@@ -47,7 +47,7 @@ namespace FlashBackClient
 
         if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _inotifyFd, &event) < 0)
         {
-            Logger::LOG_ERROR("Failed to add inotify to epoll: {}",
+            LOG_ERROR("Failed to add inotify to epoll: {}",
                               strerror(errno));
             return false;
         }
@@ -55,7 +55,7 @@ namespace FlashBackClient
         event.data.fd = _selfPipeFd[0];
         if (epoll_ctl(_epollFd, EPOLL_CTL_ADD, _selfPipeFd[0], &event) < 0)
         {
-            Logger::LOG_ERROR("Failed to add self pipe to epoll: {}",
+            LOG_ERROR("Failed to add self pipe to epoll: {}",
                               strerror(errno));
             return false;
         }
@@ -75,7 +75,7 @@ namespace FlashBackClient
             ssize_t result = write(_selfPipeFd[1], "0", 1);
             if (result == -1 && errno != EAGAIN)
             {
-                Logger::LOG_ERROR("Failed to wake up listener thread: {}",
+                LOG_ERROR("Failed to wake up listener thread: {}",
                                   strerror(errno));
                 return false;
             }
@@ -94,7 +94,7 @@ namespace FlashBackClient
     bool InotifyListener::AddListener(ListenerInfo& info, int depth)
     {
         if (depth == 0)
-            Logger::LOG_INFO("Adding listener in path: {}", info.Path.string());
+            LOG_INFO("Adding listener in path: {}", info.Path.string());
 
         if (depth > RECURSION_LIMIT) return false;
 
@@ -102,7 +102,7 @@ namespace FlashBackClient
                                    flashback_ANY_FILE_EVENT);
         if (wd < 0)
         {
-            Logger::LOG_INFO("Failed to create watch descripter: {}",
+            LOG_INFO("Failed to create watch descripter: {}",
                              strerror(errno));
             return false;
         }
@@ -162,12 +162,12 @@ namespace FlashBackClient
         if (length < 0)
         {
             if (errno != EAGAIN)
-                Logger::LOG_ERROR("Error reading inotify events: {}",
+                LOG_ERROR("Error reading inotify events: {}",
                                   strerror(errno));
             return;
         }
 
-        Logger::LOG_INFO("Read {} bytes", length);
+        LOG_INFO("Read {} bytes", length);
 
         size_t i = 0;
         while (i < length)
@@ -177,7 +177,7 @@ namespace FlashBackClient
 
             if (event->mask & IN_Q_OVERFLOW || event->mask & IN_IGNORED)
             {
-                Logger::LOG_WARN("Event overflow or ignored");
+                LOG_WARN("Event overflow or ignored");
                 i += sizeof(struct inotify_event) + event->len;
                 continue;
             }
@@ -185,8 +185,8 @@ namespace FlashBackClient
             std::string path =
                 _watchDescriptors.find(event->wd)->second + "/" + event->name;
 
-            Logger::LOG_INFO("Event: {}", event->mask);
-            Logger::LOG_INFO("Path: {}", path);
+            LOG_INFO("Event: {}", event->mask);
+            LOG_INFO("Path: {}", path);
 
             ListenerInfo info;
             info.Path       = path;
@@ -205,9 +205,9 @@ namespace FlashBackClient
                 std::filesystem::path normalizedListenerPath =
                     std::filesystem::absolute(listener.Path);
 
-                Logger::LOG_INFO("Checking listener: {}",
+                LOG_INFO("Checking listener: {}",
                                  normalizedListenerPath.string());
-                Logger::LOG_INFO("Against: {}", normalizedPath.string());
+                LOG_INFO("Against: {}", normalizedPath.string());
 
                 if (!normalizedPath.string().find(
                         normalizedListenerPath.string()))
