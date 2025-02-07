@@ -11,9 +11,20 @@
 int main(int argc, char** argv)
 {
     // Register signal handlers
-    signal(SIGHUP, FlashBackClient::SignalHandler::HandleShutdown);
-    signal(SIGINT, FlashBackClient::SignalHandler::HandleShutdown);
-    signal(SIGTERM, FlashBackClient::SignalHandler::HandleShutdown);
+    std::signal(SIGABRT, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGFPE, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGILL, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGINT, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGSEGV, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGTERM, FlashBackClient::SignalHandler::Handle);
+
+#ifndef _WIN32
+    std::signal(SIGBUS, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGPIPE, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGQUIT, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGALRM, FlashBackClient::SignalHandler::Handle);
+    std::signal(SIGHUP, FlashBackClient::SignalHandler::Handle);
+#endif
 
     FlashBackClient::Logger::Initialize();
 
