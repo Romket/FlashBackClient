@@ -39,6 +39,9 @@ namespace FlashBackClient
         ServiceLocator::Shutdown<ConfigManager>();
 
         LOG_INFO("Exiting with code {}", isError(signum) ? signum : 0);
+        
+        if (isError(signum)) Logger::DumpFileLog();
+        Logger::Shutdown();
 
         exit(isError(signum) ? signum : 0);
     }

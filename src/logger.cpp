@@ -1,3 +1,4 @@
+#include "spdlog/spdlog.h"
 #include <flashbackclient/defs.h>
 #include <flashbackclient/logger.h>
 
@@ -45,6 +46,17 @@ namespace FlashBackClient
     {
         _consoleLogger->set_level(spdlog::level::trace);
         LOG_INFO("Verbose mode enabled, you should see this");
+    }
+
+    void Logger::DumpFileLog()
+    {
+        LOG_INFO("Log dumped to {}/", LOG_DIR);
+        _fileLogger->dump_backtrace();
+    }
+
+    void Logger::Shutdown()
+    {
+        spdlog::shutdown();
     }
 
 } // namespace FlashBackClient
