@@ -25,13 +25,13 @@ namespace FlashBackClient
         if (isError(signum))
         {
             LOG_CRITICAL("Critical error detected: {} ({})", signum,
-                                 getSignalString(signum));
+                         getSignalString(signum));
             logStackTrace();
         }
         else
         {
             LOG_INFO("Signal detected: {} ({})", signum,
-                             getSignalString(signum));
+                     getSignalString(signum));
         }
 
         ServiceLocator::Shutdown<PlatformListener>();
@@ -39,7 +39,7 @@ namespace FlashBackClient
         ServiceLocator::Shutdown<ConfigManager>();
 
         LOG_INFO("Exiting with code {}", isError(signum) ? signum : 0);
-        
+
         if (isError(signum)) Logger::DumpFileLog();
         Logger::Shutdown();
 
@@ -102,10 +102,7 @@ namespace FlashBackClient
         char** symbols = backtrace_symbols(buffer, size);
 
         LOG_CRITICAL("Stack trace:");
-        for (int i = 0; i < size; i++)
-        {
-            LOG_CRITICAL("  {}", symbols[i]);
-        }
+        for (int i = 0; i < size; i++) { LOG_CRITICAL("  {}", symbols[i]); }
         free(symbols);
 #endif
     }
