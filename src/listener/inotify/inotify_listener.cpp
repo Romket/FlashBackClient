@@ -1,5 +1,6 @@
 #include "inotify_listener.h"
 
+#include <filesystem>
 #include <flashbackclient/defs.h>
 #include <flashbackclient/listener.h>
 #include <flashbackclient/logger.h>
@@ -102,6 +103,18 @@ namespace FlashBackClient
 
         if (depth > RECURSION_LIMIT) return false;
 
+        if (depth > 0 && std::filesystem::is_directory(info.Path))
+        {
+            LOG_TRACE("Reached file");
+            return true;
+        }
+
+        if (info.Owner->IsIgnored(info.Path))
+        {
+            LOG_INFO("Directory {} ignored", info.Path.string());
+            return true;
+        }
+
         int wd = inotify_add_watch(_inotifyFd, info.Path.c_str(),
                                    flashback_ANY_FILE_EVENT);
         if (wd < 0)
@@ -125,7 +138,8 @@ namespace FlashBackClient
             if (item.is_directory())
             {
                 ListenerInfo subdirInfo;
-                subdirInfo.Path = item.path();
+                subdirInfo.Path  = item.path();
+                subdirInfo.Owner = info.Owner;
 
                 if (!AddListener(subdirInfo, depth + 1)) return false;
             }
