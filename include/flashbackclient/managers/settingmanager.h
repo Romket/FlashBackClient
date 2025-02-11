@@ -1,5 +1,7 @@
 #pragma once
 
+#include <flashbackclient/logger.h>
+
 #include <any>
 #include <filesystem>
 #include <string>

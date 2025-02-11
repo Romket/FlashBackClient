@@ -24,21 +24,24 @@ namespace FlashBackClient
     {
         if (isError(signum))
         {
-            Logger::LOG_CRITICAL("Critical error detected: {} ({})", signum,
-                                 getSignalString(signum));
+            LOG_CRITICAL("Critical error detected: {} ({})", signum,
+                         getSignalString(signum));
             logStackTrace();
         }
         else
         {
-            Logger::LOG_INFO("Signal detected: {} ({})", signum,
-                             getSignalString(signum));
+            LOG_INFO("Signal detected: {} ({})", signum,
+                     getSignalString(signum));
         }
 
         ServiceLocator::Shutdown<PlatformListener>();
         ServiceLocator::Shutdown<Scheduler>();
         ServiceLocator::Shutdown<ConfigManager>();
 
-        Logger::LOG_INFO("Exiting with code {}", isError(signum) ? signum : 0);
+        LOG_INFO("Exiting with code {}", isError(signum) ? signum : 0);
+
+        if (isError(signum)) Logger::DumpFileLog();
+        Logger::Shutdown();
 
         exit(isError(signum) ? signum : 0);
     }
@@ -88,21 +91,18 @@ namespace FlashBackClient
 #if defined(_WIN32) || defined(_WIN64)
         void*  stack[62];
         USHORT frames = CaptureStackBackTrace(0, 62, stack, NULL);
-        Logger::LOG_CRITICAL("Stack trace:");
+        LOG_CRITICAL("Stack trace:");
         for (USHORT i = 0; i < frames; i++)
         {
-            Logger::LOG_CRITICAL("  Frame {}: {}", i, stack[i]);
+            LOG_CRITICAL("  Frame {}: {}", i, stack[i]);
         }
 #else
         void*  buffer[50];
         int    size    = backtrace(buffer, 50);
         char** symbols = backtrace_symbols(buffer, size);
 
-        Logger::LOG_CRITICAL("Stack trace:");
-        for (int i = 0; i < size; i++)
-        {
-            Logger::LOG_CRITICAL("  {}", symbols[i]);
-        }
+        LOG_CRITICAL("Stack trace:");
+        for (int i = 0; i < size; i++) { LOG_CRITICAL("  {}", symbols[i]); }
         free(symbols);
 #endif
     }

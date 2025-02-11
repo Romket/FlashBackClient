@@ -1,5 +1,6 @@
 #pragma once
 
+#include <flashbackclient/logger.h>
 #include <memory>
 #include <stdexcept>
 
@@ -12,6 +13,9 @@ namespace FlashBackClient
         template<typename T>
         static void Provide(T* service)
         {
+            LOG_TRACE("Providing service");
+            LOG_DEBUG("ptr: {}", service);
+
             if (!service)
             {
                 throw std::invalid_argument("Cannot provide null service");
@@ -47,7 +51,11 @@ namespace FlashBackClient
         template<typename T>
         static void Shutdown()
         {
+            LOG_TRACE("Shutting down service");
+
             auto& instance = getServiceInstance<T>();
+
+            LOG_DEBUG("ptr: {}", instance);
 
             instance->Shutdown();
             instance.reset();

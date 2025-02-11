@@ -41,6 +41,8 @@ namespace FlashBackClient
 
         void CheckRules(const std::vector<Triggers>& givenTriggers = {});
 
+        bool IsIgnored(const std::filesystem::path& path);
+
     private:
         void afterCheck(const std::vector<Triggers>& givenTriggers = {});
 
@@ -54,6 +56,8 @@ namespace FlashBackClient
                           const std::vector<Triggers>& givenTriggers = {});
 
         bool checkFileChanges(const Condition& condition);
+
+        std::string globToRegex(const std::string& glob);
 
         bool upload();
         bool download();

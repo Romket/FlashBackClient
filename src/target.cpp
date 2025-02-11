@@ -5,6 +5,10 @@
 #include <flashbackclient/service_locator.h>
 #include <listener/platform_listener.h>
 
+#include <algorithm>
+#include <regex>
+#include <string>
+
 namespace FlashBackClient
 {
     bool Target::Initialize()
@@ -58,6 +62,52 @@ namespace FlashBackClient
         afterCheck();
     }
 
+    bool Target::IsIgnored(const std::filesystem::path& path)
+    {
+        if (_settings.find("path_ignores") == _settings.end()) return false;
+
+        std::filesystem::path targetPath = GetSettingValue<std::string>("path");
+        std::filesystem::path relativePath =
+            path.lexically_relative(targetPath).generic_string();
+
+        LOG_INFO("Relative path: {}", relativePath.string());
+
+        auto& ignores =
+            std::any_cast<std::vector<std::string>&>(_settings["path_ignores"]);
+
+        for (const auto& ignore : ignores)
+        {
+            std::string regex = globToRegex(ignore);
+
+            bool notRecursive = regex.rfind("\\./", 0) == 0;
+            if (notRecursive) regex.erase(0, 3);
+            LOG_INFO("Regex after not recursive check: {}", regex);
+
+            if (regex.back() == '/' || regex.back() == '\\') regex.pop_back();
+
+            int patternDepth = std::ranges::count(regex, '/') + 1;
+            LOG_INFO("Pattern depth: {}", patternDepth);
+
+            std::regex re(regex);
+            if (std::regex_match(relativePath.generic_string(), re) &&
+                !notRecursive)
+                return true;
+
+            int depth = std::ranges::count(relativePath.generic_string(), '/');
+            for (auto parent = relativePath.parent_path(); !parent.empty();
+                 parent      = parent.parent_path(), depth--)
+            {
+                LOG_INFO("Parent: {}", parent.string());
+                LOG_INFO("Depth: {}", depth);
+                if (std::regex_match(parent.string(), re) &&
+                    (!notRecursive || depth <= patternDepth))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     bool Target::checkConditions(const Rule&                  rule,
                                  const std::vector<Triggers>& givenTriggers)
     {
@@ -90,7 +140,7 @@ namespace FlashBackClient
             }
         }
 
-        Logger::LOG_INFO("Condition met");
+        LOG_INFO("Condition met");
         return true;
     }
 
@@ -176,6 +226,95 @@ namespace FlashBackClient
         }
 
         return true;
+    }
+
+    std::string Target::globToRegex(const std::string& glob)
+    {
+        std::string regex;
+        bool        recursive        = false;
+        bool        inCharacterClass = false;
+        bool        firstOfClass     = false;
+
+        for (size_t i = 0; i < glob.size(); i++)
+        {
+            char c = glob[i];
+            switch (c)
+            {
+                case '*':
+                    if (i + 1 < glob.size() && glob[i + 1] == '*')
+                    {
+                        regex += ".*";
+                        i++;
+                        recursive = true;
+                    }
+                    else { regex += "[^/]*"; }
+
+                    break;
+                case '[':
+                    // Check if this is a character class
+                    for (size_t j = i + 1; j < glob.size(); j++)
+                    {
+                        if (glob[j] == ']' && j > i + 1)
+                        {
+                            inCharacterClass = true;
+                            break;
+                        }
+                        else if (glob[j] == '[' || glob[j] == '\\' ||
+                                 glob[j] == '/')
+                            break;
+                    }
+
+                    if (!inCharacterClass)
+                    {
+                        regex += "\\[";
+                        break;
+                    }
+
+                    regex += '[';
+                    i++;
+                    firstOfClass = true;
+
+                    if (glob[i] == ']')
+                    {
+                        regex += "\\]";
+                        i++;
+                        firstOfClass = false;
+                    }
+
+                    while (i < glob.size() && glob[i] != ']')
+                    {
+                        if (firstOfClass && (glob[i] == '!' || glob[i] == '^'))
+                        {
+                            regex += '^';
+                        }
+                        else if (!firstOfClass && glob[i] == '-' &&
+                                 i + 1 < glob.size() && glob[i + 1] != ']')
+                        {
+                            regex += '-';
+                        }
+                        else { regex += glob[i]; }
+
+                        i++;
+                        firstOfClass = false;
+                    }
+                    regex += ']';
+                    inCharacterClass = false;
+                    break;
+                case '?': regex += "[^/]"; break;
+                case '\\': regex += '/'; break;
+                case '.':
+                case ']':
+                case '(':
+                case ')':
+                case '{':
+                case '}': regex += '\\';
+                default: regex += c; break;
+            }
+        }
+
+        LOG_INFO("Regex: {}", recursive ? "^" + regex + "$" : regex);
+
+        return recursive ? "^" + regex + "$" : regex;
     }
 
     bool Target::upload()

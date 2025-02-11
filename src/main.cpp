@@ -39,6 +39,11 @@ int main(int argc, char** argv)
         {
             FlashBackClient::Logger::SetVerbose();
         }
+        else
+        {
+            FlashBackClient::LOG_ERROR("Unknown command line option {}",
+                                       argv[i]);
+        }
     }
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(

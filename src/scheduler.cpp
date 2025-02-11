@@ -1,3 +1,4 @@
+#include <exception>
 #include <flashbackclient/scheduler.h>
 
 #include <flashbackclient/defs.h>
@@ -30,12 +31,14 @@ namespace FlashBackClient
 
         if (_schedulerThread.joinable()) _schedulerThread.join();
 
+        LOG_TRACE("Scheduler thread joined");
+
         return true;
     }
 
     void Scheduler::Run()
     {
-        Logger::LOG_INFO("Running scheduler");
+        LOG_INFO("Running scheduler");
         if (_running) return;
 
         _running         = true;
@@ -50,11 +53,13 @@ namespace FlashBackClient
         }
 
         _cv.notify_one();
+
+        LOG_TRACE("Scheduler flagged");
     }
 
     void Scheduler::schedulerThread()
     {
-        Logger::LOG_INFO("Schedular thread started");
+        LOG_INFO("Scheduler thread started");
         while (_running)
         {
             {
@@ -72,6 +77,7 @@ namespace FlashBackClient
 
             _cycleCount++;
         }
+        LOG_INFO("Exiting scheduler thread");
     }
 
     void Scheduler::loadTargets(const std::filesystem::path& path, int depth)
@@ -82,10 +88,23 @@ namespace FlashBackClient
         for (const auto& entry : std::filesystem::directory_iterator(path))
         {
             if (std::filesystem::is_directory(entry.path()))
-                loadTargets(entry.path(), depth + 1);
+            {
+                try
+                {
+                    loadTargets(entry.path(), depth + 1);
+                }
+                catch (const std::exception& e)
+                {
+                    LOG_ERROR("{}", e.what());
+                    continue;
+                }
+            }
             else if (!std::filesystem::is_regular_file(entry.path()) ||
                      entry.path().extension() != ".yaml")
+            {
+                LOG_WARN("Invalid file at {}", entry.path().string());
                 continue;
+            }
             else
             {
                 std::shared_ptr<Target> target = Target::Create(entry.path());
