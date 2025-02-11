@@ -10,10 +10,12 @@
 - [x] Basic rule checking
 
 ## Medium Priority
-- [ ] Listener path ignores
-- [ ] Implement logger, remove print statements
 - [ ] Add `--generate-configs` option
-- [ ] Only check updated targets
+- [ ] Ignore paths on listener creation rather than on event
+- [ ] Add escapted characters to regex patterns instead of windows-style paths
+- [x] Only check updated targets
+- [x] Listener path ignores
+- [x] Implement logger, remove print statements
 - [x] Improve performance by waking threads instead of polling
 - [x] Specify custom formatting in [.clang-format](.clang-format)
 
