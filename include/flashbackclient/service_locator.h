@@ -14,7 +14,7 @@ namespace FlashBackClient
         static void Provide(T* service)
         {
             LOG_TRACE("Providing service");
-            LOG_DEBUG("ptr: {}", service);
+            // LOG_DEBUG("ptr: {}", service);
 
             if (!service)
             {
@@ -55,7 +55,7 @@ namespace FlashBackClient
 
             auto& instance = getServiceInstance<T>();
 
-            LOG_DEBUG("ptr: {}", instance);
+            // LOG_DEBUG("ptr: {}", instance);
 
             instance->Shutdown();
             instance.reset();
