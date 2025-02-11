@@ -37,17 +37,27 @@ namespace FlashBackClient
 
         if (config["override_rules"])
         {
+            _settings["override_rules"] = std::vector<int> {};
             auto& rules =
                 std::any_cast<std::vector<int>&>(_settings["override_rules"]);
 
             for (const auto& rule : config["override_rules"])
             {
                 if (!rule["id"]) continue;
-
-                if (_settings.find("override_rules") == _settings.end())
-                    _settings["override_rules"] = std::vector<int> {};
-
                 rules.push_back(rule["id"].as<int>());
+            }
+        }
+
+        if (config["path_ignores"])
+        {
+            _settings["path_ignores"] = std::vector<std::string> {};
+            auto& ignores = std::any_cast<std::vector<std::string>&>(
+                _settings["path_ignores"]);
+
+            for (const auto& ignore : config["path_ignores"])
+            {
+                if (!ignore["ignore"]) continue;
+                ignores.push_back(ignore["ignore"].as<std::string>());
             }
         }
     }

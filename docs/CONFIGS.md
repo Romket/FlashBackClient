@@ -13,6 +13,15 @@ This file provides the default settings for the following settings:
 - Encryption (`"none"`, `"file"`, or `"direcory"`, default `"none"` if no value specified)\
 *Note - directory-level encoding encrypts directory structure, disabling sequential backup*
 - `keep_on_target_move` (default `false`): If the target is moved, setting this to `true` will continue to track it, while `false` will consider the target as deleted.
+- `ignore_paths` (default none): A list of regex patterns to ignore when
+checking for changes. Patterns can be specified as follows:
+  - A recursive pattern: `"pattern"`
+  - A non-recursive pattern: `"./pattern"`
+  - A wildcard: `"pattern/*"`, `"pattern/*.txt"`
+  - A single character wildcard: `"pattern-?"`
+  - A range: `"pattern-[a-z]"`
+  - A negated pattern: `"!pattern"`, `"pattern-[!a-z]"`
+  - ~~An escaped character~~ (not yet implemented): `"pattern\*"`
 
 An example file might look something like this:
 ```yaml

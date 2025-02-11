@@ -223,13 +223,14 @@ namespace FlashBackClient
                         normalizedListenerPath.string()))
                 {
                     LOG_INFO("Matched");
-                    LOG_DEBUG("Owner: {}", listener.Owner);
+                    // LOG_DEBUG("Owner: {}", listener.Owner);
 
                     listener.Status     = StatusEnum::modified;
                     listener.LastUpdate = std::chrono::system_clock::now();
 
                     // ServiceLocator::Get<Scheduler>()->Flag();
-                    listener.Owner->CheckRules({Triggers::on_file_change});
+                    if (!listener.Owner->IsIgnored(normalizedPath))
+                        listener.Owner->CheckRules({Triggers::on_file_change});
                 }
             }
 

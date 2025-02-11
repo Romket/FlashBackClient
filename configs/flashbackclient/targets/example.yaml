@@ -8,6 +8,14 @@ target_type: "directory"
 
 encrypt: "directory"
 
+path_ignores:
+  - ignore: ".cache"
+  - ignore: "build"
+  - ignore: "lib"
+  - ignore: ".git"
+  - ignore: ".vscode"
+  - ignore: "*.o"
+
 # Rules for triggering actions
 rules:
   - id: 0
