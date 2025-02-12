@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_INSTALL_PREFIX "/usr/local/bin/")
 
+add_subdirectory(lib/croncpp)
 add_subdirectory(lib/yaml-cpp)
 add_subdirectory(lib/spdlog)
 
