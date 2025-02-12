@@ -11,8 +11,9 @@
 
 ## Medium Priority
 - [ ] Add `--generate-configs` option
-- [ ] Ignore paths on listener creation rather than on event
-- [ ] Add escapted characters to regex patterns instead of windows-style paths
+- [ ] Handle new directory creation inside target
+- [x] Ignore paths on listener creation rather than on event
+- [x] Add escaped characters to regex patterns instead of windows-style paths
 - [x] Only check updated targets
 - [x] Listener path ignores
 - [x] Implement logger, remove print statements

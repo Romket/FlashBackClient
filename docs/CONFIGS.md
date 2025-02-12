@@ -21,7 +21,9 @@ checking for changes. Patterns can be specified as follows:
   - A single character wildcard: `"pattern-?"`
   - A range: `"pattern-[a-z]"`
   - A negated pattern: `"!pattern"`, `"pattern-[!a-z]"`
-  - ~~An escaped character~~ (not yet implemented): `"pattern\*"`
+  - An escaped character: `"pattern\\*"`, `"pattern\\[name\\]"`\
+*Note: due to the yaml parser used, the backslash must also be escaped: `\\`
+must be used instead of `\`*
 
 An example file might look something like this:
 ```yaml
@@ -31,6 +33,16 @@ An example file might look something like this:
 encrypt: "file"
 
 keep_on_target_move: false
+
+path_ignores:
+  - ignore: "./ignore"
+  - ignore: "*.ignore"
+  - ignore: "./subdir/ignore"
+  - ignore: "ignore-num[0-9].txt"
+  - ignore: "anychar?.txt"
+  - ignore: "not-class[!0-9].txt"
+  - ignore: "escaped\\[name\\].txt"
+  - ignore: "escaped\\[also-works].txt"
 ```
 
 ## Default Scheduler Configs

@@ -241,7 +241,8 @@ namespace FlashBackClient
             switch (c)
             {
                 case '*':
-                    if (i + 1 < glob.size() && glob[i + 1] == '*')
+                    if (i > 1 && glob[i - 1] == '\\') { regex += '*'; }
+                    else if (i + 1 < glob.size() && glob[i + 1] == '*')
                     {
                         regex += ".*";
                         i++;
@@ -251,6 +252,12 @@ namespace FlashBackClient
 
                     break;
                 case '[':
+                    if (i > 1 && glob[i - 1] == '\\')
+                    {
+                        regex += '[';
+                        break;
+                    }
+
                     // Check if this is a character class
                     for (size_t j = i + 1; j < glob.size(); j++)
                     {
@@ -300,14 +307,20 @@ namespace FlashBackClient
                     regex += ']';
                     inCharacterClass = false;
                     break;
-                case '?': regex += "[^/]"; break;
-                case '\\': regex += '/'; break;
+                case '?':
+                    if (i > 1 && glob[i - 1] == '\\') { regex += '?'; }
+                    else { regex += "[^/]"; }
+                    break;
+                case '\\':
+                    if (i == 1 || glob[i - 1] != '\\') { regex += '\\'; }
+                    break;
                 case '.':
                 case ']':
                 case '(':
                 case ')':
                 case '{':
-                case '}': regex += '\\';
+                case '}':
+                    if (i == 1 || glob[i - 1] != '\\') { regex += '\\'; }
                 default: regex += c; break;
             }
         }
