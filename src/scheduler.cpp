@@ -1,9 +1,12 @@
-#include <exception>
 #include <flashbackclient/scheduler.h>
 
 #include <flashbackclient/defs.h>
 #include <flashbackclient/logger.h>
 
+#include <algorithm>
+#include <chrono>
+#include <croncpp.h>
+#include <exception>
 #include <memory>
 #include <mutex>
 #include <yaml-cpp/yaml.h>
@@ -57,25 +60,73 @@ namespace FlashBackClient
         LOG_TRACE("Scheduler flagged");
     }
 
+    bool Scheduler::AddTimePoint(ScheduledTime& time)
+    {
+        try
+        {
+            auto        cron = cron::make_cron(time.Cron);
+            std::time_t now  = std::chrono::system_clock::to_time_t(
+                std::chrono::system_clock::now());
+
+            auto next = std::chrono::system_clock::from_time_t(
+                cron::cron_next(cron, now));
+
+            time.Time = next;
+            _times.push_back(time);
+
+            std::sort(_times.begin(), _times.end(),
+                      [](const ScheduledTime& a, const ScheduledTime& b) {
+                          return a.Time < b.Time;
+                      });
+
+            _cv.notify_one();
+        }
+        catch (const std::exception& e)
+        {
+            LOG_ERROR("Failed to parse cron expression: {}", time.Cron);
+            return false;
+        }
+
+        return true;
+    }
+
     void Scheduler::schedulerThread()
     {
         LOG_INFO("Scheduler thread started");
+        std::unique_lock<std::mutex> lock(_mutex);
+
         while (_running)
         {
+            if (_times.empty())
             {
-                std::unique_lock<std::mutex> lock(_mutex);
-                _cv.wait(lock, [this] { return !_running || _flagged; });
+                _cv.wait(lock, [this] { return !_running || !_times.empty(); });
             }
-
-            if (!_running) break;
-            _flagged = false;
-
+            else
             {
-                std::unique_lock<std::mutex> targetsLock(_targetsMutex);
-                for (const auto& target : _targets) target->CheckRules();
-            }
+                auto now      = std::chrono::system_clock::now();
+                auto nextTime = _times.front().Time;
 
-            _cycleCount++;
+                if (now >= nextTime)
+                {
+                    auto task = _times.front();
+                    _times.erase(_times.begin());
+
+                    lock.unlock();
+                    if (task.Owner)
+                    {
+                        task.Owner->CheckRules(
+                            {triggerFromScheduledTime(task.Type)});
+                    }
+                    lock.lock();
+                }
+                else
+                {
+                    _cv.wait_until(lock, nextTime, [this, nextTime] {
+                        return !_running || (!_times.empty() &&
+                                             _times.front().Time != nextTime);
+                    });
+                }
+            }
         }
         LOG_INFO("Exiting scheduler thread");
     }
@@ -112,6 +163,17 @@ namespace FlashBackClient
                 if (!target->Initialize()) continue;
                 _targets.push_back(std::move(target));
             }
+        }
+    }
+
+    Triggers Scheduler::triggerFromScheduledTime(const ScheduledRuleType& time)
+    {
+        switch (time)
+        {
+            case ScheduledRuleType::atTimePoint: return Triggers::on_schedule;
+            case ScheduledRuleType::afterLast:
+            case ScheduledRuleType::beforeNext: return Triggers::after_interval;
+            default: return Triggers::none;
         }
     }
 } // namespace FlashBackClient
