@@ -96,50 +96,69 @@ namespace FlashBackClient
         return true;
     }
 
-    bool InotifyListener::AddListener(ListenerInfo& info, int depth)
+    bool InotifyListener::AddListener(ListenerCreateInfo& info, int depth)
     {
+        bool isNew = true;
+        for (auto& listener : _listeners)
+        {
+            if (listener.Path == info.path &&
+                listener.BaseTarget == info.baseTarget)
+            {
+                listener.Conditions.push_back(info.owner);
+                isNew = false;
+            }
+        }
+
         if (depth == 0)
-            LOG_INFO("Adding listener in path: {}", info.Path.string());
+            LOG_INFO("Adding listener in path: {}", info.path.string());
 
         if (depth > RECURSION_LIMIT) return false;
 
-        if (depth > 0 && std::filesystem::is_directory(info.Path))
+        if (depth > 0 && std::filesystem::is_directory(info.path))
         {
             LOG_TRACE("Reached file");
             return true;
         }
 
-        if (info.Owner->IsIgnored(info.Path))
+        if (info.baseTarget->IsIgnored(info.path))
         {
-            LOG_INFO("Directory {} ignored", info.Path.string());
+            LOG_INFO("Directory {} ignored", info.path.string());
             return true;
         }
 
-        int wd = inotify_add_watch(_inotifyFd, info.Path.c_str(),
-                                   flashback_ANY_FILE_EVENT);
-        if (wd < 0)
+        if (isNew)
         {
-            LOG_INFO("Failed to create watch descripter: {}", strerror(errno));
-            return false;
+            int wd = inotify_add_watch(_inotifyFd, info.path.c_str(),
+                                       flashback_ANY_FILE_EVENT);
+            if (wd < 0)
+            {
+                LOG_INFO("Failed to create watch descripter: {}",
+                         strerror(errno));
+                return false;
+            }
+
+            _watchDescriptors[wd] = info.path.string();
+
+            ListenerInfo newListener;
+            newListener.Path = info.path;
+            newListener.Conditions.push_back(info.owner);
+            newListener.Status     = StatusEnum::active;
+            newListener.LastUpdate = std::chrono::system_clock::now();
+            newListener.BaseTarget = info.baseTarget;
+
+            if (depth == 0) _listeners.push_back(newListener);
         }
 
-        _watchDescriptors[wd] = info.Path.string();
-
-        info.Status     = StatusEnum::active;
-        info.LastUpdate = std::chrono::system_clock::now();
-
-        if (depth == 0) _listeners.push_back(info);
-
-        if (!std::filesystem::is_directory(info.Path)) return true;
+        if (!std::filesystem::is_directory(info.path)) return true;
 
         // cppcheck-suppress useStlAlgorithm
-        for (const auto& item : std::filesystem::directory_iterator(info.Path))
+        for (const auto& item : std::filesystem::directory_iterator(info.path))
         {
             if (item.is_directory())
             {
-                ListenerInfo subdirInfo;
-                subdirInfo.Path  = item.path();
-                subdirInfo.Owner = info.Owner;
+                ListenerCreateInfo subdirInfo;
+                subdirInfo.path  = item.path();
+                subdirInfo.owner = info.owner;
 
                 if (!AddListener(subdirInfo, depth + 1)) return false;
             }
@@ -187,7 +206,7 @@ namespace FlashBackClient
 
         LOG_TRACE("Read {} bytes", length);
 
-        size_t i = 0;
+        ssize_t i = 0;
         while (i < length)
         {
             struct inotify_event* event =
@@ -243,8 +262,17 @@ namespace FlashBackClient
                     listener.LastUpdate = std::chrono::system_clock::now();
 
                     // ServiceLocator::Get<Scheduler>()->Flag();
-                    if (!listener.Owner->IsIgnored(normalizedPath))
-                        listener.Owner->CheckRules({Triggers::on_file_change});
+                    if (!listener.BaseTarget->IsIgnored(normalizedPath))
+                    {
+                        for (const auto& condition : listener.Conditions)
+                        {
+                            // TODO: Check in reverse order (add CheckReverse()
+                            // to Condition)
+                            condition->Check({Triggers::on_file_change});
+                        }
+                        listener.BaseTarget->CheckRules(
+                            {Triggers::on_file_change});
+                    }
                 }
             }
 

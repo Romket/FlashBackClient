@@ -1,11 +1,14 @@
 #pragma once
 
+#include <flashbackclient/rule.h>
 #include <flashbackclient/trigger.h>
 
+#include <memory>
+#include <vector>
 #include <yaml-cpp/yaml.h>
 
 #include <filesystem>
-#include <unordered_map>
+#include <vector>
 
 namespace FlashBackClient
 {
@@ -22,19 +25,17 @@ namespace FlashBackClient
         virtual bool Initialize();
         virtual bool Shutdown();
 
-        const inline std::unordered_map<Rule, bool>& GetRules() const
+        const inline std::vector<std::unique_ptr<Rule>>& GetRules() const
         {
             return _rules;
         }
 
     protected:
-        std::unordered_map<Rule, bool> _rules;
+        std::vector<std::unique_ptr<Rule>> _rules;
 
         std::filesystem::path _ruleFile;
 
     private:
         void loadRules(const std::filesystem::path& path);
-
-        bool loadCases(Rule& rule, const YAML::Node& casesNode);
     };
 } // namespace FlashBackClient

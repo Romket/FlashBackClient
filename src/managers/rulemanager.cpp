@@ -1,5 +1,6 @@
 #include <flashbackclient/logger.h>
 #include <flashbackclient/managers/rulemanager.h>
+#include <memory>
 
 namespace FlashBackClient
 {
@@ -36,9 +37,7 @@ namespace FlashBackClient
                 LOG_WARN("Rule has no id");
                 continue;
             }
-
-            Rule newRule;
-            newRule.id = rule["id"].as<int>();
+            int id = rule["id"].as<int>();
 
             if (!rule["name"])
             {
@@ -46,98 +45,24 @@ namespace FlashBackClient
                 continue;
             }
 
-            newRule.name = rule["name"].as<std::string>();
+            std::string name = rule["name"].as<std::string>();
 
-            if (!rule["action"] || !rule["action"].as<Actions>(newRule.Action))
+            Actions action;
+            if (!rule["action"] || !rule["action"].as<Actions>(action))
             {
-                LOG_WARN("Invalid or no action in rule \"{}",
-                                 newRule.name);
+                LOG_WARN("Invalid or no action in rule \"{}", name);
                 continue;
             }
 
-            if (!loadCases(newRule, rule["cases"]))
+            std::unique_ptr<Rule> newRule =
+                std::make_unique<Rule>(id, name, action);
+            if (!newRule->LoadCases(rule["cases"]))
             {
-                LOG_ERROR("Failed to load cases for rule \"{}",
-                                  newRule.name);
+                LOG_ERROR("Failed to load cases for rule \"{}\"", name);
                 continue;
             }
 
-            _rules.insert(std::pair<Rule, bool>(newRule, false));
+            _rules.push_back(std::move(newRule));
         }
-    }
-
-    bool RuleManager::loadCases(Rule& rule, const YAML::Node& casesNode)
-    {
-        if (!casesNode) return false;
-
-        for (const auto& caseNode : casesNode)
-        {
-            if (!caseNode["id"])
-            {
-                LOG_WARN("Case has no id");
-                continue;
-            }
-
-            Triggers trigger = caseNode["id"].as<Triggers>();
-
-            if (trigger == Triggers::none) continue;
-
-            Condition newCase;
-            newCase.TriggerName = trigger;
-
-            if (trigger == Triggers::on_schedule)
-            {
-                if (!caseNode["times"])
-                {
-                    LOG_WARN("Case has no times");
-                    continue;
-                }
-
-                for (const auto& time : caseNode["times"])
-                {
-                    if (!time["cron_exp"])
-                    {
-                        LOG_WARN("Time has no cron_exp");
-                        continue;
-                    }
-
-                    if (newCase.TriggerInfo.find("times") ==
-                        newCase.TriggerInfo.end())
-                    {
-                        newCase.TriggerInfo["times"] =
-                            std::vector<std::string>();
-                    }
-
-                    auto& times = std::any_cast<std::vector<std::string>&>(
-                        newCase.TriggerInfo["times"]);
-                    times.push_back(time["cron_exp"].as<std::string>());
-                }
-            }
-            else if (trigger == Triggers::after_interval)
-            {
-                int after_last            = 0;
-                int before_next_scheduled = 0;
-
-                if (caseNode["after_last"])
-                    after_last = caseNode["after_last"].as<int>();
-                if (caseNode["before_next_scheduled"])
-                    before_next_scheduled =
-                        caseNode["before_next_scheduled"].as<int>();
-
-                newCase.TriggerInfo["after_last"] = after_last;
-                newCase.TriggerInfo["before_next_scheduled"] =
-                    before_next_scheduled;
-            }
-
-            rule.Conditions.push_back(newCase);
-        }
-
-        if (rule.Conditions.empty())
-        {
-            LOG_WARN("Rule has no cases");
-            return false;
-        }
-
-        return true;
     }
 } // namespace FlashBackClient

@@ -10,10 +10,9 @@
 
 namespace FlashBackClient
 {
-    class Target :
-        public RuleManager,
-        public SettingManager,
-        public std::enable_shared_from_this<Target>
+    class Rule;
+
+    class Target : public RuleManager, public SettingManager
     {
     private:
         struct Private
@@ -30,9 +29,9 @@ namespace FlashBackClient
         virtual ~Target() = default;
 
         template<typename... Args>
-        static std::shared_ptr<Target> Create(Args&&... args)
+        static std::unique_ptr<Target> Create(Args&&... args)
         {
-            return std::make_shared<Target>(std::forward<Args>(args)...,
+            return std::make_unique<Target>(std::forward<Args>(args)...,
                                             Private());
         }
 
@@ -43,19 +42,14 @@ namespace FlashBackClient
 
         bool IsIgnored(const std::filesystem::path& path);
 
+        void Checked();
+
     private:
-        void afterCheck(const std::vector<Triggers>& givenTriggers = {});
+        void resetRules();
+        void checkUploadAndDownload();
 
-        std::unordered_map<Rule, bool> checkOverrideRules();
-        bool checkRule(Rule defaultRule, const std::vector<int>& overrideRules);
-
-        bool checkConditions(const Rule&                  rule,
-                             const std::vector<Triggers>& givenTriggers = {});
-
-        bool checkTrigger(Triggers                     trigger,
-                          const std::vector<Triggers>& givenTriggers = {});
-
-        bool checkFileChanges(const Condition& condition);
+        std::vector<std::unique_ptr<Rule>> checkOverrideRules();
+        bool checkRule(const std::unique_ptr<Rule>& defaultRule);
 
         std::string globToRegex(const std::string& glob);
 

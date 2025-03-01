@@ -1,5 +1,6 @@
 #include <flashbackclient/scheduler.h>
 
+#include <flashbackclient/condition.h>
 #include <flashbackclient/defs.h>
 #include <flashbackclient/logger.h>
 
@@ -60,34 +61,63 @@ namespace FlashBackClient
         LOG_TRACE("Scheduler flagged");
     }
 
-    bool Scheduler::AddTimePoint(ScheduledTime& time)
+    bool Scheduler::AddTimePoint(ScheduledTime& time, bool isNew)
     {
+        LOG_INFO("Adding time point with cron: {}", time.cron);
         try
         {
-            auto        cron = cron::make_cron(time.Cron);
+            time.updated = false;
+
+            auto        cron = cron::make_cron(time.cron);
             std::time_t now  = std::chrono::system_clock::to_time_t(
                 std::chrono::system_clock::now());
 
             auto next = std::chrono::system_clock::from_time_t(
                 cron::cron_next(cron, now));
 
-            time.Time = next;
-            _times.push_back(time);
+            time.time = next;
+
+            if (isNew) _times.push_back(time);
 
             std::sort(_times.begin(), _times.end(),
                       [](const ScheduledTime& a, const ScheduledTime& b) {
-                          return a.Time < b.Time;
+                          return a.time < b.time;
                       });
 
             _cv.notify_one();
         }
         catch (const std::exception& e)
         {
-            LOG_ERROR("Failed to parse cron expression: {}", time.Cron);
+            LOG_ERROR("Failed to parse cron expression: {}", time.cron);
+            LOG_ERROR("  {}", e.what());
             return false;
         }
 
+        LOG_INFO("Time point added for time: {}",
+                 time.time.time_since_epoch().count());
+
         return true;
+    }
+
+    bool Scheduler::ResetTimePoint(const Condition* target)
+    {
+        for (auto& time : _times)
+        {
+            if (time.owner == target)
+            {
+                if (!AddTimePoint(time, false)) return false;
+            }
+        }
+
+        return true;
+    }
+
+    void Scheduler::SetTimeStatus(const Condition* owner, bool updated)
+    {
+        for (auto& time : _times)
+        {
+            if (time.owner == owner) time.owner->SetStatus(updated);
+        }
     }
 
     void Scheduler::schedulerThread()
@@ -104,7 +134,7 @@ namespace FlashBackClient
             else
             {
                 auto now      = std::chrono::system_clock::now();
-                auto nextTime = _times.front().Time;
+                auto nextTime = _times.front().time;
 
                 if (now >= nextTime)
                 {
@@ -112,10 +142,13 @@ namespace FlashBackClient
                     _times.erase(_times.begin());
 
                     lock.unlock();
-                    if (task.Owner)
+                    if (task.owner)
                     {
-                        task.Owner->CheckRules(
-                            {triggerFromScheduledTime(task.Type)});
+                        LOG_INFO("Checking rules for scheduled time");
+                        task.owner->SetStatus(true);
+                        // task.owner->CheckRules(
+                        //    {triggerFromScheduledTime(task.Type)});
+                        task.updated = true;
                     }
                     lock.lock();
                 }
@@ -123,7 +156,7 @@ namespace FlashBackClient
                 {
                     _cv.wait_until(lock, nextTime, [this, nextTime] {
                         return !_running || (!_times.empty() &&
-                                             _times.front().Time != nextTime);
+                                             _times.front().time != nextTime);
                     });
                 }
             }
@@ -158,7 +191,7 @@ namespace FlashBackClient
             }
             else
             {
-                std::shared_ptr<Target> target = Target::Create(entry.path());
+                std::unique_ptr<Target> target = Target::Create(entry.path());
 
                 if (!target->Initialize()) continue;
                 _targets.push_back(std::move(target));

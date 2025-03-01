@@ -1,3 +1,4 @@
+#include <exception>
 #include <flashbackclient/logger.h>
 #include <flashbackclient/managers/settingmanager.h>
 
@@ -60,6 +61,9 @@ namespace FlashBackClient
                 ignores.push_back(ignore["ignore"].as<std::string>());
             }
         }
+
+        // Test if _settings is accessible
+        LOG_INFO("size: {}", _settings.size());
     }
 
     std::string SettingManager::expandHomeDirectory(const std::string& path)
