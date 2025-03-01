@@ -1,6 +1,6 @@
-#include <flashbackclient/defs.h>
 #include <flashbackclient/logger.h>
 
+#include <flashbackclient/defs.h>
 #include <spdlog/async.h>
 #include <spdlog/spdlog.h>
 

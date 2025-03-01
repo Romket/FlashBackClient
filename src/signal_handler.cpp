@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <flashbackclient/signal_handler.h>
 
 #include <flashbackclient/configs.h>
@@ -9,6 +8,7 @@
 #include "listener/platform_listener.h"
 
 #include <csignal>
+#include <cstdlib>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <dbghelp.h>

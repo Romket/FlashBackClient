@@ -1,6 +1,5 @@
 #pragma once
 
-#include <chrono>
 #include <flashbackclient/managers/rulemanager.h>
 
 #include <flashbackclient/defs.h>
@@ -8,6 +7,7 @@
 #include <flashbackclient/trigger.h>
 
 #include <atomic>
+#include <chrono>
 #include <condition_variable>
 #include <filesystem>
 #include <memory>

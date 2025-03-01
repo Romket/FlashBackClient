@@ -1,4 +1,3 @@
-#include <exception>
 #include <flashbackclient/target.h>
 
 #include <flashbackclient/logger.h>

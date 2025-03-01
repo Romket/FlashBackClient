@@ -1,7 +1,6 @@
-#include <exception>
-#include <flashbackclient/logger.h>
 #include <flashbackclient/managers/settingmanager.h>
 
+#include <flashbackclient/logger.h>
 #include <yaml-cpp/yaml.h>
 
 namespace FlashBackClient
