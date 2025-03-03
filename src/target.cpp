@@ -40,7 +40,7 @@ namespace FlashBackClient
         // cppcheck-suppress useStlAlgorithm
         for (const auto& rule : _rules)
         {
-            if (!rule->Initialize()) return false;
+            if (!rule->Initialize(this)) return false;
         }
 
         return true;
@@ -170,7 +170,6 @@ namespace FlashBackClient
             {
                 std::unique_ptr<Rule> metRule =
                     std::make_unique<Rule>(schedulerRule.get());
-                metRule->ChangeOwner(this);
 
                 metDefaults.push_back(std::move(metRule));
             }

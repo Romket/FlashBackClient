@@ -22,11 +22,24 @@ namespace FlashBackClient
     bool Condition::Initialize()
     {
         LOG_INFO("Initializing condition");
+
+        if (!_owner)
+        {
+            LOG_ERROR("Owner is null");
+            return false;
+        }
+
+        Target* target = _owner->GetOwner();
+        if (!target)
+        {
+            LOG_ERROR("Target is null");
+            return false;
+        }
+
         if (const auto path =
                 _owner->GetOwner()->GetSettingValue<std::string>("path");
             path.has_value())
         {
-            LOG_INFO("has value");
             _path = *path;
         }
         else

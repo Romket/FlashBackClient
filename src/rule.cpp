@@ -25,9 +25,18 @@ namespace FlashBackClient
         _conditions = std::move(conditions);
     }
 
-    bool Rule::Initialize()
+    bool Rule::Initialize(Target* owner)
     {
         LOG_INFO("Initializing rule");
+
+        if (!owner)
+        {
+            LOG_ERROR("Owner is null");
+            return false;
+        }
+
+        _owner = owner;
+
         // cppcheck-suppress useStlAlgorithm
         for (const auto& condition : _conditions)
         {

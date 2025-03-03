@@ -25,7 +25,7 @@ namespace FlashBackClient
         // TODO: notify owners?
         ~Rule() = default;
 
-        bool Initialize();
+        bool Initialize(Target* owner = nullptr);
         bool Shutdown();
 
         bool Check(const std::vector<Triggers>& givenTriggers = {});
@@ -43,7 +43,7 @@ namespace FlashBackClient
         {
             return _conditions;
         }
-        Target*&   GetOwner() { return _owner; }
+        Target*    GetOwner() { return _owner; }
         const bool IsMet() const { return _isMet; }
 
         bool IsEmpty() { return _conditions.empty(); }

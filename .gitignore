@@ -35,4 +35,7 @@
 build/
 
 # Clangd files
-.cache
+.cache/
+
+# VSCode files
+.vscode/

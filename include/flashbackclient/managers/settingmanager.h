@@ -69,7 +69,6 @@ namespace FlashBackClient
         inline std::expected<T, SettingError>
         GetSettingValue(const std::string& name) const
         {
-            LOG_INFO("Getting setting value {}", name);
             if (_settings.find(name) == _settings.end())
             {
                 LOG_INFO("not in map");
@@ -77,8 +76,6 @@ namespace FlashBackClient
                     SettingError::Type::notFound,
                     "Value '" + name + "' not found in settings map"});
             }
-
-            LOG_INFO("Segfault test 1");
 
             const std::any& a = _settings.at(name);
 
