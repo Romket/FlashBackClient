@@ -40,7 +40,7 @@ namespace FlashBackClient
         // cppcheck-suppress useStlAlgorithm
         for (const auto& condition : _conditions)
         {
-            if (!condition->Initialize()) return false;
+            if (!condition->Initialize(this)) return false;
         }
 
         return true;
@@ -122,6 +122,7 @@ namespace FlashBackClient
     {
         if (_isMet) return true;
 
+        _isMet = true;
         for (const auto& condition : _conditions)
         {
             if (!condition->Check(givenTriggers)) _isMet = false;

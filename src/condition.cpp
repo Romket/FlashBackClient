@@ -19,15 +19,16 @@ namespace FlashBackClient
         _isMet = other->IsMet();
     }
 
-    bool Condition::Initialize()
+    bool Condition::Initialize(Rule* owner)
     {
         LOG_INFO("Initializing condition");
 
-        if (!_owner)
+        if (!owner)
         {
             LOG_ERROR("Owner is null");
             return false;
         }
+        _owner = owner;
 
         Target* target = _owner->GetOwner();
         if (!target)

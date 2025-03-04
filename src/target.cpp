@@ -61,6 +61,7 @@ namespace FlashBackClient
         }
 
         checkUploadAndDownload();
+        resetRules();
     }
 
     bool Target::IsIgnored(const std::filesystem::path& path)
@@ -98,7 +99,6 @@ namespace FlashBackClient
             if (regex.back() == '/' || regex.back() == '\\') regex.pop_back();
 
             int patternDepth = std::ranges::count(regex, '/') + 1;
-            LOG_INFO("Pattern depth: {}", patternDepth);
 
             std::regex re(regex);
             if (std::regex_match(relativePath.generic_string(), re) &&
@@ -122,8 +122,8 @@ namespace FlashBackClient
 
     void Target::Checked()
     {
-        resetRules();
         checkUploadAndDownload();
+        resetRules();
     }
 
     void Target::resetRules()
@@ -142,6 +142,8 @@ namespace FlashBackClient
         for (const auto& rule : _rules)
         {
             if (!rule->IsMet()) continue;
+
+            LOG_INFO("Condition met");
 
             if (rule->GetAction() == Actions::upload_changed ||
                 rule->GetAction() == Actions::sync_files && !uploaded)
@@ -288,8 +290,6 @@ namespace FlashBackClient
                 default: regex += c; break;
             }
         }
-
-        LOG_INFO("Regex: {}", recursive ? "^" + regex + "$" : regex);
 
         return recursive ? "^" + regex + "$" : regex;
     }

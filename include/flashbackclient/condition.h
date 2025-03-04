@@ -25,7 +25,7 @@ namespace FlashBackClient
 
         explicit Condition(Condition* const other);
 
-        bool Initialize();
+        bool Initialize(Rule* owner);
 
         const Triggers&              GetName() const { return _name; }
         const std::filesystem::path& GetPath() const { return _path; }

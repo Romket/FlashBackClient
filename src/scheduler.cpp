@@ -146,9 +146,8 @@ namespace FlashBackClient
                     {
                         LOG_INFO("Checking rules for scheduled time");
                         task.owner->SetStatus(true);
-                        // task.owner->CheckRules(
-                        //    {triggerFromScheduledTime(task.Type)});
                         task.updated = true;
+                        task.owner->CheckParent();
                     }
                     lock.lock();
                 }
