@@ -36,6 +36,8 @@ if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")
 endif()
 
+target_compile_options(flashbackclient PRIVATE -g)
+
 install(TARGETS flashbackclient
     DESTINATION ${CMAKE_INSTALL_PREFIX}
     RENAME flashbackclient
