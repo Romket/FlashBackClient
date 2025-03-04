@@ -5,7 +5,6 @@
 #include <any>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 namespace FlashBackClient
 {
@@ -26,45 +25,7 @@ namespace FlashBackClient
         on_schedule,
         after_interval
     };
-
-    // TODO: something better
-    struct Condition
-    {
-        // cppcheck-suppress unusedStructMember
-        Triggers TriggerName;
-        // cppcheck-suppress unusedStructMember
-        std::unordered_map<std::string, std::any> TriggerInfo;
-    };
-
-    struct Rule
-    {
-        int         id;
-        std::string name;
-        // cppcheck-suppress unusedStructMember
-        Actions Action;
-        // cppcheck-suppress unusedStructMember
-        std::vector<Condition> Conditions;
-
-        bool operator==(const Rule& other) const
-        {
-            return id == other.id && name == other.name;
-        }
-    };
 } // namespace FlashBackClient
-
-// Hash function for Rule
-namespace std
-{
-    template<>
-    struct hash<FlashBackClient::Rule>
-    {
-        std::size_t operator()(const FlashBackClient::Rule& rule) const
-        {
-            return std::hash<int>()(rule.id) ^
-                   (std::hash<std::string>()(rule.name) << 1);
-        }
-    };
-} // namespace std
 
 namespace YAML
 {

@@ -24,7 +24,7 @@ namespace FlashBackClient
         bool Initialize() override;
         bool Shutdown() override;
 
-        bool AddListener(ListenerInfo& info, int depth = 0) override;
+        bool AddListener(ListenerCreateInfo& info, int depth = 0) override;
 
     private:
         void listenerThread() override;

@@ -4,3 +4,6 @@
 [submodule "lib/spdlog"]
 	path = lib/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "lib/croncpp"]
+	path = lib/croncpp
+	url = https://github.com/mariusbancila/croncpp

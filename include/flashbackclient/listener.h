@@ -1,12 +1,12 @@
 #pragma once
 
+#include <flashbackclient/condition.h>
 #include <flashbackclient/defs.h>
 #include <flashbackclient/target.h>
 
 #include <atomic>
 #include <chrono>
 #include <filesystem>
-#include <memory>
 #include <thread>
 #include <vector>
 
@@ -24,10 +24,22 @@ namespace FlashBackClient
 
     struct ListenerInfo
     {
-        std::chrono::time_point<std::chrono::system_clock> LastUpdate;
-        std::shared_ptr<Target>                            Owner = nullptr;
-        std::filesystem::path                              Path;
-        StatusEnum Status = StatusEnum::inactive;
+        std::chrono::system_clock::time_point LastUpdate;
+        // cppcheck-suppress unusedStructMember
+        std::vector<Condition*> Conditions;
+        std::filesystem::path   Path;
+        StatusEnum              Status = StatusEnum::inactive;
+        // cppcheck-suppress unusedStructMember
+        Target* BaseTarget;
+    };
+
+    struct ListenerCreateInfo
+    {
+        std::filesystem::path path;
+        // cppcheck-suppress unusedStructMember
+        Condition* owner;
+        // cppcheck-suppress unusedStructMember
+        Target* baseTarget;
     };
 
     class FileChangeListener
@@ -39,7 +51,7 @@ namespace FlashBackClient
         virtual bool Initialize() = 0;
         virtual bool Shutdown()   = 0;
 
-        virtual bool AddListener(ListenerInfo& info, int depth = 0) = 0;
+        virtual bool AddListener(ListenerCreateInfo& info, int depth = 0) = 0;
 
         const std::vector<ListenerInfo>& GetListeners() const
         {
@@ -50,7 +62,7 @@ namespace FlashBackClient
         {
             // TODO: std::any_of
             // cppcheck-suppress useStlAlgorithm
-            for (const auto listener : _listeners)
+            for (const auto& listener : _listeners)
             {
                 if (listener.Path == path) return true;
             }
