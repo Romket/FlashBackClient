@@ -1,3 +1,4 @@
+#include "spdlog/common.h"
 #include <flashbackclient/service_locator.h>
 
 #include <flashbackclient/configs.h>

@@ -22,9 +22,11 @@ namespace FlashBackClient
 
         _fileLogger =
             std::make_shared<spdlog::logger>("_fileLogger", _fileSink);
-        _fileLogger->set_level(spdlog::level::trace);
+        // Off by default so file is not written to
+        _fileLogger->set_level(spdlog::level::off);
         _fileLogger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
 
+        // Sets length of backtrace for fileLogger
         constexpr size_t backtraceLength = 32;
         _fileLogger->enable_backtrace(backtraceLength);
 
@@ -33,24 +35,24 @@ namespace FlashBackClient
 
         _consoleLogger =
             std::make_shared<spdlog::logger>("_consoleLogger", _consoleSink);
-        _consoleLogger->set_level(spdlog::level::info);
+        // _consoleLogger->set_level(spdlog::level::info);
 
         spdlog::register_logger(_fileLogger);
         spdlog::register_logger(_consoleLogger);
 
-        LOG_TRACE("Logger initialized");
+        LOG_INFO("Logger initialized");
     }
 
     void Logger::SetVerbose()
     {
         _consoleLogger->set_level(spdlog::level::trace);
-        _consoleSink->set_level(spdlog::level::trace);
-        LOG_TRACE("Verbose mode enabled, you should see this");
+        LOG_INFO("Verbose mode enabled");
     }
 
     void Logger::DumpFileLog()
     {
         LOG_INFO("Log dumped to {}/", LOG_DIR);
+        _fileLogger->set_level(spdlog::level::trace);
         _fileLogger->dump_backtrace();
     }
 

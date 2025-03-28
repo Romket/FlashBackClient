@@ -13,6 +13,8 @@ add_subdirectory(lib/croncpp)
 add_subdirectory(lib/yaml-cpp)
 add_subdirectory(lib/spdlog)
 
+add_definitions(-DSPDLOG_ACTIVE_LEVEL=0)
+
 add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/src/condition.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/configs.cpp
