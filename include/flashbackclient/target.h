@@ -1,3 +1,38 @@
+/**
+ * @file target.h
+ * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
+ * @brief Defines a class for managing a single target
+ * @version 0.1
+ * @date 2025-03-25
+ *
+ * @see target.cpp
+ * @see condition.h
+ * @see rulemanager.h
+ * @see rule.h
+ * @see settingmanager.h
+ * @sa condition.cpp
+ * @sa rulemanager.cpp
+ * @sa rule.cpp
+ * @sa settingmanager.cpp
+ * @sa scheduler.h
+ * @sa scheduler.cpp
+ *
+ * @copyright Copyright (c) 2025 Luke Houston
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #pragma once
 
 #include <flashbackclient/managers/rulemanager.h>

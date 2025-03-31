@@ -25,3 +25,4 @@
 
 ## Low Priority
 - [ ] Remove cppcheck-suppress comments
+- [ ] Add `show w` and `show c` commands from GPLv3 license
