@@ -28,11 +28,10 @@
 
 #include <cstdio>
 #include <ctime>
-#include <iomanip>
 #include <sstream>
-#include <string>
 
 #include <flashbackclient/defs.h>
+#include <flashbackclient/logging/dualsink.h>
 #include <flashbackclient/logging/logger.h>
 
 #include <spdlog/async.h>
