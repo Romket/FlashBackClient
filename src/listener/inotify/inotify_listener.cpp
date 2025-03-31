@@ -29,7 +29,7 @@
 #include <filesystem>
 #include <flashbackclient/defs.h>
 #include <flashbackclient/listener.h>
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 #include <flashbackclient/scheduler.h>
 #include <flashbackclient/service_locator.h>
 

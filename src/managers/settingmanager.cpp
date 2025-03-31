@@ -27,7 +27,7 @@
 
 #include <flashbackclient/managers/settingmanager.h>
 
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 #include <yaml-cpp/yaml.h>
 
 namespace FlashBackClient

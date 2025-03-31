@@ -30,7 +30,7 @@
 #include <flashbackclient/rule.h>
 
 #include <flashbackclient/condition.h>
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 #include <flashbackclient/target.h>
 #include <memory>
 #include <unordered_map>

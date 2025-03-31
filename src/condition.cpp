@@ -27,7 +27,7 @@
 
 #include <flashbackclient/condition.h>
 
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 #include <flashbackclient/rule.h>
 #include <flashbackclient/scheduler.h>
 #include <flashbackclient/service_locator.h>

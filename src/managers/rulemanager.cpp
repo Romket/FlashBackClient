@@ -25,7 +25,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 #include <flashbackclient/managers/rulemanager.h>
 #include <memory>
 

@@ -30,7 +30,7 @@
 #include <flashbackclient/signal_handler.h>
 
 #include <flashbackclient/configs.h>
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 #include <flashbackclient/scheduler.h>
 #include <flashbackclient/service_locator.h>
 

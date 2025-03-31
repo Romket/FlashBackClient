@@ -33,7 +33,7 @@
 
 #include <flashbackclient/condition.h>
 #include <flashbackclient/defs.h>
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 
 #include <algorithm>
 #include <chrono>

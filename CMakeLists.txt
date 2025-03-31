@@ -34,11 +34,14 @@ add_subdirectory(lib/croncpp)
 add_subdirectory(lib/yaml-cpp)
 add_subdirectory(lib/spdlog)
 
+add_definitions(-DSPDLOG_ACTIVE_LEVEL=0)
+
 add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/src/condition.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/configs.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/listener/inotify/inotify_listener.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/logger.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logging/dualsink.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logging/logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/rulemanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/settingmanager.cpp

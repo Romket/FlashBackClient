@@ -29,6 +29,8 @@
 #include <filesystem>
 #include <memory>
 
+#include <flashbackclient/logging/dualsink.h>
+
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
@@ -37,17 +39,9 @@ namespace FlashBackClient
 {
     class Logger
     {
-
-    private:
-        static std::shared_ptr<spdlog::sinks::stdout_color_sink_mt>
-                                                                  _consoleSink;
-        static std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
-        static std::shared_ptr<spdlog::logger> _consoleLogger;
-        static std::shared_ptr<spdlog::logger> _fileLogger;
-
     public:
         static void Initialize();
-        static void SetVerbose();
+        static void SetLogLevel(int level);
         static void DumpFileLog();
         static void Shutdown();
 
@@ -125,8 +119,17 @@ namespace FlashBackClient
                 _fileLogger, "{}:{} [{}] - {}", file, line, func,
                 fmt::format(fmtStr, std::forward<Args>(args)...));
         }
-    };
 
+    private:
+        static std::shared_ptr<DualLevelSink>                     _consoleSink;
+        static std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
+        static std::shared_ptr<spdlog::logger> _consoleLogger;
+        static std::shared_ptr<spdlog::logger> _fileLogger;
+        // cppcheck-suppress unusedStructMember
+        static std::string _crashFilePath;
+        // cppcheck-suppress unusedStructMember
+        static bool _dumped;
+    };
 } // namespace FlashBackClient
 
 #define LOG_TRACE(fmt, ...)                                                    \
