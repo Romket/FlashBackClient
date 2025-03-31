@@ -6,6 +6,7 @@
     - [ ] Schedule cron expressions
     - [x] File change event listener
 - [ ] Documentation
+- [ ] Write tests
 - [x] Override rule check
 - [x] Load configs
 - [x] Load rules
