@@ -2,6 +2,7 @@
  * @file logger.cpp
  * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
  * @brief Defines a custom sink that has different coloring based on log level
+ *
  * @version 0.1
  * @date 2025-03-31
  *
