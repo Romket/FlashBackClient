@@ -39,6 +39,17 @@ if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")
 endif()
 
+if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(SPDLOG_CLOCK_COARSE)
+endif()
+
+add_compile_definitions(
+    SPDLOG_NO_SOURCE_LOC
+    SPDLOG_NO_THREAD_ID
+    SPDLOG_NO_ATOMIC_LEVELS
+    SPDLOG_DISABLE_DEFAULT_LOGGER
+)
+
 target_compile_options(flashbackclient PRIVATE -g)
 
 install(TARGETS flashbackclient
