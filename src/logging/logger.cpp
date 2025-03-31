@@ -24,11 +24,6 @@ namespace FlashBackClient
     {
         _dumped = false;
 
-        constexpr size_t queueSize   = 8192; // Queue size for async logging
-        constexpr size_t threadCount = 1;    // One logging thread
-        spdlog::init_thread_pool(queueSize, threadCount);
-
-        //generate
         std::time_t t = std::time(nullptr);
         std::tm tm = *std::localtime(&t);
         std::ostringstream oss;
