@@ -37,34 +37,46 @@ int main(int argc, char** argv)
         }
         else if (std::string(argv[i]) == "--log-level")
         {
-            ++i;
-            if (std::string(argv[i]) == "trace")
+            if (++i < argc)
             {
-                FlashBackClient::Logger::SetLogLevel(0);
+                if (std::string(argv[i]) == "trace")
+                {
+                    FlashBackClient::Logger::SetLogLevel(0);
+                }
+                else if (std::string(argv[i]) == "debug")
+                {
+                    FlashBackClient::Logger::SetLogLevel(1);
+                }
+                else if (std::string(argv[i]) == "info")
+                {
+                    FlashBackClient::Logger::SetLogLevel(2);
+                }
+                else if (std::string(argv[i]) == "warn")
+                {
+                    FlashBackClient::Logger::SetLogLevel(3);
+                }
+                else if (std::string(argv[i]) == "error")
+                {
+                    FlashBackClient::Logger::SetLogLevel(4);
+                }
+                else if (std::string(argv[i]) == "critical")
+                {
+                    FlashBackClient::Logger::SetLogLevel(5);
+                }
+                else if (std::string(argv[i]) == "off")
+                {
+                    FlashBackClient::Logger::SetLogLevel(6);
+                }
+                else
+                {
+                    FlashBackClient::LOG_WARN("Unknown log level " 
+                                               "inputted, defaulting to info");
+                }
             }
-            else if (std::string(argv[i]) == "debug")
+            else
             {
-                FlashBackClient::Logger::SetLogLevel(1);
-            }
-            else if (std::string(argv[i]) == "info")
-            {
-                FlashBackClient::Logger::SetLogLevel(2);
-            }
-            else if (std::string(argv[i]) == "warn")
-            {
-                FlashBackClient::Logger::SetLogLevel(3);
-            }
-            else if (std::string(argv[i]) == "error")
-            {
-                FlashBackClient::Logger::SetLogLevel(4);
-            }
-            else if (std::string(argv[i]) == "critical")
-            {
-                FlashBackClient::Logger::SetLogLevel(5);
-            }
-            else if (std::string(argv[i]) == "off")
-            {
-                FlashBackClient::Logger::SetLogLevel(6);
+                FlashBackClient::LOG_WARN("End of arguments reached, "
+                                           "defaulting to info");
             }
         }
         else
