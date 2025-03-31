@@ -6,6 +6,7 @@
     - [ ] Schedule cron expressions
     - [x] File change event listener
 - [ ] Documentation
+- [ ] Write tests
 - [x] Override rule check
 - [x] Load configs
 - [x] Load rules
@@ -26,3 +27,4 @@
 
 ## Low Priority
 - [ ] Remove cppcheck-suppress comments
+- [ ] Add `show w` and `show c` commands from GPLv3 license

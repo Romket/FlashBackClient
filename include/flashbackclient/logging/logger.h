@@ -1,3 +1,28 @@
+/**
+ * @file logger.h
+ * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
+ * @brief Defines a custom logger class using spdlog
+ * @version 0.1
+ * @date 2025-03-25
+ *
+ * @see logger.cpp
+ *
+ * @copyright Copyright (c) 2025 Luke Houston
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #pragma once
 
 #include <cstring>
@@ -14,15 +39,6 @@ namespace FlashBackClient
 {
     class Logger
     {
-
-    private:
-        static std::shared_ptr<DualLevelSink> _consoleSink;
-        static std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
-        static std::shared_ptr<spdlog::logger> _consoleLogger;
-        static std::shared_ptr<spdlog::logger> _fileLogger;
-        static std::string _crashFilePath;
-        static bool _dumped;
-
     public:
         static void Initialize();
         static void SetLogLevel(int level);
@@ -103,8 +119,17 @@ namespace FlashBackClient
                 _fileLogger, "{}:{} [{}] - {}", file, line, func,
                 fmt::format(fmtStr, std::forward<Args>(args)...));
         }
-    };
 
+    private:
+        static std::shared_ptr<DualLevelSink>                     _consoleSink;
+        static std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
+        static std::shared_ptr<spdlog::logger> _consoleLogger;
+        static std::shared_ptr<spdlog::logger> _fileLogger;
+        // cppcheck-suppress unusedStructMember
+        static std::string _crashFilePath;
+        // cppcheck-suppress unusedStructMember
+        static bool _dumped;
+    };
 } // namespace FlashBackClient
 
 #define LOG_TRACE(fmt, ...)                                                    \
