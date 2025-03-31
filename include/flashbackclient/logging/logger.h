@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <memory>
 
-#include <flashbackclient/dualsink.h>
+#include <flashbackclient/logging/dualsink.h>
 
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>

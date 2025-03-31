@@ -5,7 +5,7 @@
 #include <string>
 
 #include <flashbackclient/defs.h>
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 
 #include <spdlog/async.h>
 #include <spdlog/common.h>

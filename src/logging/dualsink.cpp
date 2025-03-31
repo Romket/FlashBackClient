@@ -1,4 +1,4 @@
-#include <flashbackclient/dualsink.h>
+#include <flashbackclient/logging/dualsink.h>
 
 namespace FlashBackClient
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <flashbackclient/logger.h>
+#include <flashbackclient/logging/logger.h>
 #include <memory>
 #include <stdexcept>
 
