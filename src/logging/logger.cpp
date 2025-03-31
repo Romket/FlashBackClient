@@ -13,12 +13,12 @@
 
 namespace FlashBackClient
 {
-    std::shared_ptr<DualLevelSink>                       Logger::_consoleSink;
-    std::shared_ptr<spdlog::sinks::basic_file_sink_mt>   Logger::_fileSink;
-    std::shared_ptr<spdlog::logger>                      Logger::_consoleLogger;
-    std::shared_ptr<spdlog::logger>                      Logger::_fileLogger;
-    std::string Logger::_crashFilePath;
-    bool Logger::_dumped;
+    std::shared_ptr<DualLevelSink>                     Logger::_consoleSink;
+    std::shared_ptr<spdlog::sinks::basic_file_sink_mt> Logger::_fileSink;
+    std::shared_ptr<spdlog::logger>                    Logger::_consoleLogger;
+    std::shared_ptr<spdlog::logger>                    Logger::_fileLogger;
+    std::string                                        Logger::_crashFilePath;
+    bool                                               Logger::_dumped;
 
     void Logger::Initialize()
     {
