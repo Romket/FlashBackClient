@@ -61,10 +61,38 @@ namespace FlashBackClient
         LOG_INFO("Logger initialized");
     }
 
-    void Logger::SetVerbose()
+    void Logger::SetLogLevel(int level)
     {
-        _consoleLogger->set_level(spdlog::level::trace);
-        LOG_INFO("Verbose mode enabled");
+        switch (level)
+        {
+        case 0:
+            _consoleLogger->set_level(spdlog::level::trace);
+            LOG_INFO("Logger set to level trace");
+            return;
+        case 1:
+            _consoleLogger->set_level(spdlog::level::debug);
+            LOG_INFO("Logger set to level debug");
+            return;
+        case 2:
+            _consoleLogger->set_level(spdlog::level::info);
+            LOG_INFO("Logger set to level info");
+            return;
+        case 3:
+            _consoleLogger->set_level(spdlog::level::warn);
+            return;
+        case 4:
+            _consoleLogger->set_level(spdlog::level::err);
+            return;
+        case 5:
+            _consoleLogger->set_level(spdlog::level::critical);
+            return;
+        case 6:
+            _consoleLogger->set_level(spdlog::level::off);
+            return;
+        default:
+            _consoleLogger->set_level(spdlog::level::info);
+            return;
+        }
     }
 
     void Logger::DumpFileLog()

@@ -35,9 +35,37 @@ int main(int argc, char** argv)
             FlashBackClient::ConfigManager::GenerateConfigs();
             return 0;
         }
-        else if (std::string(argv[i]) == "--verbose")
+        else if (std::string(argv[i]) == "--log-level")
         {
-            FlashBackClient::Logger::SetVerbose();
+            ++i;
+            if (std::string(argv[i]) == "trace")
+            {
+                FlashBackClient::Logger::SetLogLevel(0);
+            }
+            else if (std::string(argv[i]) == "debug")
+            {
+                FlashBackClient::Logger::SetLogLevel(1);
+            }
+            else if (std::string(argv[i]) == "info")
+            {
+                FlashBackClient::Logger::SetLogLevel(2);
+            }
+            else if (std::string(argv[i]) == "warn")
+            {
+                FlashBackClient::Logger::SetLogLevel(3);
+            }
+            else if (std::string(argv[i]) == "error")
+            {
+                FlashBackClient::Logger::SetLogLevel(4);
+            }
+            else if (std::string(argv[i]) == "critical")
+            {
+                FlashBackClient::Logger::SetLogLevel(5);
+            }
+            else if (std::string(argv[i]) == "off")
+            {
+                FlashBackClient::Logger::SetLogLevel(6);
+            }
         }
         else
         {
