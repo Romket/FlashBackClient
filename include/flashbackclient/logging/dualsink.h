@@ -42,7 +42,7 @@ namespace FlashBackClient
         DualLevelSink();
 
         void Initialize();
-        
+
         void log(const spdlog::details::log_msg& msg) override;
         void flush() override;
     };

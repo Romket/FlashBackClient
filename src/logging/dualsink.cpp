@@ -45,7 +45,7 @@ namespace FlashBackClient
         {
             _warnSink->log(msg);
         }
-        else 
+        else
         {
             _traceSink->log(msg);
         }
