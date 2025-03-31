@@ -1,27 +1,47 @@
-#include <flashbackclient/logger.h>
+#include <cstdio>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 #include <flashbackclient/defs.h>
+#include <flashbackclient/logger.h>
+
 #include <spdlog/async.h>
+#include <spdlog/common.h>
 #include <spdlog/spdlog.h>
 
 namespace FlashBackClient
 {
-    std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> Logger::_consoleSink;
+    std::shared_ptr<DualLevelSink>                       Logger::_consoleSink;
     std::shared_ptr<spdlog::sinks::basic_file_sink_mt>   Logger::_fileSink;
     std::shared_ptr<spdlog::logger>                      Logger::_consoleLogger;
     std::shared_ptr<spdlog::logger>                      Logger::_fileLogger;
+    std::string Logger::_crashFilePath;
+    bool Logger::_dumped;
 
     void Logger::Initialize()
     {
+        _dumped = false;
+
         constexpr size_t queueSize   = 8192; // Queue size for async logging
         constexpr size_t threadCount = 1;    // One logging thread
         spdlog::init_thread_pool(queueSize, threadCount);
 
+        //generate
+        std::time_t t = std::time(nullptr);
+        std::tm tm = *std::localtime(&t);
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "crash_%Y-%m-%d_%H-%M-%S.txt");
+
+        _crashFilePath = LOG_DIR + '/' + oss.str();
+
         _fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
-            LOG_DIR + '/' + LOG_FILE_FMT, true);
+            _crashFilePath, true);
 
         _fileLogger =
             std::make_shared<spdlog::logger>("_fileLogger", _fileSink);
+        
         // Off by default so file is not written to
         _fileLogger->set_level(spdlog::level::off);
         _fileLogger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
@@ -30,15 +50,13 @@ namespace FlashBackClient
         constexpr size_t backtraceLength = 32;
         _fileLogger->enable_backtrace(backtraceLength);
 
-        _consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        _consoleSink->set_pattern("%^[%Y-%m-%d %H:%M:%S.%e] [%l] %v%$");
+        _consoleSink = std::make_shared<DualLevelSink>();
 
         _consoleLogger =
             std::make_shared<spdlog::logger>("_consoleLogger", _consoleSink);
-        // _consoleLogger->set_level(spdlog::level::info);
-
-        spdlog::register_logger(_fileLogger);
+        
         spdlog::register_logger(_consoleLogger);
+        spdlog::register_logger(_fileLogger);
 
         LOG_INFO("Logger initialized");
     }
@@ -54,8 +72,22 @@ namespace FlashBackClient
         LOG_INFO("Log dumped to {}/", LOG_DIR);
         _fileLogger->set_level(spdlog::level::trace);
         _fileLogger->dump_backtrace();
+        _dumped = true;
     }
 
-    void Logger::Shutdown() { spdlog::shutdown(); }
+    void Logger::Shutdown()
+    {
+        if (!_dumped)
+        {
+            if (remove(_crashFilePath.c_str()) == 0) 
+            {
+                LOG_INFO("Removed unwanted file log");
+            } else 
+            {
+                LOG_ERROR("Failed to remove file log");
+            }
+        }
+        spdlog::shutdown();
+    }
 
 } // namespace FlashBackClient

@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <memory>
 
+#include <flashbackclient/dualsink.h>
+
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
@@ -14,11 +16,12 @@ namespace FlashBackClient
     {
 
     private:
-        static std::shared_ptr<spdlog::sinks::stdout_color_sink_mt>
-                                                                  _consoleSink;
+        static std::shared_ptr<DualLevelSink> _consoleSink;
         static std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
         static std::shared_ptr<spdlog::logger> _consoleLogger;
         static std::shared_ptr<spdlog::logger> _fileLogger;
+        static std::string _crashFilePath;
+        static bool _dumped;
 
     public:
         static void Initialize();
