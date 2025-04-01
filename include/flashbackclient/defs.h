@@ -37,7 +37,7 @@
 #define TARGET_DEF_DIR HOME + "/.config/flashbackclient/targets"
 
 #define LOG_DIR      HOME + "/.local/share/flashbackclient"
-#define LOG_FILE_FMT "crash_%Y-%m-%d_%H-%M-%S.txt"
+#define LOG_FILE_FMT "crash_%Y-%m-%d_%H-%M-%S.txt" 
 #define FILE_LOGGER_FORMAT "[%Y-%m-%d %H:%M:%S.%e] [%l] %v"
 #define CONSOLE_LOGGER_FORMAT_LOW "%Y-%m-%d %H:%M:%S.%e [%^%l%$] %v"
 #define CONSOLE_LOGGER_FORMAT_HIGH "%^%Y-%m-%d %H:%M:%S.%e [%l] %v%$"
