@@ -43,10 +43,12 @@ namespace FlashBackClient
     std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> Logger::_fileSink;
     std::shared_ptr<spdlog::logger> Logger::_consoleLogger;
     std::shared_ptr<spdlog::logger> Logger::_fileLogger;
-    bool                            alwaysFileLog {false};
+    bool                            Logger::_alwaysFileLog;
 
     void Logger::Initialize()
     {
+        _alwaysFileLog = false;
+
         _fileSink =
             std::make_shared<spdlog::sinks::CrashFileSink<std::mutex>>(true);
 
@@ -59,7 +61,7 @@ namespace FlashBackClient
 
         // Sets length of backtrace for fileLogger
         constexpr size_t backtraceLength = 32;
-        _fileLogger->enable_backtrace(backtraceLength);
+        _fileLogger->enable_backtrace(32);
 
         _consoleSink = std::make_shared<DualLevelSink>();
 
@@ -96,7 +98,13 @@ namespace FlashBackClient
         }
     }
 
-    void Logger::AlwaysFileLog() { alwaysFileLog = true; }
+    void Logger::AlwaysFileLog() { _alwaysFileLog = true; }
+
+    void Logger::SetBacktraceLength(int length)
+    {
+        _fileLogger->disable_backtrace();
+        _fileLogger->enable_backtrace(length);
+    }
 
     void Logger::DumpFileLog()
     {
@@ -107,7 +115,7 @@ namespace FlashBackClient
 
     void Logger::Shutdown(bool isError)
     {
-        if (!isError && alwaysFileLog) { Logger::DumpFileLog(); }
+        if (!isError && _alwaysFileLog) { Logger::DumpFileLog(); }
         spdlog::shutdown();
     }
 

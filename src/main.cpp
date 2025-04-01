@@ -112,6 +112,13 @@ int main(int argc, char** argv)
         {
             FlashBackClient::Logger::AlwaysFileLog();
         }
+        else if (std::string(argv[i]) == "--backtrace-length")
+        {
+            if (++i < argc)
+            {
+                FlashBackClient::Logger::SetBacktraceLength(std::stoi(argv[i]));
+            }
+        }
         else
         {
             FlashBackClient::LOG_ERROR("Unknown command line option {}",
