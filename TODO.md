@@ -13,9 +13,9 @@
 - [x] Basic rule checking
 
 ## Medium Priority
-- [ ] Add `--generate-configs` option
 - [ ] Handle new directory creation inside target
 - [ ] Pre-commit hook to standardize naming
+- [x] Auto-generate configs if not detected, including example target definition
 - [x] Fix logger to not generate a file until a crash occurs
 - [x] Ignore paths on listener creation rather than on event
 - [x] Add escaped characters to regex patterns instead of windows-style paths
