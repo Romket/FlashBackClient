@@ -24,4 +24,72 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- #define DEFAULT_GLOBAL_CONFIG "TEMP"
+#define DEFAULT_GLOBAL_CONFIG \
+R"(# ~/.config/flashbackclient/flashbackclient.yaml
+# Default settings
+
+encrypt: "none"
+    
+keep_on_target_move: false
+)"
+
+#define DEFAULT_TARGET_CONFIG \
+R"(# Example target file defining a target named example
+
+name: "example"
+
+path: "~/Dev/FlashBackClient"
+
+target_type: "directory"
+
+encrypt: "directory"
+
+path_ignores:
+  - ignore: ".cache"
+  - ignore: "build"
+  - ignore: "lib"
+  - ignore: ".git"
+  - ignore: ".vscode"
+  - ignore: "*.o"
+
+# Rules for triggering actions
+rules:
+  - id: 0
+    name: "Sync files 30 minutes after last file change"
+    action: "sync_files"
+    cases:
+      - id: "on_file_change"
+      - id: "after_interval"
+        file_change_trigger: true
+        after_last: 30
+        before_next_scheduled: 30
+)"
+
+#define DEFAULT_SCHEDULER_CONFIG \
+R"(
+# ~/.config/flashbackclient/scheduler/scheduler.yaml
+# Default rules for the scheduler
+
+rules:
+  - id: 0
+    name: "Download on startup"
+    action: "download_changed"
+    cases:
+      - id: "on_startup"
+
+  - id: 1
+    name: "Upload on shutdown"
+    action: "upload_changed"
+    cases:
+      - id: "on_shutdown"
+
+  - id: 2
+    name: "Sync changed files after 2 hours"
+    action: "sync_files"
+    cases:
+      - id: "on_file_change"
+      - id: "after_interval"
+        file_change_trigger: true
+        after_last: 120
+        before_next_scheduled: 60
+)"
