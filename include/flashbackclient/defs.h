@@ -2,7 +2,7 @@
  * @file defs.h
  * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
  * @brief Pre-compiler definitions for config paths, target paths, etc.
- * @version 0.1
+ * @version 0.2
  * @date 2025-03-25
  *
  * @copyright Copyright (c) 2025 Luke Houston
