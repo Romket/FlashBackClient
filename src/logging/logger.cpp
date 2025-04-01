@@ -96,7 +96,11 @@ namespace FlashBackClient
         }
     }
 
-    void Logger::AlwaysFileLog() { _alwaysFileLog = true; }
+    void Logger::AlwaysFileLog() 
+    {
+        _fileSink->alwaysFileLog();
+        _alwaysFileLog = true;
+    }
 
     void Logger::SetBacktraceLength(int length)
     {
