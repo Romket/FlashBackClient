@@ -31,9 +31,11 @@ namespace FlashBackClient
     class SignalHandler
     {
     public:
-        static void Handle(int signum);
+        static void Register();
 
     private:
+        static void handle(int signum);
+
         static const char* getSignalString(int signum);
         static bool        isError(int signum);
         static void        logStackTrace();

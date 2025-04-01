@@ -81,14 +81,16 @@ namespace FlashBackClient
         template<typename T>
         static void Shutdown()
         {
-            LOG_TRACE("Shutting down service");
-
             auto& instance = getServiceInstance<T>();
+            if (instance)
+            {
+                LOG_TRACE("Shutting down service");
+                // LOG_DEBUG("ptr: {}", instance);
 
-            // LOG_DEBUG("ptr: {}", instance);
-
-            instance->Shutdown();
-            instance.reset();
+                instance->Shutdown();
+                instance.reset();
+            }
+            else { LOG_WARN("Service already shut down or never provided"); }
         }
 
         template<typename T>
