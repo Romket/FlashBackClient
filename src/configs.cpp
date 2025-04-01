@@ -2,7 +2,7 @@
  * @file configs.cpp
  * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
  * @brief Implements the ConfigManager for handling global configs
- * @version 0.1
+ * @version 0.2
  * @date 2025-04-01
  *
  * @see configs.h
