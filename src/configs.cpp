@@ -77,9 +77,9 @@ namespace FlashBackClient
                 LOG_INFO("{} created", SCHEDULER_CONFIG_DIR);
                 LOG_INFO("Creating default scheduler config {} in {} now", SCHEDULER_CONFIG_FILE,
                          SCHEUDLER_CONFIG_DIR);
-                std::ofstream globalConfig(SCHEDULER_CONFIG_FILE_PATH);
-                globalConfig << DEFAULT_SCHEDULER_CONFIG;
-                globalConfig.close();
+                std::ofstream schedulerConfig(SCHEDULER_CONFIG_FILE_PATH);
+                schedulerConfig << DEFAULT_SCHEDULER_CONFIG;
+                schedulerConfig.close();
                 LOG_INFO("Default scheduler config created at {}",
                          SCHEDULER_CONFIG_FILE_PATH);
             }
@@ -87,9 +87,9 @@ namespace FlashBackClient
             {
                 LOG_INFO("{} found, creating default scheduler config {} now",
                          SCHEDULER_CONFIG_DIR, SCHEDULER_CONFIG_FILE);
-                std::ofstream globalConfig(SCHEDULER_CONFIG_FILE_PATH);
-                globalConfig << DEFAULT_SCHEDULER_CONFIG;
-                globalConfig.close();
+                std::ofstream schedulerConfig(SCHEDULER_CONFIG_FILE_PATH);
+                schedulerConfig << DEFAULT_SCHEDULER_CONFIG;
+                schedulerConfig.close();
                 LOG_INFO("Default scheduler config created at {}",
                          SCHEDULER_CONFIG_FILE_PATH);
             }
@@ -101,6 +101,21 @@ namespace FlashBackClient
             LOG_INFO("{} does not exist, creating directory");
             std::filesystem::create_directory(TARGET_DEF_FIR);
             LOG_INFO("{} created", TARGET_DEF_DIR);
+
+            LOG_INFO("Creating example target definition {}", EXAMPLE_TARGET_DEF_FILE);
+            std::ofstream targetConfig(EXAMPLE_TARGET_DEF_FILE_PATH);
+            targetConfig << DEFAULT_TARGET_CONFIG;
+            targetConfig.close();
+            LOG_INFO("Example target definition created at {}", EXAMPLE_TARGET_DEF_FILE_PATH);
         }
+        else if (std::filesystem::is_empty(TARGET_DEF_DIR))
+        {
+            LOG_INFO("Creating example target definition example.yaml");
+            std::ofstream targetConfig(EXAMPLE_TARGET_DEF_FILE_PATH);
+            targetConfig << DEFAULT_TARGET_CONFIG;
+            targetConfig.close();
+            LOG_INFO("Example target definition created at {}", EXAMPLE_TARGET_DEF_FILE_PATH);
+        }
+        else { LOG_INFO("Target definition(s) found in {}, continuing", TARGET_DEF_DIR); }
     }
 } // namespace FlashBackClient

@@ -35,6 +35,9 @@
     SCHEDULER_CONFIG_DIR "/" SCHEDULER_CONFIG_FILE
 
 #define TARGET_DEF_DIR HOME + "/.config/flashbackclient/targets"
+#define EXAMPLE_TARGET_CONFIG_FILE "example.yaml"
+#define EXAMPLE_TARGET_CONFIG_FILE_PATH \
+    TARGET_DEF_DIR "/" EXAMPLE_TARGET_CONFIG_FILE
 
 #define LOG_DIR                    HOME + "/.local/share/flashbackclient"
 #define LOG_FILE_FMT_CRASH         "crash_%Y-%m-%d_%H-%M-%S.txt"
