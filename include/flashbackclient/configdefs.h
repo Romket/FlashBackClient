@@ -66,8 +66,7 @@ rules:
 )"
 
 #define DEFAULT_SCHEDULER_CONFIG \
-    R"(
-# ~/.config/flashbackclient/scheduler/scheduler.yaml
+    R"(# ~/.config/flashbackclient/scheduler/scheduler.yaml
 # Default rules for the scheduler
 
 rules:
