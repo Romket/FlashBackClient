@@ -1,9 +1,9 @@
 /**
  * @file configs.cpp
- * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
+ * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
  * @brief Implements the ConfigManager for handling global configs
  * @version 0.1
- * @date 2025-03-28
+ * @date 2025-04-01
  *
  * @see configs.h
  * @see settingmanager.h
@@ -24,7 +24,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <flashbackclient/configs.h>
+#include <filesystem>
+#include <fstream>
+
+ #include <flashbackclient/configs.h>
+ #include <flashbackclient/logging/logger.h>
 
 namespace FlashBackClient
 {
@@ -33,6 +37,27 @@ namespace FlashBackClient
 
     void ConfigManager::GenerateConfigs()
     {
-        // TODO
+        if(!std::filesystem::exists(CONFIG_FILE_PATH))
+        {
+            LOG_INFO("No global config found");
+            if(!std::filesystem::exists(CONFIG_DIR))
+            {
+                LOG_INFO("{} not found, creating now", CONFIG_DIR);
+                std::filesystem::create_directory(CONFIG_DIR);
+                LOG_INFO("{} created", CONFIG_DIR);
+                LOG_INFO("Creating default config {} in {} now", CONFIG_FILE, CONFIG_DIR);
+                std::ofstream globalConfig(CONFIG_FILE_PATH);
+                globalConfig.close();
+                LOG_INFO("Default global config created at {}", CONFIG_FILE_PATH);
+            }
+            else
+            {
+                LOG_INFO("{} found, creating default global config {} now", CONFIG_DIR, CONFIG_FILE);
+                std::ofstream globalConfig(CONFIG_FILE_PATH);
+                globalConfig.close();
+                LOG_INFO("Default global config created at {}", CONFIG_FILE_PATH);
+            }
+        }
+        else { LOG_INFO("Global config found in {}", CONFIG_DIR); }
     }
 } // namespace FlashBackClient

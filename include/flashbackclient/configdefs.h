@@ -1,15 +1,12 @@
 /**
- * @file configs.h
- * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
- * @brief Defines an inherited class of SettingManager for managing global
- * settings
- *
+ * @file configdefs.h
+ * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
+ * @brief Defines default global, target, and scheduler configs
  * @version 0.1
  * @date 2025-03-28
  *
+ * @see configs.h
  * @see configs.cpp
- * @see settingmanager.h
- * @sa settingmanager.cpp
  *
  * @copyright Copyright (c) 2025 Luke Houston
  *
@@ -27,22 +24,4 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include <flashbackclient/managers/settingmanager.h>
-
-#include <flashbackclient/defs.h>
-
-namespace FlashBackClient
-{
-    class ConfigManager : public SettingManager
-    {
-    public:
-        inline ConfigManager() : SettingManager(CONFIG_FILE_PATH) {}
-
-        bool Initialize() override;
-        bool Shutdown() override;
-
-        static void GenerateConfigs();
-    };
-} // namespace FlashBackClient
+ #define DEFAULT_GLOBAL_CONFIG "TEMP"
