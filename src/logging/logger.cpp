@@ -96,7 +96,7 @@ namespace FlashBackClient
         }
     }
 
-    void Logger::AlwaysFileLog() 
+    void Logger::AlwaysFileLog()
     {
         _fileSink->alwaysFileLog();
         _alwaysFileLog = true;

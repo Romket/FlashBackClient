@@ -92,7 +92,9 @@ namespace spdlog
                 std::time_t        t  = std::time(nullptr);
                 std::tm            tm = *std::localtime(&t);
                 std::ostringstream oss;
-                oss << std::put_time(&tm, always_file_log_ ? LOG_FILE_FMT_LOG : LOG_FILE_FMT_CRASH);
+                oss << std::put_time(&tm, always_file_log_ ?
+                                              LOG_FILE_FMT_LOG :
+                                              LOG_FILE_FMT_CRASH);
 
                 std::string _crashFilePath = LOG_DIR + '/' + oss.str();
 
