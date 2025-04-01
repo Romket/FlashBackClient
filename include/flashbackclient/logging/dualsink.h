@@ -1,11 +1,13 @@
 /**
- * @file logger.h
+ * @file dualsink.h
  * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
- * @brief Defines a defines a sink with different formatting based on log levels
+ * @brief Defines a sink with different formatting based on log levels
  * @version 0.1
  * @date 2025-03-31
  *
  * @see dualsink.cpp
+ * @sa logger.h
+ * @sa logger.cpp
  *
  * @copyright Copyright (c) 2025 Luke Houston
  *
@@ -27,8 +29,8 @@
 
 #include <memory>
 
-#include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 
 namespace FlashBackClient
 {
@@ -37,12 +39,13 @@ namespace FlashBackClient
     private:
         std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> _traceSink;
         std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> _warnSink;
+
     public:
         virtual ~DualLevelSink() = default;
         DualLevelSink();
 
         void Initialize();
-        
+
         void log(const spdlog::details::log_msg& msg) override;
         void flush() override;
     };

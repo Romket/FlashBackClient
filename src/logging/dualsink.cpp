@@ -1,11 +1,12 @@
 /**
- * @file logger.cpp
+ * @file dualsink.cpp
  * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
  * @brief Defines a custom sink that has different coloring based on log level
  * @version 0.1
  * @date 2025-03-31
  *
  * @see dualsink.h
+ * @sa logger.h
  * @sa logger.cpp
  *
  * @copyright Copyright (c) 2025 Luke Houston
@@ -41,14 +42,8 @@ namespace FlashBackClient
 
     void DualLevelSink::log(const spdlog::details::log_msg& msg)
     {
-        if(msg.level >= spdlog::level::warn)
-        {
-            _warnSink->log(msg);
-        }
-        else 
-        {
-            _traceSink->log(msg);
-        }
+        if (msg.level >= spdlog::level::warn) { _warnSink->log(msg); }
+        else { _traceSink->log(msg); }
     }
 
     void DualLevelSink::flush()
