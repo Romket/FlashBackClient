@@ -3,7 +3,7 @@
  * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
  * @brief Defines default global, target, and scheduler configs
  * @version 0.1
- * @date 2025-03-28
+ * @date 2025-04-01
  *
  * @see configs.h
  * @see configs.cpp
