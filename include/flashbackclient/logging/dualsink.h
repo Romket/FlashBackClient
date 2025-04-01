@@ -1,7 +1,7 @@
 /**
  * @file dualsink.h
  * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
- * @brief Defines a defines a sink with different formatting based on log levels
+ * @brief Defines a sink with different formatting based on log levels
  * @version 0.1
  * @date 2025-03-31
  *
