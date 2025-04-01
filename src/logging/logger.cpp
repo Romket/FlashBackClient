@@ -28,7 +28,6 @@
 
 #include <cstdio>
 #include <ctime>
-#include <sstream>
 
 #include <flashbackclient/defs.h>
 #include <flashbackclient/logging/dualsink.h>
