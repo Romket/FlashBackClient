@@ -57,7 +57,7 @@ namespace FlashBackClient
 
         // Off by default so file is not written to
         _fileLogger->set_level(spdlog::level::off);
-        _fileLogger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+        _fileLogger->set_pattern(FILE_LOGGER_FORMAT);
 
         // Sets length of backtrace for fileLogger
         constexpr size_t backtraceLength = 32;
