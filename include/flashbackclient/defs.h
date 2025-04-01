@@ -41,6 +41,7 @@
 #define FILE_LOGGER_FORMAT "[%Y-%m-%d %H:%M:%S.%e] [%l] %v"
 #define CONSOLE_LOGGER_FORMAT_LOW "%Y-%m-%d %H:%M:%S.%e [%^%l%$] %v"
 #define CONSOLE_LOGGER_FORMAT_HIGH "%^%Y-%m-%d %H:%M:%S.%e [%l] %v%$"
+#define BACKTRACE_LENGTH 32
 
 #define RECURSION_LIMIT 10
 
