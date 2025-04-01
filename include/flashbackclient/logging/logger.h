@@ -47,15 +47,7 @@ namespace FlashBackClient
         static void DumpFileLog();
         static void Shutdown();
 
-    private:
-        static std::shared_ptr<DualLevelSink>                     _consoleSink;
-        static std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> _fileSink;
-        static std::shared_ptr<spdlog::logger> _consoleLogger;
-        static std::shared_ptr<spdlog::logger> _fileLogger;
-        // cppcheck-suppress unusedStructMember
-        static std::string _crashFilePath;
-
-                // Don't question the std::forward<Args>(args)...
+        // Don't question the std::forward<Args>(args)...
         // Cause I don't know either
         template<typename... Args>
         static void logTrace(const char* file, int line, const char* func,
@@ -129,6 +121,14 @@ namespace FlashBackClient
                 _fileLogger, "{}:{} [{}] - {}", file, line, func,
                 fmt::format(fmtStr, std::forward<Args>(args)...));
         }
+
+    private:
+        static std::shared_ptr<DualLevelSink>                     _consoleSink;
+        static std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> _fileSink;
+        static std::shared_ptr<spdlog::logger> _consoleLogger;
+        static std::shared_ptr<spdlog::logger> _fileLogger;
+        // cppcheck-suppress unusedStructMember
+        static std::string _crashFilePath;
     };
 } // namespace FlashBackClient
 

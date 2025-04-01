@@ -26,6 +26,10 @@
 
 #pragma once
 
+#include <string>
+
+#include <flashbackclient/defs.h>
+
 #include <spdlog/details/file_helper.h>
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
@@ -37,8 +41,7 @@ namespace spdlog
         template <typename Mutex>
         class CrashFileSink : public base_sink<Mutex> {
         public:
-            explicit CrashFileSink(const filename_t &filename,
-                                    bool truncate = false,
+            explicit CrashFileSink(bool truncate = false,
                                     const file_event_handlers &event_handlers = {});
             const filename_t &filename() const;
             void truncate();
@@ -49,16 +52,14 @@ namespace spdlog
 
         private:
             details::file_helper file_helper_;
-            filename_t file_name_;
             bool truncate_;
             bool initialized_;
         };
 
         template <typename Mutex>
-        SPDLOG_INLINE CrashFileSink<Mutex>::CrashFileSink(const filename_t &filename,
-                                                            bool truncate,
+        SPDLOG_INLINE CrashFileSink<Mutex>::CrashFileSink(bool truncate,
                                                             const file_event_handlers &event_handlers)
-            : file_helper_{event_handlers}, file_name_{filename}, truncate_{truncate} { initialized_ = false;}
+            : file_helper_{event_handlers}, truncate_{truncate} {}
 
         template <typename Mutex>
         SPDLOG_INLINE const filename_t &CrashFileSink<Mutex>::filename() const {
@@ -77,8 +78,15 @@ namespace spdlog
             base_sink<Mutex>::formatter_->format(msg, formatted);
             if (!initialized_)
             {
-            file_helper_.open(file_name_, truncate_);
-            initialized_ = true;
+                std::time_t t = std::time(nullptr);
+                std::tm tm = *std::localtime(&t);
+                std::ostringstream oss;
+                oss << std::put_time(&tm, "crash_%Y-%m-%d_%H-%M-%S.txt");
+                
+                std::string _crashFilePath = LOG_DIR + '/' + oss.str();
+                
+                file_helper_.open(_crashFilePath, truncate_);
+                initialized_ = true;
             }
             file_helper_.write(formatted);
         }

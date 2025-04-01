@@ -55,8 +55,7 @@ namespace FlashBackClient
 
         _crashFilePath = LOG_DIR + '/' + oss.str();
 
-        _fileSink = std::make_shared<spdlog::sinks::CrashFileSink<std::mutex>>(
-            _crashFilePath, true);
+        _fileSink = std::make_shared<spdlog::sinks::CrashFileSink<std::mutex>>(true);
 
         _fileLogger =
             std::make_shared<spdlog::logger>("_fileLogger", _fileSink);
