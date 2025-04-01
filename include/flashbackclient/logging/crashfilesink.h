@@ -65,6 +65,7 @@ namespace spdlog
             bool truncate, const file_event_handlers& event_handlers) :
             file_helper_ {event_handlers}, truncate_ {truncate}
         {
+            initialized_     = false;
             always_file_log_ = false;
         }
 

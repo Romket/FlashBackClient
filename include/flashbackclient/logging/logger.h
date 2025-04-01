@@ -131,7 +131,8 @@ namespace FlashBackClient
                                                _fileSink;
         static std::shared_ptr<spdlog::logger> _consoleLogger;
         static std::shared_ptr<spdlog::logger> _fileLogger;
-        static bool                            _alwaysFileLog;
+        // cppcheck-suppress unusedStructMember
+        static bool _alwaysFileLog;
     };
 } // namespace FlashBackClient
 
