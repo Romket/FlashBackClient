@@ -6,6 +6,7 @@
  * @date 2025-03-31
  *
  * @see dualsink.h
+ * @sa logger.h
  * @sa logger.cpp
  *
  * @copyright Copyright (c) 2025 Luke Houston
