@@ -86,23 +86,10 @@ EOF
     log "Installed"
 }
 
-# Generate config files
-generate_configs() {
-    log "Generating configs..."
-
-    if [ -d "~/.config/flashbackclient" ]; then
-        rm -r ~/.config/flashbackclient
-    fi
-
-    cp -r configs/flashbackclient ~/.config
-}
-
 main() {
     cmake_build
 
     install
-
-    generate_configs
 }
 
 main

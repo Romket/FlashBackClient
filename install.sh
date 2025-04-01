@@ -86,21 +86,10 @@ EOF
     echo "Installed"
 }
 
-# Generate config files
-generate_configs() {
-    echo "Generating configs..."
-
-    mkdir ~/.flashback
-
-    cp configs/flashbackclient ~/.flashbackclient
-}
-
 main() {
     cmake_build
 
     install
-
-    generate_configs
 }
 
 main
