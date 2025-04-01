@@ -28,6 +28,7 @@
 #include <fstream>
 
  #include <flashbackclient/configs.h>
+ #include <flashbackclient/configdefs.h>
  #include <flashbackclient/logging/logger.h>
 
 namespace FlashBackClient
