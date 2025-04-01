@@ -41,11 +41,13 @@ namespace FlashBackClient
         if (!std::filesystem::exists(CONFIG_FILE_PATH))
         {
             LOG_INFO("No global config found");
+
             if (!std::filesystem::exists(CONFIG_DIR))
             {
                 LOG_INFO("{} not found, creating now", CONFIG_DIR);
                 std::filesystem::create_directory(CONFIG_DIR);
                 LOG_INFO("{} created", CONFIG_DIR);
+
                 LOG_INFO("Creating default global config {} in {} now", CONFIG_FILE,
                          CONFIG_DIR);
                 std::ofstream globalConfig(CONFIG_FILE_PATH);
@@ -75,6 +77,7 @@ namespace FlashBackClient
                 LOG_INFO("{} not found, creating now", SCHEDULER_CONFIG_DIR);
                 std::filesystem::create_directory(SCHEDULER_CONFIG_DIR);
                 LOG_INFO("{} created", SCHEDULER_CONFIG_DIR);
+                
                 LOG_INFO("Creating default scheduler config {} in {} now", SCHEDULER_CONFIG_FILE,
                          SCHEUDLER_CONFIG_DIR);
                 std::ofstream schedulerConfig(SCHEDULER_CONFIG_FILE_PATH);
