@@ -1,5 +1,5 @@
 /**
- * @file logger.cpp
+ * @file dualsink.cpp
  * @author Chase Attebury (Appleberry) (chaseappleberryboi@gmail.com)
  * @brief Defines a custom sink that has different coloring based on log level
  * @version 0.1
