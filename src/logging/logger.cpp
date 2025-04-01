@@ -26,6 +26,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "flashbackclient/logging/crashfilesink.h"
 #include <cstdio>
 #include <ctime>
 #include <sstream>
@@ -41,16 +42,13 @@
 namespace FlashBackClient
 {
     std::shared_ptr<DualLevelSink>                     Logger::_consoleSink;
-    std::shared_ptr<spdlog::sinks::basic_file_sink_mt> Logger::_fileSink;
+    std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> Logger::_fileSink;
     std::shared_ptr<spdlog::logger>                    Logger::_consoleLogger;
     std::shared_ptr<spdlog::logger>                    Logger::_fileLogger;
     std::string                                        Logger::_crashFilePath;
-    bool                                               Logger::_dumped;
 
     void Logger::Initialize()
     {
-        _dumped = false;
-
         std::time_t t = std::time(nullptr);
         std::tm tm = *std::localtime(&t);
         std::ostringstream oss;
@@ -58,7 +56,7 @@ namespace FlashBackClient
 
         _crashFilePath = LOG_DIR + '/' + oss.str();
 
-        _fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(
+        _fileSink = std::make_shared<spdlog::sinks::CrashFileSink<std::mutex>>(
             _crashFilePath, true);
 
         _fileLogger =
@@ -112,19 +110,10 @@ namespace FlashBackClient
         LOG_INFO("Log dumped to {}/", LOG_DIR);
         _fileLogger->set_level(spdlog::level::trace);
         _fileLogger->dump_backtrace();
-        _dumped = true;
     }
 
     void Logger::Shutdown()
     {
-        if (!_dumped)
-        {
-            if (remove(_crashFilePath.c_str()) == 0)
-            {
-                LOG_INFO("Removed unwanted file log");
-            }
-            else { LOG_ERROR("Failed to remove file log"); }
-        }
         spdlog::shutdown();
     }
 
