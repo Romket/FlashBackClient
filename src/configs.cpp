@@ -27,9 +27,9 @@
 #include <filesystem>
 #include <fstream>
 
- #include <flashbackclient/configs.h>
- #include <flashbackclient/configdefs.h>
- #include <flashbackclient/logging/logger.h>
+#include <flashbackclient/configdefs.h>
+#include <flashbackclient/configs.h>
+#include <flashbackclient/logging/logger.h>
 
 namespace FlashBackClient
 {
@@ -38,26 +38,30 @@ namespace FlashBackClient
 
     void ConfigManager::GenerateConfigs()
     {
-        if(!std::filesystem::exists(CONFIG_FILE_PATH))
+        if (!std::filesystem::exists(CONFIG_FILE_PATH))
         {
             LOG_INFO("No global config found");
-            if(!std::filesystem::exists(CONFIG_DIR))
+            if (!std::filesystem::exists(CONFIG_DIR))
             {
                 LOG_INFO("{} not found, creating now", CONFIG_DIR);
                 std::filesystem::create_directory(CONFIG_DIR);
                 LOG_INFO("{} created", CONFIG_DIR);
-                LOG_INFO("Creating default config {} in {} now", CONFIG_FILE, CONFIG_DIR);
+                LOG_INFO("Creating default config {} in {} now", CONFIG_FILE,
+                         CONFIG_DIR);
                 std::ofstream globalConfig(CONFIG_FILE_PATH);
                 globalConfig.close();
-                LOG_INFO("Default global config created at {}", CONFIG_FILE_PATH);
+                LOG_INFO("Default global config created at {}",
+                         CONFIG_FILE_PATH);
             }
             else
             {
-                LOG_INFO("{} found, creating default global config {} now", CONFIG_DIR, CONFIG_FILE);
+                LOG_INFO("{} found, creating default global config {} now",
+                         CONFIG_DIR, CONFIG_FILE);
                 std::ofstream globalConfig(CONFIG_FILE_PATH);
 
                 globalConfig.close();
-                LOG_INFO("Default global config created at {}", CONFIG_FILE_PATH);
+                LOG_INFO("Default global config created at {}",
+                         CONFIG_FILE_PATH);
             }
         }
         else { LOG_INFO("Global config found in {}, continuing", CONFIG_DIR); }

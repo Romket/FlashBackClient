@@ -25,7 +25,7 @@
  */
 
 #define DEFAULT_GLOBAL_CONFIG \
-R"(# ~/.config/flashbackclient/flashbackclient.yaml
+    R"(# ~/.config/flashbackclient/flashbackclient.yaml
 # Default settings
 
 encrypt: "none"
@@ -34,7 +34,7 @@ keep_on_target_move: false
 )"
 
 #define DEFAULT_TARGET_CONFIG \
-R"(# Example target file defining a target named example
+    R"(# Example target file defining a target named example
 
 name: "example"
 
@@ -66,7 +66,7 @@ rules:
 )"
 
 #define DEFAULT_SCHEDULER_CONFIG \
-R"(
+    R"(
 # ~/.config/flashbackclient/scheduler/scheduler.yaml
 # Default rules for the scheduler
 
