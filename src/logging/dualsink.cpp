@@ -25,6 +25,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <flashbackclient/defs.h>
 #include <flashbackclient/logging/dualsink.h>
 
 namespace FlashBackClient
@@ -33,11 +34,11 @@ namespace FlashBackClient
     {
         _traceSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         _traceSink->set_level(spdlog::level::trace);
-        _traceSink->set_pattern("%Y-%m-%d %H:%M:%S.%e [%^%l%$] %v");
+        _traceSink->set_pattern(CONSOLE_LOGGER_FORMAT_LOW);
 
         _warnSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         _warnSink->set_level(spdlog::level::warn);
-        _warnSink->set_pattern("%^%Y-%m-%d %H:%M:%S.%e [%l] %v%$");
+        _warnSink->set_pattern(CONSOLE_LOGGER_FORMAT_HIGH);
     }
 
     void DualLevelSink::log(const spdlog::details::log_msg& msg)
