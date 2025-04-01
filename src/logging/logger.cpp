@@ -57,11 +57,9 @@ namespace FlashBackClient
 
         // Off by default so file is not written to
         _fileLogger->set_level(spdlog::level::off);
-        _fileLogger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+        _fileLogger->set_pattern(FILE_LOGGER_FORMAT);
 
-        // Sets length of backtrace for fileLogger
-        constexpr size_t backtraceLength = 32;
-        _fileLogger->enable_backtrace(32);
+        _fileLogger->enable_backtrace(BACKTRACE_LENGTH);
 
         _consoleSink = std::make_shared<DualLevelSink>();
 
@@ -98,7 +96,11 @@ namespace FlashBackClient
         }
     }
 
-    void Logger::AlwaysFileLog() { _alwaysFileLog = true; }
+    void Logger::AlwaysFileLog()
+    {
+        _fileSink->alwaysFileLog();
+        _alwaysFileLog = true;
+    }
 
     void Logger::SetBacktraceLength(int length)
     {
