@@ -53,4 +53,3 @@ namespace FlashBackClient
         _warnSink->flush();
     }
 } // namespace FlashBackClient
-// minor change for science!
