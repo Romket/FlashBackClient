@@ -116,7 +116,24 @@ int main(int argc, char** argv)
         {
             if (++i < argc)
             {
-                FlashBackClient::Logger::SetBacktraceLength(std::stoi(argv[i]));
+                try
+                {
+                    FlashBackClient::Logger::SetBacktraceLength(
+                        std::stoi(argv[i]));
+                }
+                catch (const std::invalid_argument& e)
+                {
+                    FlashBackClient::LOG_ERROR("Not a valid integer.");
+                }
+                catch (const std::out_of_range& e)
+                {
+                    FlashBackClient::LOG_ERROR("Error: Number out of range.");
+                }
+            }
+            else
+            {
+                FlashBackClient::LOG_WARN("End of arguments reached, "
+                                          "backtrace length unchanged");
             }
         }
         else
