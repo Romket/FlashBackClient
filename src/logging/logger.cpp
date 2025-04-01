@@ -106,7 +106,7 @@ namespace FlashBackClient
         _fileLogger->enable_backtrace(length);
     }
 
-    void Logger::DumpFileLog()
+    void Logger::dumpFileLog()
     {
         LOG_INFO("Log dumped to {}/", LOG_DIR);
         _fileLogger->set_level(spdlog::level::trace);
@@ -115,7 +115,7 @@ namespace FlashBackClient
 
     void Logger::Shutdown(bool isError)
     {
-        if (isError || _alwaysFileLog) { Logger::DumpFileLog(); }
+        if (isError || _alwaysFileLog) { Logger::dumpFileLog(); }
         spdlog::shutdown();
     }
 

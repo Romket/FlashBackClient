@@ -46,7 +46,6 @@ namespace FlashBackClient
         static void SetLogLevel(int level);
         static void AlwaysFileLog();
         static void SetBacktraceLength(int length);
-        static void DumpFileLog();
         static void Shutdown(bool isError);
 
         // Don't question the std::forward<Args>(args)...
@@ -125,6 +124,8 @@ namespace FlashBackClient
         }
 
     private:
+        static void dumpFileLog();
+
         static std::shared_ptr<DualLevelSink> _consoleSink;
         static std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>>
                                                _fileSink;
