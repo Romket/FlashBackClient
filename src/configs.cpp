@@ -36,6 +36,8 @@ namespace FlashBackClient
     bool ConfigManager::Initialize() { return SettingManager::Initialize(); }
     bool ConfigManager::Shutdown() { return SettingManager::Shutdown(); }
 
+    // Generates default global and scheduler configs if they are not present
+    // Also creates example target definition if none are found
     void ConfigManager::GenerateConfigs()
     {
         if (!std::filesystem::exists(CONFIG_FILE_PATH))
@@ -77,9 +79,9 @@ namespace FlashBackClient
                 LOG_INFO("{} not found, creating now", SCHEDULER_CONFIG_DIR);
                 std::filesystem::create_directory(SCHEDULER_CONFIG_DIR);
                 LOG_INFO("{} created", SCHEDULER_CONFIG_DIR);
-                
+
                 LOG_INFO("Creating default scheduler config {} in {} now", SCHEDULER_CONFIG_FILE,
-                         SCHEUDLER_CONFIG_DIR);
+                         SCHEDULER_CONFIG_DIR);
                 std::ofstream schedulerConfig(SCHEDULER_CONFIG_FILE_PATH);
                 schedulerConfig << DEFAULT_SCHEDULER_CONFIG;
                 schedulerConfig.close();
@@ -101,8 +103,8 @@ namespace FlashBackClient
 
         if (!std::filesystem::exists(TARGET_DEF_DIR))
         {
-            LOG_INFO("{} does not exist, creating directory");
-            std::filesystem::create_directory(TARGET_DEF_FIR);
+            LOG_INFO("{} does not exist, creating directory", TARGET_DEF_DIR);
+            std::filesystem::create_directory(TARGET_DEF_DIR);
             LOG_INFO("{} created", TARGET_DEF_DIR);
 
             LOG_INFO("Creating example target definition {}", EXAMPLE_TARGET_DEF_FILE);
@@ -113,6 +115,7 @@ namespace FlashBackClient
         }
         else if (std::filesystem::is_empty(TARGET_DEF_DIR))
         {
+            LOG_WARN("No target definitions detected in {}", TARGET_DEF_DIR);
             LOG_INFO("Creating example target definition example.yaml");
             std::ofstream targetConfig(EXAMPLE_TARGET_DEF_FILE_PATH);
             targetConfig << DEFAULT_TARGET_CONFIG;
