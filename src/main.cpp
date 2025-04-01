@@ -57,6 +57,8 @@ int main(int argc, char** argv)
 
     FlashBackClient::Logger::Initialize();
 
+    FlashBackClient::ConfigManager::GenerateConfigs();
+
     for (int i = 1; i < argc; ++i)
     {
         if (std::string(argv[i]) == "--log-level")
