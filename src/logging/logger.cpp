@@ -44,17 +44,9 @@ namespace FlashBackClient
     std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> Logger::_fileSink;
     std::shared_ptr<spdlog::logger>                    Logger::_consoleLogger;
     std::shared_ptr<spdlog::logger>                    Logger::_fileLogger;
-    std::string                                        Logger::_crashFilePath;
 
     void Logger::Initialize()
     {
-        std::time_t t = std::time(nullptr);
-        std::tm tm = *std::localtime(&t);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, "crash_%Y-%m-%d_%H-%M-%S.txt");
-
-        _crashFilePath = LOG_DIR + '/' + oss.str();
-
         _fileSink = std::make_shared<spdlog::sinks::CrashFileSink<std::mutex>>(true);
 
         _fileLogger =
