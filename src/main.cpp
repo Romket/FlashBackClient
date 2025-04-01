@@ -59,12 +59,7 @@ int main(int argc, char** argv)
 
     for (int i = 1; i < argc; ++i)
     {
-        if (std::string(argv[i]) == "--generate-configs")
-        {
-            FlashBackClient::ConfigManager::GenerateConfigs();
-            return 0;
-        }
-        else if (std::string(argv[i]) == "--log-level")
+        if (std::string(argv[i]) == "--log-level")
         {
             if (++i < argc)
             {
