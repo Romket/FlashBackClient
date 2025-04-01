@@ -33,7 +33,7 @@ namespace spdlog
                                                             bool truncate,
                                                             const file_event_handlers &event_handlers)
             : file_helper_{event_handlers}, file_name_{filename}, truncate_{truncate} { initialized_ = false;}
-        
+
         template <typename Mutex>
         SPDLOG_INLINE const filename_t &CrashFileSink<Mutex>::filename() const {
             return file_helper_.filename();
@@ -49,7 +49,7 @@ namespace spdlog
         SPDLOG_INLINE void CrashFileSink<Mutex>::sink_it_(const details::log_msg &msg) {
             memory_buf_t formatted;
             base_sink<Mutex>::formatter_->format(msg, formatted);
-            if (!initialized_) 
+            if (!initialized_)
             {
             file_helper_.open(file_name_, truncate_);
             initialized_ = true;
