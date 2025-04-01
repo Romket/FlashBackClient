@@ -26,4 +26,4 @@ FlashBack is a fast, lightweight, and highly customizeable command line backup s
 *For more information on how to use the configuration files, see [CONFIGS.md](./docs/CONFIGS.md)*
 
 ## License
-FlashBack is licensed under the MIT License - see [LICENSE](LICENSE) for more info.
+FlashBack is licensed under the GNU General Public License - see [LICENSE](LICENSE) for more info.
