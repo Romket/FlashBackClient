@@ -55,10 +55,11 @@ namespace FlashBackClient
             {
                 LOG_INFO("{} found, creating default global config {} now", CONFIG_DIR, CONFIG_FILE);
                 std::ofstream globalConfig(CONFIG_FILE_PATH);
+
                 globalConfig.close();
                 LOG_INFO("Default global config created at {}", CONFIG_FILE_PATH);
             }
         }
-        else { LOG_INFO("Global config found in {}", CONFIG_DIR); }
+        else { LOG_INFO("Global config found in {}, continuing", CONFIG_DIR); }
     }
 } // namespace FlashBackClient
