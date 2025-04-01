@@ -108,6 +108,10 @@ int main(int argc, char** argv)
                                           "defaulting to info");
             }
         }
+        else if (std::string(argv[i]) == "--always-file-log")
+        {
+            FlashBackClient::Logger::AlwaysFileLog();
+        }
         else
         {
             FlashBackClient::LOG_ERROR("Unknown command line option {}",

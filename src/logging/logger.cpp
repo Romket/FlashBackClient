@@ -43,6 +43,7 @@ namespace FlashBackClient
     std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> Logger::_fileSink;
     std::shared_ptr<spdlog::logger> Logger::_consoleLogger;
     std::shared_ptr<spdlog::logger> Logger::_fileLogger;
+    bool                            alwaysFileLog {false};
 
     void Logger::Initialize()
     {
@@ -95,6 +96,8 @@ namespace FlashBackClient
         }
     }
 
+    void Logger::AlwaysFileLog() { alwaysFileLog = true; }
+
     void Logger::DumpFileLog()
     {
         LOG_INFO("Log dumped to {}/", LOG_DIR);
@@ -102,6 +105,10 @@ namespace FlashBackClient
         _fileLogger->dump_backtrace();
     }
 
-    void Logger::Shutdown() { spdlog::shutdown(); }
+    void Logger::Shutdown(bool isError)
+    {
+        if (!isError && alwaysFileLog) { Logger::DumpFileLog(); }
+        spdlog::shutdown();
+    }
 
 } // namespace FlashBackClient

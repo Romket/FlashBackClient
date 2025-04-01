@@ -70,7 +70,7 @@ namespace FlashBackClient
         LOG_INFO("Exiting with code {}", isError(signum) ? signum : 0);
 
         if (isError(signum)) Logger::DumpFileLog();
-        Logger::Shutdown();
+        Logger::Shutdown(isError(signum));
 
         exit(isError(signum) ? signum : 0);
     }

@@ -44,8 +44,9 @@ namespace FlashBackClient
     public:
         static void Initialize();
         static void SetLogLevel(int level);
+        static void AlwaysFileLog();
         static void DumpFileLog();
-        static void Shutdown();
+        static void Shutdown(bool isError);
 
         // Don't question the std::forward<Args>(args)...
         // Cause I don't know either
@@ -128,6 +129,7 @@ namespace FlashBackClient
                                                _fileSink;
         static std::shared_ptr<spdlog::logger> _consoleLogger;
         static std::shared_ptr<spdlog::logger> _fileLogger;
+        static bool                            alwaysFileLog;
     };
 } // namespace FlashBackClient
 
