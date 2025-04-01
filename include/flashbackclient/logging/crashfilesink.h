@@ -47,6 +47,7 @@ namespace spdlog
                 const file_event_handlers& event_handlers = {});
             const filename_t& filename() const;
             void              truncate();
+            void              alwaysFileLog();
 
         protected:
             void sink_it_(const details::log_msg& msg) override;
@@ -56,6 +57,7 @@ namespace spdlog
             details::file_helper file_helper_;
             bool                 truncate_;
             bool                 initialized_;
+            bool                 always_file_log_;
         };
 
         template<typename Mutex>
@@ -63,6 +65,7 @@ namespace spdlog
             bool truncate, const file_event_handlers& event_handlers) :
             file_helper_ {event_handlers}, truncate_ {truncate}
         {
+            always_file_log_ = false;
         }
 
         template<typename Mutex>
@@ -89,7 +92,9 @@ namespace spdlog
                 std::time_t        t  = std::time(nullptr);
                 std::tm            tm = *std::localtime(&t);
                 std::ostringstream oss;
-                oss << std::put_time(&tm, "crash_%Y-%m-%d_%H-%M-%S.txt");
+                oss << std::put_time(&tm, always_file_log_ ?
+                                              LOG_FILE_FMT_LOG :
+                                              LOG_FILE_FMT_CRASH);
 
                 std::string _crashFilePath = LOG_DIR + '/' + oss.str();
 
@@ -103,6 +108,12 @@ namespace spdlog
         SPDLOG_INLINE void CrashFileSink<Mutex>::flush_()
         {
             file_helper_.flush();
+        }
+
+        template<typename Mutex>
+        SPDLOG_INLINE void CrashFileSink<Mutex>::alwaysFileLog()
+        {
+            always_file_log_ = true;
         }
     } // namespace sinks
 } // namespace spdlog
