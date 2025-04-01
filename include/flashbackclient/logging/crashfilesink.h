@@ -38,62 +38,71 @@ namespace spdlog
 {
     namespace sinks
     {
-        template <typename Mutex>
-        class CrashFileSink : public base_sink<Mutex> {
+        template<typename Mutex>
+        class CrashFileSink : public base_sink<Mutex>
+        {
         public:
-            explicit CrashFileSink(bool truncate = false,
-                                    const file_event_handlers &event_handlers = {});
-            const filename_t &filename() const;
-            void truncate();
+            explicit CrashFileSink(
+                bool                       truncate       = false,
+                const file_event_handlers& event_handlers = {});
+            const filename_t& filename() const;
+            void              truncate();
 
         protected:
-            void sink_it_(const details::log_msg &msg) override;
+            void sink_it_(const details::log_msg& msg) override;
             void flush_() override;
 
         private:
             details::file_helper file_helper_;
-            bool truncate_;
-            bool initialized_;
+            bool                 truncate_;
+            bool                 initialized_;
         };
 
-        template <typename Mutex>
-        SPDLOG_INLINE CrashFileSink<Mutex>::CrashFileSink(bool truncate,
-                                                            const file_event_handlers &event_handlers)
-            : file_helper_{event_handlers}, truncate_{truncate} {}
+        template<typename Mutex>
+        SPDLOG_INLINE CrashFileSink<Mutex>::CrashFileSink(
+            bool truncate, const file_event_handlers& event_handlers) :
+            file_helper_ {event_handlers}, truncate_ {truncate}
+        {
+        }
 
-        template <typename Mutex>
-        SPDLOG_INLINE const filename_t &CrashFileSink<Mutex>::filename() const {
+        template<typename Mutex>
+        SPDLOG_INLINE const filename_t& CrashFileSink<Mutex>::filename() const
+        {
             return file_helper_.filename();
         }
 
-        template <typename Mutex>
-        SPDLOG_INLINE void CrashFileSink<Mutex>::truncate() {
+        template<typename Mutex>
+        SPDLOG_INLINE void CrashFileSink<Mutex>::truncate()
+        {
             std::lock_guard<Mutex> lock(base_sink<Mutex>::mutex_);
             file_helper_.reopen(true);
         }
 
-        template <typename Mutex>
-        SPDLOG_INLINE void CrashFileSink<Mutex>::sink_it_(const details::log_msg &msg) {
+        template<typename Mutex>
+        SPDLOG_INLINE void
+        CrashFileSink<Mutex>::sink_it_(const details::log_msg& msg)
+        {
             memory_buf_t formatted;
             base_sink<Mutex>::formatter_->format(msg, formatted);
             if (!initialized_)
             {
-                std::time_t t = std::time(nullptr);
-                std::tm tm = *std::localtime(&t);
+                std::time_t        t  = std::time(nullptr);
+                std::tm            tm = *std::localtime(&t);
                 std::ostringstream oss;
                 oss << std::put_time(&tm, "crash_%Y-%m-%d_%H-%M-%S.txt");
-                
+
                 std::string _crashFilePath = LOG_DIR + '/' + oss.str();
-                
+
                 file_helper_.open(_crashFilePath, truncate_);
                 initialized_ = true;
             }
             file_helper_.write(formatted);
         }
 
-        template <typename Mutex>
-        SPDLOG_INLINE void CrashFileSink<Mutex>::flush_() {
+        template<typename Mutex>
+        SPDLOG_INLINE void CrashFileSink<Mutex>::flush_()
+        {
             file_helper_.flush();
         }
-    } //namespace sinks
+    } // namespace sinks
 } // namespace spdlog

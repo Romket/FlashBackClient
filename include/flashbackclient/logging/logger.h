@@ -123,8 +123,9 @@ namespace FlashBackClient
         }
 
     private:
-        static std::shared_ptr<DualLevelSink>                     _consoleSink;
-        static std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> _fileSink;
+        static std::shared_ptr<DualLevelSink> _consoleSink;
+        static std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>>
+                                               _fileSink;
         static std::shared_ptr<spdlog::logger> _consoleLogger;
         static std::shared_ptr<spdlog::logger> _fileLogger;
     };

@@ -29,8 +29,8 @@
 
 #include <memory>
 
-#include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 
 namespace FlashBackClient
 {
@@ -39,6 +39,7 @@ namespace FlashBackClient
     private:
         std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> _traceSink;
         std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> _warnSink;
+
     public:
         virtual ~DualLevelSink() = default;
         DualLevelSink();

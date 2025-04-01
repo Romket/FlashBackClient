@@ -42,14 +42,8 @@ namespace FlashBackClient
 
     void DualLevelSink::log(const spdlog::details::log_msg& msg)
     {
-        if(msg.level >= spdlog::level::warn)
-        {
-            _warnSink->log(msg);
-        }
-        else
-        {
-            _traceSink->log(msg);
-        }
+        if (msg.level >= spdlog::level::warn) { _warnSink->log(msg); }
+        else { _traceSink->log(msg); }
     }
 
     void DualLevelSink::flush()

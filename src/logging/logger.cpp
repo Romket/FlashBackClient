@@ -39,14 +39,15 @@
 
 namespace FlashBackClient
 {
-    std::shared_ptr<DualLevelSink>                     Logger::_consoleSink;
+    std::shared_ptr<DualLevelSink> Logger::_consoleSink;
     std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>> Logger::_fileSink;
-    std::shared_ptr<spdlog::logger>                    Logger::_consoleLogger;
-    std::shared_ptr<spdlog::logger>                    Logger::_fileLogger;
+    std::shared_ptr<spdlog::logger> Logger::_consoleLogger;
+    std::shared_ptr<spdlog::logger> Logger::_fileLogger;
 
     void Logger::Initialize()
     {
-        _fileSink = std::make_shared<spdlog::sinks::CrashFileSink<std::mutex>>(true);
+        _fileSink =
+            std::make_shared<spdlog::sinks::CrashFileSink<std::mutex>>(true);
 
         _fileLogger =
             std::make_shared<spdlog::logger>("_fileLogger", _fileSink);
@@ -101,9 +102,6 @@ namespace FlashBackClient
         _fileLogger->dump_backtrace();
     }
 
-    void Logger::Shutdown()
-    {
-        spdlog::shutdown();
-    }
+    void Logger::Shutdown() { spdlog::shutdown(); }
 
 } // namespace FlashBackClient
