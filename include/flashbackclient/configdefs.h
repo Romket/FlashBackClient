@@ -29,7 +29,7 @@
 # Default settings
 
 encrypt: "none"
-    
+
 keep_on_target_move: false
 )"
 

@@ -49,6 +49,7 @@ namespace FlashBackClient
                 LOG_INFO("Creating default config {} in {} now", CONFIG_FILE,
                          CONFIG_DIR);
                 std::ofstream globalConfig(CONFIG_FILE_PATH);
+                globalConfig << DEFAULT_GLOBAL_CONFIG;
                 globalConfig.close();
                 LOG_INFO("Default global config created at {}",
                          CONFIG_FILE_PATH);
@@ -58,12 +59,41 @@ namespace FlashBackClient
                 LOG_INFO("{} found, creating default global config {} now",
                          CONFIG_DIR, CONFIG_FILE);
                 std::ofstream globalConfig(CONFIG_FILE_PATH);
-
+                globalConfig << DEFAULT_GLOBAL_CONFIG;
                 globalConfig.close();
                 LOG_INFO("Default global config created at {}",
                          CONFIG_FILE_PATH);
             }
         }
         else { LOG_INFO("Global config found in {}, continuing", CONFIG_DIR); }
+
+        if (!std::filesystem::exists(SCHEDULER_CONFIG_FILE_PATH))
+        {
+            LOG_INFO("No global config found");
+            if (!std::filesystem::exists(SCHEDULER_CONFIG_DIR))
+            {
+                LOG_INFO("{} not found, creating now", SCHEDULER_CONFIG_DIR);
+                std::filesystem::create_directory(SCHEDULER_CONFIG_DIR);
+                LOG_INFO("{} created", SCHEDULER_CONFIG_DIR);
+                LOG_INFO("Creating default config {} in {} now", SCHEDULER_CONFIG_FILE,
+                         SCHEUDLER_CONFIG_DIR);
+                std::ofstream globalConfig(SCHEDULER_CONFIG_FILE_PATH);
+                globalConfig << DEFAULT_SCHEDULER_CONFIG;
+                globalConfig.close();
+                LOG_INFO("Default global config created at {}",
+                         SCHEDULER_CONFIG_FILE_PATH);
+            }
+            else
+            {
+                LOG_INFO("{} found, creating default global config {} now",
+                         SCHEDULER_CONFIG_DIR, SCHEDULER_CONFIG_FILE);
+                std::ofstream globalConfig(SCHEDULER_CONFIG_FILE_PATH);
+                globalConfig << DEFAULT_SCHEDULER_CONFIG;
+                globalConfig.close();
+                LOG_INFO("Default global config created at {}",
+                         SCHEDULER_CONFIG_FILE_PATH);
+            }
+        }
+        else { LOG_INFO("Scheduler config found in {}, continuing", SCHEDULER_CONFIG_DIR); }
     }
 } // namespace FlashBackClient
