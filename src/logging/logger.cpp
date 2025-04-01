@@ -115,7 +115,7 @@ namespace FlashBackClient
 
     void Logger::Shutdown(bool isError)
     {
-        if (!isError && _alwaysFileLog) { Logger::DumpFileLog(); }
+        if (isError || _alwaysFileLog) { Logger::DumpFileLog(); }
         spdlog::shutdown();
     }
 
