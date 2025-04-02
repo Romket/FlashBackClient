@@ -12,10 +12,9 @@ Checks: >
   readability-identifier-naming.ProtectedMemberCase=_camelBack,
   readability-identifier-naming.GlobalVariableCase=camelBack,
   readability-identifier-naming.MacroDefinitionCase=UPPER_CASE,
-  modernize-use-angle-brackets
 
 WarningsAsErrors: true
-HeaderFilterRegex: '(src|include)/.*\.(h|cpp)'
+HeaderFilterRegex: '(src|include)/.*\.(h|cpp)$'
 FormatStyle: none
 
 CheckOptions:
