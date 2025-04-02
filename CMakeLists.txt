@@ -39,6 +39,7 @@ add_definitions(-DSPDLOG_ACTIVE_LEVEL=0)
 add_executable(flashbackclient
     ${CMAKE_CURRENT_SOURCE_DIR}/src/condition.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/configs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/helper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/listener/inotify/inotify_listener.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/logging/dualsink.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/logging/logger.cpp

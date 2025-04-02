@@ -49,7 +49,25 @@
 
 namespace FlashBackClient
 {
-    void SignalHandler::Handle(int signum)
+    void SignalHandler::Register()
+    {
+        std::signal(SIGABRT, SignalHandler::handle);
+        std::signal(SIGFPE, SignalHandler::handle);
+        std::signal(SIGILL, SignalHandler::handle);
+        std::signal(SIGINT, SignalHandler::handle);
+        std::signal(SIGSEGV, SignalHandler::handle);
+        std::signal(SIGTERM, SignalHandler::handle);
+
+#ifndef _WIN32
+        std::signal(SIGBUS, SignalHandler::handle);
+        std::signal(SIGPIPE, SignalHandler::handle);
+        std::signal(SIGQUIT, SignalHandler::handle);
+        std::signal(SIGALRM, SignalHandler::handle);
+        std::signal(SIGHUP, SignalHandler::handle);
+#endif
+    }
+
+    void SignalHandler::handle(int signum)
     {
         if (isError(signum))
         {
@@ -62,6 +80,9 @@ namespace FlashBackClient
             LOG_INFO("Signal detected: {} ({})", signum,
                      getSignalString(signum));
         }
+
+        LOG_TRACE("Reregistering signal handlers");
+        Register();
 
         ServiceLocator::Shutdown<PlatformListener>();
         ServiceLocator::Shutdown<Scheduler>();

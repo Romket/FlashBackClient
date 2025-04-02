@@ -1,11 +1,11 @@
 /**
- * @file signal_handler.h
+ * @file helper.h
  * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
- * @brief Defines a class for handling system signals
+ * @brief Miscellaneous helper functions
  * @version 0.1
- * @date 2025-03-25
+ * @date 2025-04-01
  *
- * @see signal_handler.cpp
+ * @see helper.cpp
  * @sa main.cpp
  *
  * @copyright Copyright (c) 2025 Luke Houston
@@ -24,20 +24,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
 namespace FlashBackClient
 {
-    class SignalHandler
+    class Helper
     {
     public:
-        static void Register();
-
-    private:
-        static void handle(int signum);
-
-        static const char* getSignalString(int signum);
-        static bool        isError(int signum);
-        static void        logStackTrace();
+        static bool ProcessCommandLineArgs(int argc, char** argv);
     };
 } // namespace FlashBackClient
