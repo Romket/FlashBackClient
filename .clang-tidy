@@ -14,7 +14,8 @@ Checks: >
   readability-identifier-naming.MacroDefinitionCase=UPPER_CASE,
   modernize-use-angle-brackets
 WarningsAsErrors: true
-HeaderFilterRegex: ''
+HeaderFilterRegex: '(src|include)/.*\.(h|cpp)$'
+ExcludeRegex: 'include/flashbackclient/logging/dualsink\.h'
 AnalyzeTemporaryDtors: false
 FormatStyle:     none
 CheckOptions:
