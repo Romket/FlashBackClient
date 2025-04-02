@@ -4,7 +4,7 @@
  * @brief Main entry point for the FlashBackClient program. Registers signal
  * handlers, checks command line arguments, and initializes and runs services
  *
- * @version 0.1
+ * @version 0.3
  * @date 2025-03-28
  *
  * @sa service_locator.h
