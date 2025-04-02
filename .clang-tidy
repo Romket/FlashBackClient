@@ -1,0 +1,43 @@
+---
+Checks: >
+  readability-identifier-naming,
+  readability-identifier-naming.ClassCase=PascalCase,
+  readability-identifier-naming.StructCase=PascalCase,
+  readability-identifier-naming.EnumCase=PascalCase,
+  readability-identifier-naming.FunctionCase=PascalCase,
+  readability-identifier-naming.PrivateFunctionCase=camelBack,
+  readability-identifier-naming.ProtectedFunctionCase=camelBack,
+  readability-identifier-naming.VariableCase=camelBack,
+  readability-identifier-naming.PrivateMemberCase=_camelBack,
+  readability-identifier-naming.ProtectedMemberCase=_camelBack,
+  readability-identifier-naming.GlobalVariableCase=camelBack,
+  readability-identifier-naming.MacroDefinitionCase=UPPER_CASE,
+  modernize-use-angle-brackets
+WarningsAsErrors: true
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     none
+CheckOptions:
+  - key: readability-identifier-naming.ClassCase
+    value: PascalCase
+  - key: readability-identifier-naming.StructCase
+    value: PascalCase
+  - key: readability-identifier-naming.EnumCase
+    value: PascalCase
+  - key: readability-identifier-naming.FunctionCase
+    value: PascalCase
+  - key: readability-identifier-naming.PrivateFunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.ProtectedFunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.VariableCase
+    value: camelBack
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: _camelBack
+  - key: readability-identifier-naming.ProtectedMemberCase
+    value: _camelBack
+  - key: readability-identifier-naming.GlobalVariableCase
+    value: camelBack
+  - key: readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
+...
