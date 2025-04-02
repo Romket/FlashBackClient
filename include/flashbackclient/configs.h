@@ -5,7 +5,7 @@
  * settings
  *
  * @version 0.1
- * @date 2025-03-25
+ * @date 2025-03-28
  *
  * @see configs.cpp
  * @see settingmanager.h

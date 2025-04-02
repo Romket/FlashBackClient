@@ -28,7 +28,9 @@
 #include <cstring>
 #include <filesystem>
 #include <memory>
+#include <mutex>
 
+#include <flashbackclient/logging/crashfilesink.h>
 #include <flashbackclient/logging/dualsink.h>
 
 #include <spdlog/sinks/basic_file_sink.h>
@@ -42,8 +44,9 @@ namespace FlashBackClient
     public:
         static void Initialize();
         static void SetLogLevel(int level);
-        static void DumpFileLog();
-        static void Shutdown();
+        static void AlwaysFileLog();
+        static void SetBacktraceLength(int length);
+        static void Shutdown(bool isError);
 
         // Don't question the std::forward<Args>(args)...
         // Cause I don't know either
@@ -121,14 +124,15 @@ namespace FlashBackClient
         }
 
     private:
-        static std::shared_ptr<DualLevelSink>                     _consoleSink;
-        static std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
+        static void dumpFileLog();
+
+        static std::shared_ptr<DualLevelSink> _consoleSink;
+        static std::shared_ptr<spdlog::sinks::CrashFileSink<std::mutex>>
+                                               _fileSink;
         static std::shared_ptr<spdlog::logger> _consoleLogger;
         static std::shared_ptr<spdlog::logger> _fileLogger;
         // cppcheck-suppress unusedStructMember
-        static std::string _crashFilePath;
-        // cppcheck-suppress unusedStructMember
-        static bool _dumped;
+        static bool _alwaysFileLog;
     };
 } // namespace FlashBackClient
 

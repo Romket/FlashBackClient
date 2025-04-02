@@ -61,6 +61,19 @@ if (NOT UNIX)
     message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")
 endif()
 
+#spdlog definition to use a less accurate clock on linux release versions in exchange for performance
+if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_compile_definitions(SPDLOG_CLOCK_COARSE)
+endif()
+
+#spdlog definitions to remove unused things to theoretically improved performance
+add_compile_definitions(
+    SPDLOG_NO_SOURCE_LOC
+    SPDLOG_NO_THREAD_ID
+    SPDLOG_NO_ATOMIC_LEVELS
+    SPDLOG_DISABLE_DEFAULT_LOGGER
+)
+
 target_compile_options(flashbackclient PRIVATE -g)
 
 install(TARGETS flashbackclient

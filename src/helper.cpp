@@ -27,6 +27,7 @@
 #include <flashbackclient/helper.h>
 
 #include <flashbackclient/configs.h>
+#include <flashbackclient/logging/logger.h>
 #include <string>
 
 namespace FlashBackClient
@@ -82,6 +83,35 @@ namespace FlashBackClient
                 {
                     FlashBackClient::LOG_WARN("End of arguments reached, "
                                               "defaulting to info");
+                }
+            }
+            else if (std::string(argv[i]) == "--always-file-log")
+            {
+                FlashBackClient::Logger::AlwaysFileLog();
+            }
+            else if (std::string(argv[i]) == "--backtrace-length")
+            {
+                if (++i < argc)
+                {
+                    try
+                    {
+                        FlashBackClient::Logger::SetBacktraceLength(
+                            std::stoi(argv[i]));
+                    }
+                    catch (const std::invalid_argument& e)
+                    {
+                        FlashBackClient::LOG_ERROR("Not a valid integer.");
+                    }
+                    catch (const std::out_of_range& e)
+                    {
+                        FlashBackClient::LOG_ERROR(
+                            "Error: Number out of range.");
+                    }
+                }
+                else
+                {
+                    FlashBackClient::LOG_WARN(
+                        "End of arguments reached, backtrace length unchanged");
                 }
             }
             else
