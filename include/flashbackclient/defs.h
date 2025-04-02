@@ -2,7 +2,7 @@
  * @file defs.h
  * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
  * @brief Pre-compiler definitions for config paths, target paths, etc.
- * @version 0.1
+ * @version 0.2
  * @date 2025-03-25
  *
  * @copyright Copyright (c) 2025 Luke Houston
@@ -34,7 +34,9 @@
 #define SCHEDULER_CONFIG_FILE_PATH \
     SCHEDULER_CONFIG_DIR "/" SCHEDULER_CONFIG_FILE
 
-#define TARGET_DEF_DIR HOME + "/.config/flashbackclient/targets"
+#define TARGET_DEF_DIR               HOME + "/.config/flashbackclient/targets"
+#define EXAMPLE_TARGET_DEF_FILE      "example.yaml"
+#define EXAMPLE_TARGET_DEF_FILE_PATH TARGET_DEF_DIR "/" EXAMPLE_TARGET_DEF_FILE
 
 #define LOG_DIR                    HOME + "/.local/share/flashbackclient"
 #define LOG_FILE_FMT_CRASH         "crash_%Y-%m-%d_%H-%M-%S.txt"
