@@ -15,20 +15,18 @@ Checks: >
   modernize-use-angle-brackets
 
 WarningsAsErrors: true
-HeaderFilterRegex: '(src|include)/.*\.(h|cpp)$'  # Only check .h and .cpp in src/ and include/
-ExcludeRegex: 'include/flashbackclient/logging/dualsink\.h'  # This will be ignored by clang-tidy
-AnalyzeTemporaryDtors: false
+HeaderFilterRegex: '(src|include)/.*\.(h|cpp)'
 FormatStyle: none
 
 CheckOptions:
   - key: readability-identifier-naming.ClassCase
-    value: PascalCase
+    value: CamelCase
   - key: readability-identifier-naming.StructCase
-    value: PascalCase
+    value: CamelCase
   - key: readability-identifier-naming.EnumCase
-    value: PascalCase
+    value: CamelCase
   - key: readability-identifier-naming.FunctionCase
-    value: PascalCase
+    value: CamelCase
   - key: readability-identifier-naming.PrivateFunctionCase
     value: camelBack
   - key: readability-identifier-naming.ProtectedFunctionCase
