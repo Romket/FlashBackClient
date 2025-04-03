@@ -2,7 +2,7 @@
  * @file helper.cpp
  * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
  * @brief Miscellaneous helper functions
- * @version 0.2
+ * @version 0.3
  * @date 2025-04-01
  *
  * @see helper.h
@@ -125,10 +125,12 @@ namespace FlashBackClient
                     if (std::string(argv[i]) == "w")
                     {
                         std::cout << SHOW_W << std::endl;
+                        return ArgsResult::exit;
                     }
                     else if (std::string(argv[i]) == "c")
                     {
                         std::cout << SHOW_C << std::endl;
+                        return ArgsResult::exit;
                     }
                     else
                     {
