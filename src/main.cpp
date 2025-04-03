@@ -4,7 +4,7 @@
  * @brief Main entry point for the FlashBackClient program. Registers signal
  * handlers, checks command line arguments, and initializes and runs services
  *
- * @version 0.3
+ * @version 0.5
  * @date 2025-03-28
  *
  * @sa service_locator.h
@@ -49,7 +49,13 @@ int main(int argc, char** argv)
 
     FlashBackClient::ConfigManager::GenerateConfigs();
 
-    if (!FlashBackClient::Helper::ProcessCommandLineArgs(argc, argv)) return 1;
+    FlashBackClient::Helper::DisplayNotice();
+
+    FlashBackClient::ArgsResult result =
+        FlashBackClient::Helper::ProcessCommandLineArgs(argc, argv);
+    if (result == FlashBackClient::ArgsResult::err) return 1;
+    else if (result == FlashBackClient::ArgsResult::exit)
+        return 0;
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(
         new FlashBackClient::ConfigManager());

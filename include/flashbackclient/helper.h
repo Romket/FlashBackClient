@@ -2,7 +2,7 @@
  * @file helper.h
  * @author Luke Houston (Romket or RomketBoi) (lukehouston08@gmail.com)
  * @brief Miscellaneous helper functions
- * @version 0.1
+ * @version 0.2
  * @date 2025-04-01
  *
  * @see helper.cpp
@@ -28,9 +28,17 @@
 
 namespace FlashBackClient
 {
+    enum class ArgsResult
+    {
+        cont,
+        err,
+        exit
+    };
+
     class Helper
     {
     public:
-        static bool ProcessCommandLineArgs(int argc, char** argv);
+        static void       DisplayNotice();
+        static ArgsResult ProcessCommandLineArgs(int argc, char** argv);
     };
 } // namespace FlashBackClient
