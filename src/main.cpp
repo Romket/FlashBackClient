@@ -4,7 +4,7 @@
  * @brief Main entry point for the FlashBackClient program. Registers signal
  * handlers, checks command line arguments, and initializes and runs services
  *
- * @version 0.3
+ * @version 0.5
  * @date 2025-03-28
  *
  * @sa service_locator.h
@@ -13,18 +13,20 @@
  *
  * @copyright Copyright (c) 2025 Luke Houston
  *
- * This program is free software: you can redistribute it and/or modify
+ * This file is part of FlashBackClient
+ *
+ * FlashBackClient is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * FlashBackClient is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with FlashBackClient.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include <flashbackclient/service_locator.h>
@@ -47,7 +49,13 @@ int main(int argc, char** argv)
 
     FlashBackClient::ConfigManager::GenerateConfigs();
 
-    if (!FlashBackClient::Helper::ProcessCommandLineArgs(argc, argv)) return 1;
+    FlashBackClient::Helper::DisplayNotice();
+
+    FlashBackClient::ArgsResult result =
+        FlashBackClient::Helper::ProcessCommandLineArgs(argc, argv);
+    if (result == FlashBackClient::ArgsResult::err) return 1;
+    else if (result == FlashBackClient::ArgsResult::exit)
+        return 0;
 
     FlashBackClient::ServiceLocator::Provide<FlashBackClient::ConfigManager>(
         new FlashBackClient::ConfigManager());
