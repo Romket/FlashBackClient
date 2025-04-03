@@ -60,15 +60,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
 target_link_libraries(flashbackclient yaml-cpp spdlog croncpp)
 
 if (NOT UNIX)
-    message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")
+    message(FATAL_ERROR "FlashBack Client currently only supports unix systems.
+            Future Windows support is planned.")
 endif()
 
-#spdlog definition to use a less accurate clock on linux release versions in exchange for performance
+# spdlog definition to use a less accurate clock on linux release versions in
+# exchange for performance
 if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_definitions(SPDLOG_CLOCK_COARSE)
 endif()
 
-#spdlog definitions to remove unused things to theoretically improved performance
+# spdlog definitions to remove unused things to theoretically improve
+# performance
 add_compile_definitions(
     SPDLOG_NO_SOURCE_LOC
     SPDLOG_NO_THREAD_ID
