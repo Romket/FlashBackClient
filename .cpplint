@@ -1,0 +1,11 @@
+filter=-whitespace,-readability/casting,-runtime/int,-build/include_order,-legal/copyright
+class_name=([A-Z][a-zA-Z0-9]*)
+struct_name=([A-Z][a-zA-Z0-9]*)
+enum_name=([A-Z][a-zA-Z0-9]*)
+enum_value=([a-z][a-zA-Z0-9]*)
+function_name=(^[A-Z][a-zA-Z0-9]*)
+function_name_private=([a-z][a-zA-Z0-9]*)
+variable_name=([A-Z][a-zA-Z0-9]*)
+variable_name_private=(_[a-z][a-zA-Z0-9]*)
+global_variable_name=([a-z][a-zA-Z0-9]*)
+macro_name=([A-Z_]+)
