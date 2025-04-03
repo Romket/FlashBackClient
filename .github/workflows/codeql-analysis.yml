@@ -1,0 +1,35 @@
+name: "CodeQL Analysis"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 12 * * 1'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Initialize submodules (if needed)
+        run: git submodule update --init --recursive
+
+      - name: Set up CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: cpp
+
+      - name: Build project
+        run: |
+          cmake -S . -B build
+          cmake --build build
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
