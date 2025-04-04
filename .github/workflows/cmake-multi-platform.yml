@@ -50,7 +50,7 @@ jobs:
         submodules: recursive
 
     - name: Check installed c++ version
-      run: echo '' | clang++ -std=c++98 -x c++ -E -
+      run: echo '' | clang++ -std=c++23 -x c++ -E -
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
