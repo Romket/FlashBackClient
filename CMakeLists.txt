@@ -29,6 +29,7 @@ project(FlashBackClient
         DESCRIPTION "Fast cross-device cloud backup and sync program")
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_INSTALL_PREFIX "/usr/local/bin/")
 
