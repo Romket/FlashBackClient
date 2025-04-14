@@ -6,18 +6,20 @@
 ###
 ### @copyright Copyright (c) 2025 Luke Houston
 ###
-### This program is free software: you can redistribute it and/or modify
+### This file is part of FlashBackClient
+###
+### FlashBackClient is free software: you can redistribute it and/or modify
 ### it under the terms of the GNU General Public License as published by
 ### the Free Software Foundation, either version 3 of the License, or
 ### (at your option) any later version.
 ###
-### This program is distributed in the hope that it will be useful,
+### FlashBackClient is distributed in the hope that it will be useful,
 ### but WITHOUT ANY WARRANTY; without even the implied warranty of
 ### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ### GNU General Public License for more details.
 ###
 ### You should have received a copy of the GNU General Public License
-### along with this program.  If not, see <https://www.gnu.org/licenses/>.
+### along with FlashBackClient.  If not, see <https://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.12)
 
@@ -27,6 +29,7 @@ project(FlashBackClient
         DESCRIPTION "Fast cross-device cloud backup and sync program")
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_INSTALL_PREFIX "/usr/local/bin/")
 
@@ -58,15 +61,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
 target_link_libraries(flashbackclient yaml-cpp spdlog croncpp)
 
 if (NOT UNIX)
-    message(FATAL_ERROR "FlashBack Client currently only supports unix systems. Future Windows support is planned.")
+    message(FATAL_ERROR "FlashBack Client currently only supports unix systems.
+            Future Windows support is planned.")
 endif()
 
-#spdlog definition to use a less accurate clock on linux release versions in exchange for performance
+# spdlog definition to use a less accurate clock on linux release versions in
+# exchange for performance
 if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_definitions(SPDLOG_CLOCK_COARSE)
 endif()
 
-#spdlog definitions to remove unused things to theoretically improved performance
+# spdlog definitions to remove unused things to theoretically improve
+# performance
 add_compile_definitions(
     SPDLOG_NO_SOURCE_LOC
     SPDLOG_NO_THREAD_ID
