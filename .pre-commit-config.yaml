@@ -13,5 +13,8 @@ repos:
         args: ["--style=file"]
       - id: cppcheck
         args: ["--enable=all", "--language=c++", "--inline-suppr", "--check-level=exhaustive"]
+      - id: cpplint
+        files: ^(src|include)/.*\.cpp$|^(src|include)/.*\.h$
+        exclude: include/flashbackclient/logging/crashfilesink.h
 #   - id: include-what-you-use
 #     args: ["-p", "./build/compile_commands.json"]
