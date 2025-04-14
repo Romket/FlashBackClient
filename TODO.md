@@ -3,7 +3,7 @@
 - [ ] Get server connection working
 - [ ] Nontrivial rule checks
     - [ ] Relative time scheduling (after_last and before_next_scheduled)
-    - [ ] Schedule cron expressions
+    - [x] Schedule cron expressions
     - [x] File change event listener
 - [ ] Documentation
 - [ ] Write tests
@@ -27,4 +27,5 @@
 
 ## Low Priority
 - [ ] Remove cppcheck-suppress comments
-- [ ] Add `show w` and `show c` commands from GPLv3 license
+- [ ] Improve command line argument documentation
+- [x] Add `show w` and `show c` commands from GPLv3 license
