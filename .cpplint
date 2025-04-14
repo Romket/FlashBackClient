@@ -1,4 +1,3 @@
-filter=-whitespace,-readability/casting,-runtime/int,-build/include_order,-legal/copyright
 namespace_name=([A-Z][a-zA-Z0-9]*)
 class_name=([A-Z][a-zA-Z0-9]*)
 struct_name=([A-Z][a-zA-Z0-9]*)
