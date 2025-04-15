@@ -123,17 +123,17 @@ namespace FlashBackClient
             }
             else if (trigger == Triggers::after_interval)
             {
-                int after_last            = 0;
-                int before_next_scheduled = 0;
+                int afterLast           = 0;
+                int beforeNextScheduled = 0;
 
                 if (caseNode["after_last"])
-                    after_last = caseNode["after_last"].as<int>();
+                    afterLast = caseNode["after_last"].as<int>();
                 if (caseNode["before_next_scheduled"])
-                    before_next_scheduled =
+                    beforeNextScheduled =
                         caseNode["before_next_scheduled"].as<int>();
 
-                info["after_last"]            = after_last;
-                info["before_next_scheduled"] = before_next_scheduled;
+                info["after_last"]            = afterLast;
+                info["before_next_scheduled"] = beforeNextScheduled;
             }
 
             _conditions.push_back(
