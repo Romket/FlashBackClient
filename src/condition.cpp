@@ -170,11 +170,11 @@ namespace FlashBackClient
         for (const auto& listener :
              ServiceLocator::Get<PlatformListener>()->GetListeners())
         {
-            auto it = std::find(listener.Conditions.begin(),
-                                listener.Conditions.end(), this);
+            auto it = std::find(listener.conditions.begin(),
+                                listener.conditions.end(), this);
 
-            if (it != listener.Conditions.end() &&
-                listener.Status == StatusEnum::modified)
+            if (it != listener.conditions.end() &&
+                listener.status == StatusEnum::modified)
             {
                 return true;
             }

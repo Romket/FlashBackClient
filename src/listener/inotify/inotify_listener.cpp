@@ -129,10 +129,10 @@ namespace FlashBackClient
         bool isNew = true;
         for (auto& listener : _listeners)
         {
-            if (listener.Path == info.path &&
-                listener.BaseTarget == info.baseTarget)
+            if (listener.path == info.path &&
+                listener.baseTarget == info.baseTarget)
             {
-                listener.Conditions.push_back(info.owner);
+                listener.conditions.push_back(info.owner);
                 isNew = false;
             }
         }
@@ -168,11 +168,11 @@ namespace FlashBackClient
             _watchDescriptors[wd] = info.path.string();
 
             ListenerInfo newListener;
-            newListener.Path = info.path;
-            newListener.Conditions.push_back(info.owner);
-            newListener.Status     = StatusEnum::active;
-            newListener.LastUpdate = std::chrono::system_clock::now();
-            newListener.BaseTarget = info.baseTarget;
+            newListener.path = info.path;
+            newListener.conditions.push_back(info.owner);
+            newListener.status     = StatusEnum::active;
+            newListener.lastUpdate = std::chrono::system_clock::now();
+            newListener.baseTarget = info.baseTarget;
 
             if (depth == 0) _listeners.push_back(newListener);
         }
@@ -254,18 +254,18 @@ namespace FlashBackClient
             LOG_INFO("Path: {}", path);
 
             ListenerInfo info;
-            info.Path       = path;
-            info.LastUpdate = std::chrono::system_clock::now();
+            info.path       = path;
+            info.lastUpdate = std::chrono::system_clock::now();
 
             if (event->mask & IN_DELETE_SELF || event->mask & IN_MOVE_SELF)
             {
                 LOG_TRACE("Target self deleted or self moved");
-                info.Status = StatusEnum::self_modified;
+                info.status = StatusEnum::self_modified;
             }
             else
             {
                 LOG_TRACE("Target modified");
-                info.Status = StatusEnum::modified;
+                info.status = StatusEnum::modified;
             }
 
             std::filesystem::path normalizedPath =
@@ -274,7 +274,7 @@ namespace FlashBackClient
             for (auto& listener : _listeners)
             {
                 std::filesystem::path normalizedListenerPath =
-                    std::filesystem::absolute(listener.Path);
+                    std::filesystem::absolute(listener.path);
 
                 Logger::LOG_INFO("Checking listener: {}",
                                  normalizedListenerPath.string());
@@ -286,19 +286,19 @@ namespace FlashBackClient
                     LOG_INFO("Matched");
                     // LOG_DEBUG("Owner: {}", listener.Owner);
 
-                    listener.Status     = StatusEnum::modified;
-                    listener.LastUpdate = std::chrono::system_clock::now();
+                    listener.status     = StatusEnum::modified;
+                    listener.lastUpdate = std::chrono::system_clock::now();
 
                     // ServiceLocator::Get<Scheduler>()->Flag();
-                    if (!listener.BaseTarget->IsIgnored(normalizedPath))
+                    if (!listener.baseTarget->IsIgnored(normalizedPath))
                     {
-                        for (const auto& condition : listener.Conditions)
+                        for (const auto& condition : listener.conditions)
                         {
                             // TODO: Check in reverse order (add CheckReverse()
                             // to Condition)
                             condition->Check({Triggers::on_file_change});
                         }
-                        listener.BaseTarget->CheckRules(
+                        listener.baseTarget->CheckRules(
                             {Triggers::on_file_change});
                     }
                 }

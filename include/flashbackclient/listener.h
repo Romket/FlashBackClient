@@ -47,19 +47,19 @@ namespace FlashBackClient
         active,
         // TODO: update target configs to include cases for self move, self
         // delete, etc.
-        self_modified,
+        self_modified, // NOLINT: stuff relating to yaml is this case
         modified
     };
 
     struct ListenerInfo
     {
-        std::chrono::system_clock::time_point LastUpdate;
+        std::chrono::system_clock::time_point lastUpdate;
         // cppcheck-suppress unusedStructMember
-        std::vector<Condition*> Conditions;
-        std::filesystem::path   Path;
-        StatusEnum              Status = StatusEnum::inactive;
+        std::vector<Condition*> conditions;
+        std::filesystem::path   path;
+        StatusEnum              status = StatusEnum::inactive;
         // cppcheck-suppress unusedStructMember
-        Target* BaseTarget;
+        Target* baseTarget;
     };
 
     struct ListenerCreateInfo
@@ -93,7 +93,7 @@ namespace FlashBackClient
             // cppcheck-suppress useStlAlgorithm
             for (const auto& listener : _listeners)
             {
-                if (listener.Path == path) return true;
+                if (listener.path == path) return true;
             }
 
             return false;
@@ -104,7 +104,7 @@ namespace FlashBackClient
         {
             for (auto& listener : _listeners)
             {
-                if (listener.Path == path) { listener.Status = status; }
+                if (listener.path == path) { listener.status = status; }
             }
         }
 
