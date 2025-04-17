@@ -14,5 +14,12 @@ repos:
       - id: cppcheck
         args: ["--enable=all", "--language=c++", "--inline-suppr",
           "--check-level=exhaustive"]
+  - repo: local
+    hooks:
+      - id: naming-convention-checker
+        name: C++ Naming Convention Checker
+        entry: python3 check-naming.py
+        language: system
+        types: [c, c++]
 #     - id: include-what-you-use
 #       args: ["-p", "./build/compile_commands.json"]
