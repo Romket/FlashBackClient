@@ -31,9 +31,6 @@ project(FlashBackClient
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_C_COMPILER "/usr/bin/clang")
-set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
-
 set(CMAKE_INSTALL_PREFIX "/usr/local/bin/")
 
 add_subdirectory(lib/croncpp)
