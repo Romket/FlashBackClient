@@ -1,5 +1,4 @@
 clang-format
-cpplint
 croncpp
 pre-commit
 spdlog
