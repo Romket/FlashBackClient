@@ -1,19 +1,25 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
     hooks:
-    -   id: check-added-large-files
-    -   id: check-yaml
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
--   repo: https://github.com/pocc/pre-commit-hooks
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
-    -   id: clang-format
+      - id: clang-format
         args: ["--style=file"]
-#   -   id: clang-tidy
-#       args: ["build/compile_commands.json"]
-    -   id: cppcheck
-        args: ["--enable=all", "--language=c++", "--inline-suppr", "--check-level=exhaustive"]
-#   -   id: include-what-you-use
+      - id: cppcheck
+        args: ["--enable=all", "--language=c++", "--inline-suppr",
+          "--check-level=exhaustive"]
+  - repo: local
+    hooks:
+      - id: naming-convention-checker
+        name: C++ Naming Convention Checker
+        entry: python3 check-naming.py
+        language: system
+        types: [c, c++]
+#     - id: include-what-you-use
 #       args: ["-p", "./build/compile_commands.json"]
