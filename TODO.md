@@ -14,7 +14,7 @@
 
 ## Medium Priority
 - [ ] Handle new directory creation inside target
-- [ ] Pre-commit hook to standardize naming
+- [x] Pre-commit hook to standardize naming
 - [x] Auto-generate configs if not detected, including example target definition
 - [x] Fix logger to not generate a file until a crash occurs
 - [x] Ignore paths on listener creation rather than on event
